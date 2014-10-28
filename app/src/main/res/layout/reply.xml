@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#0F98EC"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <Button
+            android:id="@+id/backtoReviewInDetailActivity"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/back_arrow" />
+
+        <TextView
+            android:id="@+id/replyText"
+            android:layout_toRightOf="@+id/backtoReviewInDetailActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="      Reply"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/postReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="#0F98EC"
+            android:text="POST"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <EditText
+            android:id="@+id/newReplyEt"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            android:hint="Write Your Reply here..."
+            android:lineSpacingExtra="5dp"
+            android:padding="16dp"
+            android:textColor="#4C4C4C"
+            android:textColorHighlight="#999999"
+            android:textSize="14sp" />
+    </ScrollView>
+
+</LinearLayout>

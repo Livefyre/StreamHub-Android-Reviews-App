@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.livefyre" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:name="livefyre.LivefyreApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/livefyreappicon"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.TranslucentActionBar" >
+        <activity
+            android:name="livefyre.activities.ReviewsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="livefyre.activities.NewReview"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+        <activity
+            android:name="livefyre.activities.ReviewInDetail"
+            android:icon="@drawable/bigbac"
+            android:label="@string/title_activity_review_in_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.TranslucentActionBar.ActionBar.Overlay" >
+        </activity>
+        <activity
+            android:name="livefyre.activities.Reply"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="livefyre.activities.Edit"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+        <activity
+            android:name="com.filepicker.sdk.FilePicker"
+            android:icon="@drawable/bigbac" >
+        </activity>
+        <activity
+            android:name="com.filepicker.sdk.AuthActivity"
+            android:icon="@drawable/bigbac" >
+        </activity>
+        <activity android:name="livefyre.fadingactionbar.ListViewActivity" >
+        </activity>
+        <activity android:name="livefyre.activities.LivefyreSplash" >
+        </activity>
+
+    </application>
+
+</manifest>
