@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="bottom"
+    android:layout_marginLeft="55dp"
+    android:layout_marginTop="5dp" 
+    
+    >
+
+    <LinearLayout
+        android:id="@+id/mainDialog"
+        android:layout_width="165dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+       android:fadingEdge="horizontal|vertical"
+       android:paddingTop="10dp"
+         >
+
+        <TextView
+            android:id="@+id/mostHelpful"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Most Helpful"
+            android:textColor="@color/black"
+            android:textSize="16sp" 
+            android:gravity="bottom"
+            android:paddingBottom="20dp"
+            android:paddingTop="8dp"
+           />
+
+        <TextView
+            android:id="@+id/highestRating"
+            android:layout_width="match_parent"
+          android:layout_height="48dp"
+            android:text="Highest Rating"
+            android:textColor="@color/black"
+            android:textSize="16sp" 
+            android:gravity="bottom"
+            android:paddingBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/lowestRating"
+            android:layout_width="match_parent"
+           android:layout_height="48dp"
+            android:text="Lowest Rating"
+            android:textColor="@color/black"
+            android:textSize="16sp" 
+            android:gravity="bottom"
+            android:paddingBottom="20dp"
+            />
+
+        <TextView
+            android:id="@+id/newest"
+            android:layout_width="match_parent"
+          android:layout_height="48dp"
+            android:text="Newest"
+            android:textColor="@color/black"
+            android:textSize="16sp" 
+            android:gravity="bottom"
+            android:paddingBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/oldest"
+            android:layout_width="match_parent"
+           android:layout_height="48dp"
+            android:text="Oldest"
+            android:textColor="@color/black"
+            android:textSize="16sp" 
+            android:gravity="bottom"
+            android:paddingBottom="20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/leftViewOfDropDown"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toLeftOf="@+id/mainDialog"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rightViewOfDropDown"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/mainDialog"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomViewOfDropDown"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/mainDialog"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</RelativeLayout>
