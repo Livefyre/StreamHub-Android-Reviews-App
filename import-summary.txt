@@ -31,7 +31,7 @@ Eclipse projects. Here's how the projects were restructured:
 * AndroidManifest.xml => streamHubAndroidSDK/src/main/AndroidManifest.xml
 * assets/ => streamHubAndroidSDK/src/main/assets/
 * libs/android-async-http.jar => streamHubAndroidSDK/libs/android-async-http.jar
-* res/ => streamHubAndroidSDK/src/main/java/
+* res/ => streamHubAndroidSDK/src/main/res/
 * src/ => streamHubAndroidSDK/src/main/java/
 
 Missing Android Support Repository:

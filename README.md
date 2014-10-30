@@ -7,7 +7,7 @@ Read the docs: [http://livefyre.github.com/StreamHub-Android-SDK/](http://livefy
 
 --------
 ##### Dependencies
-This Livefyre StreamHub Reviews example uses following dependencies
+This Livefyre StreamHub Reviews example uses the following dependencies
 
 * [StreamHub-Android-SDK](https://github.com/Livefyre/StreamHub-Android-SDK/)
 
@@ -23,7 +23,7 @@ Installation
 
 ```
 git clone https://github.com/Livefyre/StreamHub-Android-SDK.git
-In your example app go to "File" => "Impoert Module". Browse and select SDK location.
+In your example app go to "File" => "Import Module". Browse and select SDK location.
 In build.gradle file add following,
 
 dependencies {
@@ -36,7 +36,9 @@ dependencies {
 After adding dependencies build gradle and run the app.
 ```
 
-Add Filepicker, Picasso libraries to app/libs directory. Filepicker SDK is used to upload image/files to the host.
+Add Filepicker, Picasso libraries to app/libs directory.
+
+Filepicker SDK is used to upload image/files to the host.
 
 Picasso is an powerful image downloading and caching library for Android
 
