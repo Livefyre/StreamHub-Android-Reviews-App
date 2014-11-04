@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/streamHubAndroidSDK/src/main/assets" />
+        <source path="/Users/kvanainc1/Developer/android/Livefyre-relese/Livefyre_Reaadme/StreamHub-Android-Reviews-App/streamHubAndroidSDK/src/main/assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/streamHubAndroidSDK/src/debug/assets" />
+        <source path="/Users/kvanainc1/Developer/android/Livefyre-relese/Livefyre_Reaadme/StreamHub-Android-Reviews-App/streamHubAndroidSDK/src/debug/assets" />
     </dataSet>
 
 </merger>
