@@ -7,19 +7,6 @@ Make Android apps powered by Livefyre StreamHub
 Read the docs: [http://livefyre.github.com/StreamHub-Android-SDK/](http://livefyre.github.com/StreamHub-Android-SDK/)
 
 ---
-Dependencies
-=============================
-This Livefyre StreamHub Reviews example App uses the following dependencies:
-* [StreamHub-Android-SDK](https://github.com/Livefyre/StreamHub-Android-SDK/)
-
-* [Filepicker](https://github.com/Ink/filepicker-android)
- * Filepicker SDK is used to upload image/files to the host.
-* [Asynchronous Http Client](https://github.com/loopj/android-async-http)
- * Android-async-http is an asynchronous, callback-based Http client for Android built on top of Apache's HttpClient libraries.
-* [Picasso](https://github.com/square/picasso)
- * Picasso is an powerful image downloading and caching library for Android
-
----
 Installation
 =============================
 Android Reviews App Build Steps:
@@ -34,10 +21,10 @@ Customizing the SDK
 =============================
 In some cases, the following might be required when customizing the SDK:
 
-Preparing
 1. git clone https://github.com/Livefyre/StreamHub-Android-SDK.git
 2. In your example app go to "File" => "Import Module". Browse and select SDK location.
 3. In build.gradle file add following before running the app:
+4. 
  ```
 .. dependencies {
 ..  compile files('libs/android-async-http.jar')
@@ -47,7 +34,18 @@ Preparing
 .. }
 ```
 
------
+---
+Dependencies
+=============================
+This Livefyre StreamHub Reviews example App uses the following dependencies:
+* [StreamHub-Android-SDK](https://github.com/Livefyre/StreamHub-Android-SDK/)
+
+* [Filepicker](https://github.com/Ink/filepicker-android)
+ * Filepicker SDK is used to upload image/files to the host.
+* [Asynchronous Http Client](https://github.com/loopj/android-async-http)
+ * Android-async-http is an asynchronous, callback-based Http client for Android built on top of Apache's HttpClient libraries.
+* [Picasso](https://github.com/square/picasso)
+ * Picasso is an powerful image downloading and caching library for Android
 
 ### Developers
 Clone the project, run the tests, and notice a few undocumented classes. Kindly treat the project as alpha code.
