@@ -24,7 +24,7 @@ In some cases, the following might be required when customizing the SDK:
 1. git clone https://github.com/Livefyre/StreamHub-Android-SDK.git
 2. In your example app go to "File" => "Import Module". Browse and select SDK location.
 3. In build.gradle file add following before running the app:
-4. 
+
  ```
 .. dependencies {
 ..  compile files('libs/android-async-http.jar')
