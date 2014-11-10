@@ -26,12 +26,12 @@ In some cases, the following might be required when customizing the SDK:
 3. In build.gradle file add following before running the app:
 
 ```
-.. dependencies {
-..  compile files('libs/android-async-http.jar')
-..  compile files('libs/picasso-2.3.4.jar')
-..  compile project(':filePickerSDK')
-..  compile project(':streamHubAndroidSDK')
-.. }
+dependencies {
+  compile files('libs/android-async-http.jar')
+  compile files('libs/picasso-2.3.4.jar')
+  compile project(':filePickerSDK')
+  compile project(':streamHubAndroidSDK')
+}
 ```
 
 ---
