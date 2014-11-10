@@ -14,6 +14,8 @@ Android Reviews App Build Steps:
 1. Clone this repo to get the project
 2. Open Android Studio, import the project, and open the directory
  * Optionally you can change the config params for the endpoints under StreamHub-Android-Reviews-App/streamHubAndroidSDK/src/main/java/livefyre/streamhub/Config.java
+2. Ensure that you have the <a href="https://github.com/Livefyre/StreamHub-Android-SDK.git">SDK</a> loaded into your environment
+ * You might have to explictily "File" => "Import Module" and point to the StreamHub SDK location.
 3. Click on the Build Gradle button.
  * Clicking the Run button will open the app in the simulator or device if it is connected.
 
@@ -22,7 +24,7 @@ Customizing the SDK
 In some cases, the following might be required when customizing the SDK:
 
 1. git clone https://github.com/Livefyre/StreamHub-Android-SDK.git
-2. In your example app go to "File" => "Import Module". Browse and select SDK location.
+2. In your example app go to "File" => "Import Module". Browse to the SDK location cloned in the step above.
 3. In build.gradle file add following before running the app:
 
 ```
