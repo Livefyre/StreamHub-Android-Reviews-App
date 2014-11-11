@@ -25,7 +25,7 @@ In some cases, the following might be required when customizing the SDK:
 
 1. git clone https://github.com/Livefyre/StreamHub-Android-SDK.git
 2. In your example app go to "File" => "Import Module". Browse to the SDK location cloned in the step above.
-3. In build.gradle file add following before running the app:
+3. In **build.gradle** file add following before running the app:
 
 ```
 dependencies {
@@ -48,6 +48,7 @@ This Livefyre StreamHub Reviews example App uses the following dependencies:
  * Android-async-http is an asynchronous, callback-based Http client for Android built on top of Apache's HttpClient libraries.
 * [Picasso](https://github.com/square/picasso)
  * Picasso is an powerful image downloading and caching library for Android
+* In build.gradle the preferred version for targetSdkVersion is 20, but 21  will also work if using SDK Manager,  Android 5.0 (API 21) is  downloaded and installed
 
 ### Developers
 Clone the project, run the tests, and notice a few undocumented classes. Kindly treat the project as alpha code.

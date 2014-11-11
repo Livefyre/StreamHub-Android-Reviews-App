@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment />
 
     <attr name="actionBarDivider" format="reference" />
@@ -513,13 +513,13 @@
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
     <item name="dialog_fixed_width_major" type="dimen">320dp</item>
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/dimens.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/dimens.xml -->
     <eat-comment />
 
     <dimen name="padding_large">16dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_small">8dp</dimen>
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment />
 
     <item name="action_bar_activity_content" type="id"/>
@@ -544,7 +544,7 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="app_name">FilepickerDroid</string>
@@ -552,11 +552,11 @@
     <string name="lfs">Livefyre</string>
     <string name="title_activity_file_picker">Filepicker</string>
     <string name="title_activity_file_picker_auth">FilepickerAuthActivity</string>
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values/styles.xml -->
     <eat-comment />
 
     <style name="AppTheme" parent="android:Theme.Light" />
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment />
 
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">

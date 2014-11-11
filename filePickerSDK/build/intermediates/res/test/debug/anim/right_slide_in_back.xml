@@ -5,4 +5,4 @@
         android:toXDelta="100%p"
         android:duration="@string/file_picker_animation_duration"
     />
-</set><!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/anim/right_slide_in_back.xml --><!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/bundles/debug/res/anim/right_slide_in_back.xml -->
+</set><!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/anim/right_slide_in_back.xml --><!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/build/intermediates/bundles/debug/res/anim/right_slide_in_back.xml -->
