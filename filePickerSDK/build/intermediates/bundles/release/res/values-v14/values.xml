@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-relese/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values-v14/styles.xml -->
+    <!-- From: file:/Users/kvanainc1/Developer/android/Livefyre-readme/StreamHub-Android-Reviews-App/filePickerSDK/src/main/res/values-v14/styles.xml -->
     <eat-comment />
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
