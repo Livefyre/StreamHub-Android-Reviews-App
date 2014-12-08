@@ -119,28 +119,28 @@ public class Reply extends BaseActivity {
 
 		if (!isEdit) {
 			Log.d("REPLY", "IN NEW REPLY");
-			HashMap<String, Object> perameters = new HashMap();
-			perameters.put(LFSConstants.LFSPostBodyKey, body);
-			perameters.put(LFSConstants.LFSPostType,
+			HashMap<String, Object> parameters = new HashMap();
+			parameters.put(LFSConstants.LFSPostBodyKey, body);
+			parameters.put(LFSConstants.LFSPostType,
 					LFSConstants.LFSPostTypeReply);
-			perameters.put(LFSConstants.LFSPostUserTokenKey,
+			parameters.put(LFSConstants.LFSPostUserTokenKey,
 					LFSConfig.USER_TOKEN);
 			try {
 				WriteClient.postContent(LFSConfig.NETWORK_ID,
 						LFSConfig.COLLECTION_ID, id, LFSConfig.USER_TOKEN,
-						perameters, new newReplyCallback());
+						parameters, new newReplyCallback());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		} else {
 			Log.d("EDIT", "IN EDIT REPLY");
 
-			RequestParams perameters = new RequestParams();
-			perameters.put(LFSConstants.LFSPostBodyKey, body);
-			perameters.put(LFSConstants.LFSPostUserTokenKey,
+			RequestParams parameters = new RequestParams();
+			parameters.put(LFSConstants.LFSPostBodyKey, body);
+			parameters.put(LFSConstants.LFSPostUserTokenKey,
 					LFSConfig.USER_TOKEN);
 			WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-					LFSConfig.USER_TOKEN, LFSActions.EDIT, perameters,
+					LFSConfig.USER_TOKEN, LFSActions.EDIT, parameters,
 					new editCallback());
 
 		}
