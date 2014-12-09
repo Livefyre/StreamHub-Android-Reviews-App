@@ -670,25 +670,25 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				showProgress();
 				if (HFVal == 1) {
-					RequestParams perameters = new RequestParams();
-					perameters.put("value", "0");
-					perameters.put(LFSConstants.LFSPostUserTokenKey,
+					RequestParams parameters = new RequestParams();
+					parameters.put("value", "0");
+					parameters.put(LFSConstants.LFSPostUserTokenKey,
 							LFSConfig.USER_TOKEN);
-					perameters.put("message_id", id);
+					parameters.put("message_id", id);
 
 					WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-							LFSConfig.USER_TOKEN, LFSActions.VOTE, perameters,
+							LFSConfig.USER_TOKEN, LFSActions.VOTE, parameters,
 							new helpfulCallback());
 					dialog.dismiss();
 				} else {
-					RequestParams perameters = new RequestParams();
-					perameters.put("value", "1");
-					perameters.put(LFSConstants.LFSPostUserTokenKey,
+					RequestParams parameters = new RequestParams();
+					parameters.put("value", "1");
+					parameters.put(LFSConstants.LFSPostUserTokenKey,
 							LFSConfig.USER_TOKEN);
-					perameters.put("message_id", id);
+					parameters.put("message_id", id);
 
 					WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-							LFSConfig.USER_TOKEN, LFSActions.VOTE, perameters,
+							LFSConfig.USER_TOKEN, LFSActions.VOTE, parameters,
 							new helpfulCallback());
 					dialog.dismiss();
 
@@ -705,25 +705,25 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				showProgress();
 				if (HFVal == 2) {
-					RequestParams perameters = new RequestParams();
-					perameters.put("value", "0");
-					perameters.put(LFSConstants.LFSPostUserTokenKey,
+					RequestParams parameters = new RequestParams();
+					parameters.put("value", "0");
+					parameters.put(LFSConstants.LFSPostUserTokenKey,
 							LFSConfig.USER_TOKEN);
-					perameters.put("message_id", id);
+					parameters.put("message_id", id);
 
 					WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-							LFSConfig.USER_TOKEN, LFSActions.VOTE, perameters,
+							LFSConfig.USER_TOKEN, LFSActions.VOTE, parameters,
 							new helpfulCallback());
 					dialog.dismiss();
 				} else {
-					RequestParams perameters = new RequestParams();
-					perameters.put("value", "2");
-					perameters.put(LFSConstants.LFSPostUserTokenKey,
+					RequestParams parameters = new RequestParams();
+					parameters.put("value", "2");
+					parameters.put(LFSConstants.LFSPostUserTokenKey,
 							LFSConfig.USER_TOKEN);
-					perameters.put("message_id", id);
+					parameters.put("message_id", id);
 
 					WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-							LFSConfig.USER_TOKEN, LFSActions.VOTE, perameters,
+							LFSConfig.USER_TOKEN, LFSActions.VOTE, parameters,
 							new helpfulCallback());
 					dialog.dismiss();
 
@@ -873,13 +873,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				showProgress();
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSActions.BOZO, perameters,
+						LFSConfig.USER_TOKEN, LFSActions.BOZO, parameters,
 						new actionCallback());
 				dialog.dismiss();
 			}
@@ -890,13 +890,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				showProgress();
-				RequestParams perameters = new RequestParams();
-				perameters.put("network", LFSConfig.NETWORK_ID);
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put("network", LFSConfig.NETWORK_ID);
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("retroactive", "0");
+				parameters.put("retroactive", "0");
 				WriteClient.flagAuthor(ContentParser.ContentCollection.get(id)
-						.getAuthorId(), LFSConfig.USER_TOKEN, perameters,
+						.getAuthorId(), LFSConfig.USER_TOKEN, parameters,
 						new actionCallback());
 
 				dialog.dismiss();
@@ -909,13 +909,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				showProgress();
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSActions.DELETE, perameters,
+						LFSConfig.USER_TOKEN, LFSActions.DELETE, parameters,
 						new actionCallback());
 
 				dialog.dismiss();
@@ -956,13 +956,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.flagContent(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSFlag.SPAM, perameters,
+						LFSConfig.USER_TOKEN, LFSFlag.SPAM, parameters,
 						new flagCallback());
 				dialog.dismiss();
 
@@ -975,13 +975,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.flagContent(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSFlag.OFFENSIVE, perameters,
+						LFSConfig.USER_TOKEN, LFSFlag.OFFENSIVE, parameters,
 						new flagCallback());
 				dialog.dismiss();
 
@@ -994,13 +994,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.flagContent(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSFlag.OFF_TOPIC, perameters,
+						LFSConfig.USER_TOKEN, LFSFlag.OFF_TOPIC, parameters,
 						new flagCallback());
 				dialog.dismiss();
 
@@ -1013,13 +1013,13 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 
-				RequestParams perameters = new RequestParams();
-				perameters.put(LFSConstants.LFSPostUserTokenKey,
+				RequestParams parameters = new RequestParams();
+				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
-				perameters.put("message_id", id);
+				parameters.put("message_id", id);
 
 				WriteClient.flagContent(LFSConfig.COLLECTION_ID, id,
-						LFSConfig.USER_TOKEN, LFSFlag.DISAGREE, perameters,
+						LFSConfig.USER_TOKEN, LFSFlag.DISAGREE, parameters,
 						new flagCallback());
 				dialog.dismiss();
 

@@ -223,27 +223,27 @@ public class Edit extends BaseActivity {
 				return;
 			}
 			String htmlBody = Html.toHtml(editReviewBodyEt.getText());
-			RequestParams perameters = new RequestParams();
-			perameters.put(LFSConstants.LFSPostBodyKey, htmlBody);
-			perameters.put(LFSConstants.LFSPostTitleKey, editReviewTitleEt
+			RequestParams parameters = new RequestParams();
+			parameters.put(LFSConstants.LFSPostBodyKey, htmlBody);
+			parameters.put(LFSConstants.LFSPostTitleKey, editReviewTitleEt
 					.getText().toString());
 
-			perameters.put(LFSConstants.LFSPostType,
+			parameters.put(LFSConstants.LFSPostType,
 					LFSConstants.LFSPostTypeReview);
 			JSONObject ratingJson = new JSONObject();
 			try {
 				ratingJson.put("default", rating + "");
-				perameters.put(LFSConstants.LFSPostRatingKey,
+				parameters.put(LFSConstants.LFSPostRatingKey,
 						ratingJson.toString());
 
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
-			perameters.put(LFSConstants.LFSPostUserTokenKey,
+			parameters.put(LFSConstants.LFSPostUserTokenKey,
 					LFSConfig.USER_TOKEN);
 			WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
-                    LFSConfig.USER_TOKEN, LFSActions.EDIT, perameters,
+                    LFSConfig.USER_TOKEN, LFSActions.EDIT, parameters,
                     new editCallback());
 
 		}

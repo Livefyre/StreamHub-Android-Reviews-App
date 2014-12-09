@@ -408,20 +408,20 @@ public class NewReview extends BaseActivity {
 			return;
 		}
 		showProgress();
-		HashMap<String, Object> perameters = new HashMap();
-		perameters.put(LFSConstants.LFSPostBodyKey, body);
-		perameters.put(LFSConstants.LFSPostTitleKey, title);
-		perameters.put(LFSConstants.LFSPostTypeReview, reviewRating);
-		perameters
+		HashMap<String, Object> parameters = new HashMap();
+		parameters.put(LFSConstants.LFSPostBodyKey, body);
+		parameters.put(LFSConstants.LFSPostTitleKey, title);
+		parameters.put(LFSConstants.LFSPostTypeReview, reviewRating);
+		parameters
 				.put(LFSConstants.LFSPostType, LFSConstants.LFSPostTypeReview);
-		perameters.put(LFSConstants.LFSPostUserTokenKey, LFSConfig.USER_TOKEN);
+		parameters.put(LFSConstants.LFSPostUserTokenKey, LFSConfig.USER_TOKEN);
 		if (imgObj != null)
-			perameters.put(LFSConstants.LFSPostAttachment,
+			parameters.put(LFSConstants.LFSPostAttachment,
 					(new JSONArray().put(imgObj)).toString());
 		try {
 			WriteClient.postContent(LFSConfig.NETWORK_ID,
                     LFSConfig.COLLECTION_ID, null, LFSConfig.USER_TOKEN,
-                    perameters, new writeclientCallback());
+                    parameters, new writeclientCallback());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
