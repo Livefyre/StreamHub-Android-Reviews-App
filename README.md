@@ -54,6 +54,6 @@ This Livefyre StreamHub Reviews example App uses the following dependencies:
 Clone the project, run the tests, and notice a few undocumented classes. Kindly treat the project as alpha code.
 
 ## License
-Copyright 2013 Livefyre Inc.
+Copyright 2013-2015 Livefyre Inc.
 
 Licensed under the MIT License
