@@ -246,9 +246,4 @@ public class ContentBean implements Serializable {
 		this.from = from;
 	}
 
-
-
-	
-
-
 }
