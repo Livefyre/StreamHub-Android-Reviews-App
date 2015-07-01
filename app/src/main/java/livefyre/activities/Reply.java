@@ -126,7 +126,7 @@ public class Reply extends BaseActivity {
 			parameters.put(LFSConstants.LFSPostUserTokenKey,
 					LFSConfig.USER_TOKEN);
 			try {
-				WriteClient.postContent(LFSConfig.NETWORK_ID,
+				WriteClient.postContent(
 						LFSConfig.COLLECTION_ID, id, LFSConfig.USER_TOKEN,
 						parameters, new newReplyCallback());
 			} catch (MalformedURLException e) {
@@ -142,7 +142,6 @@ public class Reply extends BaseActivity {
 			WriteClient.postAction(LFSConfig.COLLECTION_ID, id,
 					LFSConfig.USER_TOKEN, LFSActions.EDIT, parameters,
 					new editCallback());
-
 		}
 	}
 
@@ -163,17 +162,14 @@ public class Reply extends BaseActivity {
 				JSONObject errorJson=new JSONObject(content);
 				if(!errorJson.isNull("msg")){
 					showAlert(errorJson.getString("msg"), LFSAppConstants.DISMISS);
-
 				}else{
 					showAlert("Something went wrong.", LFSAppConstants.DISMISS);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 				showAlert("Something went wrong.", LFSAppConstants.DISMISS);
-
 			}
 		}
-
 	}
 
 	public class newReplyCallback extends JsonHttpResponseHandler {

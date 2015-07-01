@@ -218,7 +218,7 @@ public class ReviewsActivity extends BaseActivity implements
 		try {
 			AdminClient.authenticateUser(LFSConfig.USER_TOKEN,
 					LFSConfig.COLLECTION_ID, LFSConfig.ARTICLE_ID,
-					LFSConfig.SITE_ID, LFSConfig.NETWORK_ID,
+					LFSConfig.SITE_ID,
 					new AdminCallback());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -232,7 +232,6 @@ public class ReviewsActivity extends BaseActivity implements
 			JSONObject data;
 			try {
 				data = AdminClintJsonResponseObject.getJSONObject("data");
-
 				if (!data.isNull("permissions")) {
 					JSONObject permissions = data.getJSONObject("permissions");
 					if (!permissions.isNull("moderator_key"))
@@ -246,7 +245,6 @@ public class ReviewsActivity extends BaseActivity implements
 					application.saveDataInSharedPreferences(
 							LFSAppConstants.ISMOD, "no");
 				}
-
 				if (!data.isNull("profile")) {
 					JSONObject profile = data.getJSONObject("profile");
 
@@ -256,14 +254,11 @@ public class ReviewsActivity extends BaseActivity implements
 						adminClintId = profile.getString("id");
 					}
 				}
-
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-
 			bootstrapClientCall();
 		}
-
 		@Override
 		public void onFailure(Throwable error, String content) {
 			super.onFailure(error, content);
@@ -275,7 +270,7 @@ public class ReviewsActivity extends BaseActivity implements
 
 	void bootstrapClientCall() {
 		try {
-			BootstrapClient.getInit(LFSConfig.NETWORK_ID, LFSConfig.SITE_ID,
+			BootstrapClient.getInit( LFSConfig.SITE_ID,
 					LFSConfig.ARTICLE_ID, new InitCallback());
 
 		} catch (UnsupportedEncodingException e) {
@@ -315,9 +310,9 @@ public class ReviewsActivity extends BaseActivity implements
 
 	void streamClintCall() {
 		try {
-			StreamClient.pollStreamEndpoint(LFSConfig.NETWORK_ID,
+			StreamClient.pollStreamEndpoint(
 					LFSConfig.COLLECTION_ID, ContentParser.lastEvent,
-					new StramCallBack());
+					new StreamCallBack());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
@@ -325,7 +320,7 @@ public class ReviewsActivity extends BaseActivity implements
 		}
 	}
 
-	public class StramCallBack extends AsyncHttpResponseHandler {
+	public class StreamCallBack extends AsyncHttpResponseHandler {
 
 		public void onSuccess(String data) {
 			if (data != null) {

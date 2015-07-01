@@ -65,19 +65,15 @@ public class NewReview extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.new_review);
-
 		init();
-
 		newReviewTitleEt.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 			}
-
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-
 				if (newReviewTitleEt.getText().toString().length() > 0) {
 					newReviewTitleTv.setVisibility(View.VISIBLE);
 					newReviewTitleEt.setHintTextColor(Color
@@ -88,10 +84,8 @@ public class NewReview extends BaseActivity {
 							.parseColor("#cdcdcd"));
 				}
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
-
 				if (newReviewTitleEt.getText().toString().length() > 0) {
 					newReviewTitleTv.setVisibility(View.VISIBLE);
 					newReviewTitleEt.setHintTextColor(Color
@@ -108,9 +102,7 @@ public class NewReview extends BaseActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-
 			}
-
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
@@ -124,7 +116,6 @@ public class NewReview extends BaseActivity {
 							.parseColor("#cdcdcd"));
 				}
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (newReviewBodyEt.getText().toString().length() > 0) {
@@ -138,18 +129,14 @@ public class NewReview extends BaseActivity {
 				}
 			}
 		});
-
 		newReviewProsEt.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-
 			}
-
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-
 				if (newReviewProsEt.getText().toString().length() > 0) {
 					newReviewProsTv.setVisibility(View.VISIBLE);
 					newReviewProsEt.setHintTextColor(Color
@@ -160,10 +147,8 @@ public class NewReview extends BaseActivity {
 							.parseColor("#cdcdcd"));
 				}
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
-
 				if (newReviewProsEt.getText().toString().length() > 0) {
 					newReviewProsTv.setVisibility(View.VISIBLE);
 					newReviewProsEt.setHintTextColor(Color
@@ -175,18 +160,14 @@ public class NewReview extends BaseActivity {
 				}
 			}
 		});
-
 		newReviewConsEt.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-
 			}
-
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-
 				if (newReviewConsEt.getText().toString().length() > 0) {
 					newReviewConsTv.setVisibility(View.VISIBLE);
 					newReviewConsEt.setHintTextColor(Color
@@ -197,10 +178,8 @@ public class NewReview extends BaseActivity {
 							.parseColor("#cdcdcd"));
 				}
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
-
 				if (newReviewConsEt.getText().toString().length() > 0) {
 					newReviewConsTv.setVisibility(View.VISIBLE);
 					newReviewConsEt.setHintTextColor(Color
@@ -212,7 +191,6 @@ public class NewReview extends BaseActivity {
 				}
 			}
 		});
-
 	}
 
 	void init() {
@@ -264,19 +242,15 @@ public class NewReview extends BaseActivity {
 				addPhoto.setVisibility(View.VISIBLE);
 				capturedImage.setVisibility(View.GONE);
 				deleteCapturedImage.setVisibility(View.GONE);
-
 				return;
 			}
-
 			camBtn.setVisibility(View.GONE);
 			addPhoto.setVisibility(View.GONE);
 			capturedImage.setVisibility(View.VISIBLE);
 			deleteCapturedImage.setVisibility(View.VISIBLE);
 			String imgUrl = data.getExtras().getString("fpurl");
 			Log.d("url", imgUrl + "");
-
 			try {
-
 				imgObj = new JSONObject();
 				imgObj.put("link", imgUrl);
 				imgObj.put("provider_name", "LivefyreFilePicker");
@@ -284,29 +258,12 @@ public class NewReview extends BaseActivity {
 				imgObj.put("thumbnail_url", imgUrl);
 				imgObj.put("type", "photo");
 				imgObj.put("url", imgUrl);
-
 				Picasso.with(getBaseContext()).load(imgUrl).fit()
 						.into(capturedImage);
-
-				// Bitmap bitmap = cache.getImageFromWarehouse(imgUrl);
-				// if (bitmap != null) {
-				// Log.d("Length bitmap", "" + bitmap.getByteCount());
-				// capturedImage.setImageBitmap(bitmap);
-				//
-				// } else {
-				// capturedImage.setImageBitmap(null);
-				// DownloadImageTask imgTask = new DownloadImageTask(cache,
-				// capturedImage);
-				//
-				// imgTask.execute(imgUrl);
-				// }
-
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-
 			}
-
 		}
 	}
 
@@ -315,11 +272,9 @@ public class NewReview extends BaseActivity {
 		public void onClick(View v) {
 			camBtn.setVisibility(View.VISIBLE);
 			addPhoto.setVisibility(View.VISIBLE);
-
 			capturedImage.setVisibility(View.GONE);
 			deleteCapturedImage.setVisibility(View.GONE);
 			imgUrl = "";
-
 			imgObj = null;
 		}
 	};
@@ -330,40 +285,18 @@ public class NewReview extends BaseActivity {
 
 			Intent intent = new Intent(NewReview.this, FilePicker.class);
 			FilePickerAPI.setKey(LFSConfig.FILEPICKER_API_KEY);
-
 			startActivityForResult(intent, FilePickerAPI.REQUEST_CODE_GETFILE);
 		}
 	};
 
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// if (resultCode != RESULT_OK)
-	// return;
-	// Uri uri = data.getData();
-	// System.out.println("File path is " + uri.toString());
-	// System.out.println("FPUrl: " + data.getExtras().getString("fpurl"));
-	// System.out.println("File name: "
-	// + data.getExtras().getString("filename"));
-	//
-	// // Uri uri = Uri.fromFile("/tmp/android.txt"); //a uri to the content to
-	// save
-	// Intent intent = new Intent(FilePicker.SAVE_CONTENT, uri, this,
-	// FilePicker.class);
-	// // intent.putExtra("extension", ".txt"); //optional, add an extension
-	// startActivityForResult(intent, FilePickerAPI.REQUEST_CODE_SAVEFILE);
-	// }
-
 	OnClickListener postReviewListener = new OnClickListener() {
 
 		public void onClick(View v) {
-
 			String title = newReviewTitleEt.getText().toString();
 			String description = newReviewBodyEt.getText().toString();
 			String pros = newReviewProsEt.getText().toString();
 			String cons = newReviewConsEt.getText().toString();
-
 			int reviewRating = (int) (newReviewRatingBar.getRating() * 20);
-
 			if (title.length() == 0) {
 				showAlert("Please Enter Title.", LFSAppConstants.DISMISS);
 				return;
@@ -419,9 +352,9 @@ public class NewReview extends BaseActivity {
 			parameters.put(LFSConstants.LFSPostAttachment,
 					(new JSONArray().put(imgObj)).toString());
 		try {
-			WriteClient.postContent(LFSConfig.NETWORK_ID,
-                    LFSConfig.COLLECTION_ID, null, LFSConfig.USER_TOKEN,
-                    parameters, new writeclientCallback());
+			WriteClient.postContent(
+					LFSConfig.COLLECTION_ID, null, LFSConfig.USER_TOKEN,
+					parameters, new writeclientCallback());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -462,24 +395,7 @@ public class NewReview extends BaseActivity {
 	OnClickListener backtoReviewActivityListener = new OnClickListener() {
 
 		public void onClick(View v) {
-
 			finish();
 		}
 	};
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// if (resultCode != RESULT_OK)
-	// return;
-	// Uri uri = data.getData();
-	// System.out.println("File path is " + uri.toString());
-	// System.out.println("FPUrl: " + data.getExtras().getString("fpurl"));
-	// System.out.println("File name: "
-	// + data.getExtras().getString("filename"));
-	// // Uri uri = Uri.fromFile("/tmp/android.txt"); //a uri to the content to
-	// // save
-	// Intent intent = new Intent(FilePicker.SAVE_CONTENT, uri, this,
-	// FilePicker.class);
-	// intent.putExtra("extension", ".txt"); // optional, add an extension
-	// startActivityForResult(intent, FilePickerAPI.REQUEST_CODE_SAVEFILE);
-	// }
 }

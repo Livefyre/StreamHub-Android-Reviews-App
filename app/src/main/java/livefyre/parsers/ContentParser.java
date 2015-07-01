@@ -69,11 +69,9 @@ public class ContentParser {
 							} else {
 								list = new ArrayList();
 								list.add(t.getId());
-
 							}
 							bean.setChildBeanContent(list);
 						}
-
 					}
 				}
 			}
@@ -92,7 +90,6 @@ public class ContentParser {
 					bean.setVisibilityCount(visCount - 1);
 				}
 		}
-
 	}
 
 	public int visibilityCountForContent(JSONArray ja) {

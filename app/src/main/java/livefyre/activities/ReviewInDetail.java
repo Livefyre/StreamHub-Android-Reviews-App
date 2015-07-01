@@ -105,14 +105,12 @@ public class ReviewInDetail extends BaseActivity {
 				for (int i = 0; i < collectionToBuild.size(); i++) {
 					ContentBean b = collectionToBuild.get(i);
 					if (b.getId().equals(latestContentId)) {
-
 						position = i;
 					}
 				}
 			}
 			listView.smoothScrollToPosition(position + 1);
 		}
-
 	};
 
 	private void loadAllData() {
@@ -156,10 +154,8 @@ public class ReviewInDetail extends BaseActivity {
 				ContentBean mContentBean = ContentParser.ContentCollection
 						.get(reviewId);
 				mContentBean.setNewReplyCount(newReplyCount);
-
 			}
 		}
-
 	}
 
 	void init() {
@@ -196,7 +192,6 @@ public class ReviewInDetail extends BaseActivity {
 		public void onClick(View v) {
 			Intent mainViewIntent = new Intent(ReviewInDetail.this,
 					ReviewsActivity.class);
-
 			startActivity(mainViewIntent);
 		}
 	};
@@ -222,10 +217,8 @@ public class ReviewInDetail extends BaseActivity {
 					image_header.setImageBitmap(null);
 					DownloadImageTask imgTask = new DownloadImageTask(cache,
 							image_header);
-
 					imgTask.execute(img);
 				}
-
 			} else {
 				image_header.setImageResource(R.drawable.img_bac);
 				listView.setBackgroundResource(R.drawable.img_bac);
@@ -234,20 +227,15 @@ public class ReviewInDetail extends BaseActivity {
 			image_header.setImageResource(R.drawable.img_bac);
 			listView.setBackgroundResource(R.drawable.img_bac);
 		}
-
 	}
 
 	void buildList() {
-
 		loadAllData();
 		adapter = null;
 		if (adapter == null) {
 			adapter = new ReviewInDetailAdapter(ReviewInDetail.this, getApplicationContext(), collectionToBuild,notificationHandler, selectedReview.getId());
-
 		}
-
 		listView.setAdapter(adapter);
-
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

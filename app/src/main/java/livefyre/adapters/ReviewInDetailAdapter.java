@@ -438,7 +438,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 					} else {
 						moreDialog(content.getId(), false, true);
 					}
-
 				}
 			});
 
@@ -1098,7 +1097,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 		dialog = new ProgressDialog(activity);
 		dialog.setMessage("Please wait." + "\n"
 				+ "Your request is being processed..");
-
 		dialog.setCancelable(false);
 		dialog.show();
 	}
@@ -1107,7 +1105,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 		try {
 			dialog.dismiss();
 		} catch (Exception e) {
-
 		}
 	}
 

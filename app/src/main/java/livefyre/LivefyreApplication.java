@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import livefyre.streamhub.LivefyreConfig;
+
 public class LivefyreApplication extends Application {
 	private static final int TIMEOUT_VALUE = 10000;
 	private static final String LIVEFYRE = "livefyre";
@@ -15,7 +17,7 @@ public class LivefyreApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		LivefyreConfig.setLivefyreNetworkID(LFSConfig.NETWORK_ID);
 		AppSingleton.getInstance().setApplication(this);
 		init();
 	}

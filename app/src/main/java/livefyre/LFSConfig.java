@@ -10,7 +10,7 @@ public class LFSConfig {
 	
 	public static String testUser ="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkb21haW4iOiJjbGllbnQtc29sdXRpb25zLmZ5cmUuY28iLCJ1c2VyX2lkIjoiVGVzdHVzZXIxIiwiZGlzcGxheV9uYW1lIjoiVGVzdHVzZXIxIiwiZXhwaXJlcyI6MjgyNDg3MjA1MS43NTJ9.RX7oOnArddinnEGpH6xZDo_fGTBNlSqxVaK39b47J34";
 	
-	public static String USER_TOKEN = testUser;
+	public static String USER_TOKEN = system;
 	
 	
 }
