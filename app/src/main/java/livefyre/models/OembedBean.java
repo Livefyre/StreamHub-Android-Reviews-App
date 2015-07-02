@@ -2,9 +2,7 @@ package livefyre.models;
 
 public class OembedBean {
 
-	/**
-	 * 
-	 */
+
 	private String Visibility;
 	private String targetId;
 	private String Oembedlink;

@@ -1,53 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical" >
+    android:background="#ffffff">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#0F98EC"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
-
-        <Button
-            android:id="@+id/backtoReviewInDetailActivity"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/back_arrow" />
-
-        <TextView
-            android:id="@+id/replyText"
-            android:layout_toRightOf="@+id/backtoReviewInDetailActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:text="      Reply"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/postReply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="#0F98EC"
-            android:text="POST"
-            android:textColor="#ffffff"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar">
 
         <EditText
             android:id="@+id/newReplyEt"
@@ -62,4 +25,4 @@
             android:textSize="14sp" />
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

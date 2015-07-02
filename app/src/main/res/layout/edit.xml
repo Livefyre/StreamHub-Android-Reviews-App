@@ -1,55 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/livefyre"
-    android:orientation="vertical" >
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/editReviewTitle"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#0F98EC"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
-
-        <Button
-            android:id="@+id/backtoReviewInDetailFromEditActivity"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/back_arrow" />
-
-        <TextView
-            android:id="@+id/editReviewText"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_toRightOf="@+id/backtoReviewInDetailFromEditActivity"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:text="Edit Review"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/editPostReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="#0F98EC"
-            android:text="POST"
-            android:textColor="#ffffff"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/editReviewTitle"
+        android:layout_below="@+id/app_bar"
         android:background="#ffffff" >
 
         <ScrollView
@@ -70,7 +32,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Title"
+                    android:text="@string/Title"
                     android:textColor="#000"
                     android:visibility="invisible" />
 
@@ -80,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:background="#ffffff"
-                    android:hint="Title"
+                    android:hint="@string/Title"
                     android:lineSpacingExtra="3dp"
                     android:textColor="#4C4C4C"
                     android:textColorHint="#999999"
@@ -107,7 +69,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Description"
+                    android:text="@string/Description"
                     android:textColor="#000"
                     android:textSize="12sp"
                     android:visibility="invisible"
@@ -119,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:background="#ffffff"
-                    android:hint="Description"
+                    android:hint="@string/Description"
                     android:lineSpacingExtra="5dp"
                     android:textColor="#4C4C4C"
                     android:textColorHighlight="#999999"
