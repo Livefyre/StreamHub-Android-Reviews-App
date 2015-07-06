@@ -110,7 +110,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         public void onClick(View v) {
             Intent detailViewIntent = new Intent(ReviewsActivity.this,
-                    ReviewIndetailActivity.class);
+                    ReviewInDetailActivity.class);
             detailViewIntent.putExtra("id", ownReviewId);
             startActivity(detailViewIntent);
 //            overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -170,7 +170,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 @Override
                 public void onClick(View view, int position) {
 
-                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewIndetailActivity.class);
+                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
                     detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
                     startActivity(detailViewIntent);
 

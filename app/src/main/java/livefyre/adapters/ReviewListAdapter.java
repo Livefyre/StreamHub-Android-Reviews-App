@@ -38,7 +38,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         this.context = context;
     }
 
-
     @Override
     public int getItemViewType(int position) {
         return ContentMap.get(position).getContentType().getValue();
