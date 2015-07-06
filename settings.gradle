@@ -1,3 +1,1 @@
 include ':app', ':streamHubAndroidSDK'
-include ':filePickerSDK'
-project(':filePickerSDK').projectDir = new File(rootProject.projectDir, './filePickerSDK')

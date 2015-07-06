@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StreamHub-Android-Reviews-App-3.1.iml" filepath="$PROJECT_DIR$/StreamHub-Android-Reviews-App-3.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/filePickerSDK/filePickerSDK.iml" filepath="$PROJECT_DIR$/filePickerSDK/filePickerSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/streamHubAndroidSDK/streamHubAndroidSDK.iml" filepath="$PROJECT_DIR$/streamHubAndroidSDK/streamHubAndroidSDK.iml" />
     </modules>
   </component>

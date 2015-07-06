@@ -18,9 +18,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.filepicker.sdk.FilePicker;
-import com.filepicker.sdk.FilePickerAPI;
-
+import io.filepicker.Filepicker;
 import livefyre.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -336,9 +334,9 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
     View.OnClickListener captureImageListener = new View.OnClickListener() {
 
         public void onClick(View v) {
-            Intent intent = new Intent(NewReviewActivity.this, FilePicker.class);
-            FilePickerAPI.setKey(LFSConfig.FILEPICKER_API_KEY);
-            startActivityForResult(intent, FilePickerAPI.REQUEST_CODE_GETFILE);
+            Intent intent = new Intent(NewReviewActivity.this, Filepicker.class);
+            Filepicker.setKey(LFSConfig.FILEPICKER_API_KEY);
+            startActivityForResult(intent, Filepicker.REQUEST_CODE_GETFILE);
         }
     };
 
@@ -357,14 +355,14 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
     DialogInterface.OnClickListener selectImageDialogAction = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface arg0, int arg1) {
-            Intent intent = new Intent(NewReviewActivity.this, FilePicker.class);
-            FilePickerAPI.setKey(LFSConfig.FILEPICKER_API_KEY);
-            startActivityForResult(intent, FilePickerAPI.REQUEST_CODE_GETFILE);
+            Intent intent = new Intent(NewReviewActivity.this, Filepicker.class);
+            Filepicker.setKey(LFSConfig.FILEPICKER_API_KEY);
+            startActivityForResult(intent, Filepicker.REQUEST_CODE_GETFILE);
         }
     };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FilePickerAPI.REQUEST_CODE_GETFILE) {
+        if (requestCode == Filepicker.REQUEST_CODE_GETFILE) {
             if (resultCode != RESULT_OK) {
                 showAlert("No Image Selected.", "SELECT IMAGE", selectImageDialogAction);
                 addPhotoLL.setVisibility(View.VISIBLE);
