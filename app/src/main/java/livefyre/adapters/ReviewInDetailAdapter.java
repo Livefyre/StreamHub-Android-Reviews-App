@@ -64,13 +64,19 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 
     private List<Content> ContentArray;
 
-    public ReviewInDetailAdapter(Context context,
-                                 List<Content> ContentArray) {
+    public ReviewInDetailAdapter(Activity activity, Context context,
+                                 List<Content> ContentArray, OnClickListener notificationHandler,String mainReviewId) {
         this.ContentArray = ContentArray;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+		this.mainReviewId = mainReviewId;
+		this.activity = activity;
         application = AppSingleton.getInstance().getApplication();
     }
+	public void updateReviewInDetailAdapter(List<Content> ContentCollection) {
+		this.ContentArray = ContentCollection;
+		notifyDataSetChanged();
+	}
 
     @Override
     public int getItemViewType(int position) {
@@ -83,8 +89,8 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
         View view = null;
         switch (viewType) {
             case PARENT:
-                view = inflater.inflate(R.layout.activity_child_list_row, parent, false);
-                holder = new MyViewHolder(view);
+                view = inflater.inflate(R.layout.activity_review_indetail, parent, false);
+				holder = new MyViewHolder(view);
                 break;
             case CHILD:
                 view = inflater.inflate(R.layout.activity_child_list_row, parent, false);
@@ -266,7 +272,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 			});
 			break;
 		case CHILD:
-
 			float density = context.getResources().getDisplayMetrics().density;
 			int px = (int) (40 * density);
             int depthValue = 0;
@@ -519,7 +524,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 	private void helpfulDialog(final int HFVal, final String id) {
 		final Dialog dialog = new Dialog(activity,
 				android.R.style.Theme_Translucent_NoTitleBar);
-
 		dialog.setTitle("");
 		dialog.setContentView(R.layout.helpfull_dialog);
 		dialog.setCancelable(true);
@@ -527,12 +531,9 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 		LinearLayout emptyDialogSpace = (LinearLayout) dialog
 				.findViewById(R.id.emptyDialogSpace);
 		emptyDialogSpace.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
 				dialog.dismiss();
-
 			}
 		});
 

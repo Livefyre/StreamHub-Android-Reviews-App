@@ -156,6 +156,10 @@ public class ContentParser {
                     mContent.setIsModerator(annotations
                             .getString("moderator"));
                 }
+                if (!annotations.isNull("rating")) {
+                    mContent.setRating(""
+                            + (annotations.getJSONArray("rating").get(0)));
+                }
                 if (!annotations.isNull("isFeatured")) {
                     mContent.setIsFeatured(true);
                 }
@@ -202,17 +206,12 @@ public class ContentParser {
             if (!content.isNull("ancestorId")) {
                 mContent.setAncestorId(content.getString("ancestorId"));
             }
-
             if (!content.isNull("title")) {
                 mContent.setTitle(content.getString("title"));
             }
-
-
             if (!content.isNull("bodyHtml"))
                 mContent.setBodyHtml(content.getString("bodyHtml"));
-
             else
-
                 mContent.setBodyHtml("");
             if (!contentObject.isNull("vis")) {
                 mContent.setVisibility(contentObject.getString("vis"));
@@ -224,6 +223,9 @@ public class ContentParser {
 
             if (!contentObject.getString("vis").equals("1"))
                 mContent.setContentType(ContentTypeEnum.DELETED);
+
+            if (!contentObject.isNull("rating"))
+                mContent.setRating(contentObject.getString("rating"));
 
             if (!contentObject.isNull("event")) {
                 mContent.setEvent(contentObject.getString("event"));
@@ -322,31 +324,31 @@ public class ContentParser {
 //        return childs;
 //
 //    }
-    public void getCommentsforReviews(ArrayList<Content> reviewsList){
-        ArrayList<Content> CommentsArray=new ArrayList<>();
-        for (int position = 0; position < reviewsArray.size(); position++) {
-            Content rContent = reviewsArray.get(position);
-            for (int i = 0; i < reviewsList.size(); i++) {
-                Content reviewContent = reviewsList.get(i);
-                if (rContent.getId().equals(reviewContent.getParentId())) {
-                    CommentsArray.add(reviewContent);
-                }
-            }
-            Collections.sort(CommentsArray, new Comparator<Content>() {
-                @Override
-                public int compare(Content lhs, Content rhs) {
-                    return Integer.parseInt(rhs.getCreatedAt())
-                            - Integer.parseInt(lhs.getCreatedAt());
-                }
-            });
-            for (int i = 0; i < CommentsArray.size(); i++) {
-
-                parentsList.add(position + i + 1, CommentsArray.get(i));
-                SortedContents.add(position + i + 1, CommentsArray.get(i));
-                getChildContents(reviewsList);
-            }
-        }
-    }
+//    public void getCommentsforReviews(ArrayList<Content> reviewsList){
+//        ArrayList<Content> CommentsArray=new ArrayList<>();
+//        for (int position = 0; position < reviewsArray.size(); position++) {
+//            Content rContent = reviewsArray.get(position);
+//            for (int i = 0; i < reviewsList.size(); i++) {
+//                Content reviewContent = reviewsList.get(i);
+//                if (rContent.getId().equals(reviewContent.getParentId())) {
+//                    CommentsArray.add(reviewContent);
+//                }
+//            }
+//            Collections.sort(CommentsArray, new Comparator<Content>() {
+//                @Override
+//                public int compare(Content lhs, Content rhs) {
+//                    return Integer.parseInt(rhs.getCreatedAt())
+//                            - Integer.parseInt(lhs.getCreatedAt());
+//                }
+//            });
+//            for (int i = 0; i < CommentsArray.size(); i++) {
+//
+//                parentsList.add(position + i + 1, CommentsArray.get(i));
+//                SortedContents.add(position + i + 1, CommentsArray.get(i));
+//                getChildContents(reviewsList);
+//            }
+//        }
+//    }
     public void getChildContents(ArrayList<Content> mainList) {
         for (int position = 0; position < parentsList.size(); position++) {
             Content mContent = parentsList.get(position);
@@ -388,7 +390,6 @@ public class ContentParser {
                 getChildContents(mainList);
             }
         }
-
     }
 
 
@@ -417,6 +418,28 @@ public class ContentParser {
         return tempArray;
     }
 
+    public  static ArrayList<Content> getChildForContent(String contentId){
+        return getChildContentsRecursive(contentId, new ArrayList<Content>());
+    }
+
+    public static ArrayList<Content> getChildContentsRecursive(String contentId, ArrayList<Content> results) {
+        Content mContent = ContentMap.get(contentId);
+        if (mContent != null) {
+            List<String> childPath = mContent.getChildPath();
+            if (childPath != null)
+                for (int i = 0; i < childPath.size(); i++) {
+                    Content childContent = ContentMap.get(childPath.get(i));
+                    if (childContent.getVisibility().equals("1")) {
+                        results.add(childContent);
+//                        return ;
+//                    } else {
+                    getChildContentsRecursive(childPath.get(i),results);
+                    }
+                }
+        }
+        return results;
+    }
+
     public Boolean hasVisibleChildContents(String contentId) {
 
         Content mContent = ContentMap.get(contentId);
@@ -434,7 +457,6 @@ public class ContentParser {
         }
         return false;
     }
-
 
     public void setStreamData(String data) {
 

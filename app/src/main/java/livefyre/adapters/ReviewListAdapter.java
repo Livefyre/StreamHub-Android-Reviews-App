@@ -61,18 +61,13 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.reviewCount.setVisibility(View.VISIBLE);
 
         if (content.getVote() != null) {
-
             if (content.getVisibilityCount() == 0
                     && content.getVote().size() == 0) {
-
                 holder.reviewCount.setVisibility(View.GONE);
-
             }
         } else if (content.getVisibilityCount() == 0) {
             holder.reviewCount.setVisibility(View.GONE);
-
         }
-
         if (content.getIsModerator() != null) {
             if (content.getIsModerator().equals("true")) {
                 holder.isMod.setText("Moderator");
@@ -85,21 +80,19 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         } else {
             holder.isMod.setVisibility(View.GONE);
         }
-
         if (content.getIsFeatured() != null) {
             if (content.getIsFeatured()) {
                 holder.isMod.setText("Feature");
                 holder.isMod.setTextColor(Color.parseColor("#FEB33B"));
                 holder.isMod.setVisibility(View.VISIBLE);
                 holder.reviewerid.setMaxWidth(330);
-
             }
         }
-
         holder.reviewedDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
         holder.reviewTitle.setText(content.getTitle());
         holder.reviewBody.setText(LFUtils.trimTrailingWhitespace(Html.fromHtml(content.getBodyHtml())), TextView.BufferType.SPANNABLE);
         holder.reviewRatingBar.setRating(Float.parseFloat(content.getRating()) / 20);
+
         if (content.getAuthor().getAvatar().length() > 0) {
             Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.reviewerImage);
         } else {
@@ -126,12 +119,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
                         } else {
                             holder.reviewImage.setVisibility(View.GONE);
                         }
-
-                    } else {
+                    }  else {
                         holder.reviewImage.setVisibility(View.GONE);
                     }
                 }
-
             } else {
                 holder.reviewImage.setVisibility(View.GONE);
             }
@@ -157,18 +148,16 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         } else
             holder.replies.setVisibility(View.GONE);
     }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
-
     @Override
     public int getItemCount() {
         return ContentMap.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+     static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView reviewerImage, reviewImage;
         RatingBar reviewRatingBar;
         TextView reviewerid, isMod, reviewedDate, reviewTitle, reviewBody, helpful, replies;
