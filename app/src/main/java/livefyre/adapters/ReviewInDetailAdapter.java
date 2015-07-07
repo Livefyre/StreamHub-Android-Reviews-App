@@ -1017,7 +1017,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
             Log.d("action ClientCall", error + "");
             showToast("Something went wrong.");
         }
-
     }
 
     private class helpfulCallback extends JsonHttpResponseHandler {

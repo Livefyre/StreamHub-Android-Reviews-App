@@ -2,31 +2,23 @@ package livefyre.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,20 +26,12 @@ import java.util.List;
 
 import livefyre.AppSingleton;
 import livefyre.BaseActivity;
-import livefyre.LFSAppConstants;
-import livefyre.LFSConfig;
+
 import livefyre.LivefyreApplication;
 import livefyre.R;
-import livefyre.RoundedTransformation;
 import livefyre.adapters.ReviewInDetailAdapter;
-import livefyre.models.Attachments;
 import livefyre.models.Content;
-import livefyre.models.Vote;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.LFSActions;
-import livefyre.streamhub.LFSConstants;
-import livefyre.streamhub.LFSFlag;
-import livefyre.streamhub.WriteClient;
 
 /**
  * Created by kvanadev5 on 18/06/15.
@@ -86,6 +70,12 @@ public class ReviewInDetailActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_indetail);
+//        FadingActionBarHelper helper = new FadingActionBarHelper()
+//                .actionBarBackground(getResources().getDrawable(R.color.colorPrimary))
+//                .headerLayout(R.layout.activity_parent_row)
+//                .contentLayout(R.layout.activity_review_indetail);
+//        setContentView(helper.createView(this));
+//        helper.initActionBar(this);
         application = AppSingleton.getInstance().getApplication();
         pullViews();
         getDataFromIntent();
@@ -162,24 +152,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         Intent fromReviewsActivity = getIntent();
         reviewId = fromReviewsActivity.getStringExtra("id");
         selectedReviews = ContentParser.ContentMap.get(reviewId);
-
-        // actionbar text
-//        List<Attachments> img = selectedReviews.getAttachments();
-//        if (img != null) {
-//            Attachments mAttachments = selectedReviews.getAttachments().get(0);
-//            if (mAttachments.getUrl() != null) {
-//                if (mAttachments.getUrl().length() > 0) {
-//                    image_header.setVisibility(View.VISIBLE);
-//                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-//                } else {
-//                    image_header.setVisibility(View.GONE);
-//                }
-//            } else {
-//                image_header.setImageResource(R.mipmap.img_bac);
-//            }
-//        } else {
-//            image_header.setImageResource(R.mipmap.img_bac);
-//        }
+//        getActionBar().setTitle("  " + selectedReviews.getTitle());
     }
 
     void buildList() {
