@@ -164,22 +164,22 @@ public class ReviewInDetailActivity extends BaseActivity {
         selectedReviews = ContentParser.ContentMap.get(reviewId);
 
         // actionbar text
-        List<Attachments> img = selectedReviews.getAttachments();
-        if (img != null) {
-            Attachments mAttachments = selectedReviews.getAttachments().get(0);
-            if (mAttachments.getUrl() != null) {
-                if (mAttachments.getUrl().length() > 0) {
-                    image_header.setVisibility(View.VISIBLE);
-                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-                } else {
-                    image_header.setVisibility(View.GONE);
-                }
-            } else {
-                image_header.setImageResource(R.mipmap.img_bac);
-            }
-        } else {
-            image_header.setImageResource(R.mipmap.img_bac);
-        }
+//        List<Attachments> img = selectedReviews.getAttachments();
+//        if (img != null) {
+//            Attachments mAttachments = selectedReviews.getAttachments().get(0);
+//            if (mAttachments.getUrl() != null) {
+//                if (mAttachments.getUrl().length() > 0) {
+//                    image_header.setVisibility(View.VISIBLE);
+//                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+//                } else {
+//                    image_header.setVisibility(View.GONE);
+//                }
+//            } else {
+//                image_header.setImageResource(R.mipmap.img_bac);
+//            }
+//        } else {
+//            image_header.setImageResource(R.mipmap.img_bac);
+//        }
     }
 
     void buildList() {

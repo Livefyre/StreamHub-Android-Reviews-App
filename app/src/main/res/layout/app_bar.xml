@@ -25,24 +25,27 @@
                 android:layout_marginRight="32dp" />
 
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/activityIconLL">
 
-        <!--<Spinner-->
-            <!--android:id="@+id/activityTitleSpinner"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:entries="@array/helpful_categories"-->
-            <!--android:prompt="@string/helpful_spinner"-->
-            <!--android:layout_toRightOf="@+id/activityIconLL"-->
-            <!--android:spinnerMode="dropdown" />-->
+        <Spinner
+            android:id="@+id/activityTitleSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/helpful_categories"
+            android:prompt="@string/helpful_spinner"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/activityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/activityIconLL"
-            android:textColor="@color/white" />
 
+            android:textColor="@color/white" />
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/actionLL"
             android:layout_width="wrap_content"

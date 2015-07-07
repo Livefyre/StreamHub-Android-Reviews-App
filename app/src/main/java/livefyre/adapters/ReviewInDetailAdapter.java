@@ -42,6 +42,7 @@ import livefyre.LivefyreApplication;
 import livefyre.RoundedTransformation;
 import livefyre.activities.EditReview;
 import livefyre.activities.ReplyReview;
+import livefyre.models.Attachments;
 import livefyre.models.Content;
 import livefyre.models.Vote;
 import livefyre.parsers.ContentParser;
@@ -114,7 +115,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         // main
         Button backtoReviewActivityFromInDetailView;
         TextView titleForReviewInDetail;
-        ImageView reviewImageInDetail;
+        ImageView image_header;
         RatingBar ratingBarInDetailView;
         ImageView mainReviewerImage;
         TextView mainReviewerDisplayName;
@@ -147,6 +148,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         ImageView childHelpfulImg;
         ImageView childReplyImg;
         ImageView childMoreOptions;
+
         // deleted
         LinearLayout deletedCell;
 
@@ -170,31 +172,22 @@ public class ReviewInDetailAdapter extends BaseAdapter {
             case PARENT:
 //                break;
                 view = inflater.inflate(R.layout.activity_parent_row, null);
+                holder.image_header = (ImageView) view.findViewById(R.id.image_header);
+                holder.parentNotifBtn = (Button) view.findViewById(R.id.parentNotifBtn);
 
-                holder.parentNotifBtn = (Button) view
-                        .findViewById(R.id.parentNotifBtn);
+                holder.titleForReviewInDetail = (TextView) view.findViewById(R.id.titleForReviewInDetail);
 
-                holder.titleForReviewInDetail = (TextView) view
-                        .findViewById(R.id.titleForReviewInDetail);
+                holder.ratingBarInDetailView = (RatingBar) view.findViewById(R.id.ratingBarInDetailView);
 
-                holder.ratingBarInDetailView = (RatingBar) view
-                        .findViewById(R.id.ratingBarInDetailView);
-
-                holder.mainReviewerImage = (ImageView) view
-                        .findViewById(R.id.mainReviewerImage);
-                holder.mainReviewerDisplayName = (TextView) view
-                        .findViewById(R.id.mainReviewerDisplayName);
-                holder.mainReviewDate = (TextView) view
-                        .findViewById(R.id.mainReviewDate);
-                holder.mainReviewBody = (TextView) view
-                        .findViewById(R.id.mainReviewBody);
+                holder.mainReviewerImage = (ImageView) view.findViewById(R.id.mainReviewerImage);
+                holder.mainReviewerDisplayName = (TextView) view.findViewById(R.id.mainReviewerDisplayName);
+                holder.mainReviewDate = (TextView) view.findViewById(R.id.mainReviewDate);
+                holder.mainReviewBody = (TextView) view.findViewById(R.id.mainReviewBody);
                 holder.isParenrMod = (TextView) view.findViewById(R.id.isParentMod);
 
-                holder.parentHelpfulImg = (ImageView) view
-                        .findViewById(R.id.parentsHelpfulImg);
+                holder.parentHelpfulImg = (ImageView) view.findViewById(R.id.parentsHelpfulImg);
 
-                holder.parentHelpfulTv = (TextView) view
-                        .findViewById(R.id.parentsHelpfulTv);
+                holder.parentHelpfulTv = (TextView) view.findViewById(R.id.parentsHelpfulTv);
 
                 holder.parentReplyTv = (TextView) view
                         .findViewById(R.id.parentReplyTv);
@@ -255,157 +248,179 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         switch (viewType) {
             case PARENT:
 //                break;
-//                if (content.getNewReplyCount() > 0) {
-//                    holder.parentNotifRV.setVisibility(View.VISIBLE);
-//                    if (content.getNewReplyCount() != 1)
-//                        holder.detailReplyNotificationTV.setText(content
-//                                .getNewReplyCount() + " New Replies");
-//                    else
-//                        holder.detailReplyNotificationTV.setText(content
-//                                .getNewReplyCount() + " New Reply");
-//                } else {
-//                    holder.parentNotifRV.setVisibility(View.GONE);
-//                }
-//
-//                if (content.getIsModerator() != null) {
-//                    if (content.getIsModerator().equals("true")) {
-//                        holder.isParenrMod.setText("Moderator");
-//                        holder.isParenrMod
-//                                .setTextColor(Color.parseColor("#0F98EC"));
-//                        holder.isParenrMod.setVisibility(View.VISIBLE);
-//                        holder.mainReviewerDisplayName.setMaxWidth(330);
-//                    } else {
-//                        holder.isParenrMod.setVisibility(View.GONE);
-//                    }
-//                } else {
-//                    holder.isParenrMod.setVisibility(View.GONE);
-//                }
-//
-//                if (content.getIsFeatured() != null) {
-//                    if (content.getIsFeatured()) {
-//                        holder.isParenrMod.setText("Feature");
-//                        holder.isParenrMod
-//                                .setTextColor(Color.parseColor("#FEB33B"));
-//                        holder.isParenrMod.setVisibility(View.VISIBLE);
-//                        holder.mainReviewerDisplayName.setMaxWidth(380);
-//
-//                    }
-//                }
-//
-//                if (content.getVote() != null) {// know helpful value and set color
-//                    if (content.getVote().size() > 0) {
-//                        helpfulFlag = 0;
-//                        helpfulFlag = knowHelpfulValue(
-//                                application
-//                                        .getDataFromSharedPreferences(LFSAppConstants.ID),
-//                                content.getVote());
-//
-//                        if (helpfulFlag == 1) {
-//                            holder.parentHelpfulImg
-//                                    .setImageResource(R.mipmap.helpful);
-//                            holder.parentHelpfulTv.setTextColor(Color
-//                                    .parseColor("#ff0000"));
-//                            holder.parentHelpfulTv.setText("HELPFUL");
-//                        } else if (helpfulFlag == 2) {
-//                            holder.parentHelpfulImg
-//                                    .setImageResource(R.mipmap.unhelpful);
-//                            holder.parentHelpfulTv.setTextColor(Color
-//                                    .parseColor("#848484"));
-//                            holder.parentHelpfulTv.setText("UNHELPFUL");
-//                        } else {
-//                            holder.parentHelpfulImg
-//                                    .setImageResource(R.mipmap.help_initial);
-//                            holder.parentHelpfulTv.setTextColor(Color
-//                                    .parseColor("#0F98EC"));
-//                            holder.parentHelpfulTv.setText("HELPFUL?");
-//                        }
-//                    } else {
-//                        holder.parentHelpfulImg
-//                                .setImageResource(R.mipmap.help_initial);
-//                        holder.parentHelpfulTv.setTextColor(Color
-//                                .parseColor("#0F98EC"));
-//                    }
-//
-//                } else {
-//                    holder.parentHelpfulImg
-//                            .setImageResource(R.mipmap.help_initial);
-//                    holder.parentHelpfulTv
-//                            .setTextColor(Color.parseColor("#0F98EC"));
-//                }
-//
-//                holder.titleForReviewInDetail.setText(content.getTitle());
-//
-//                holder.ratingBarInDetailView.setRating(Float.parseFloat(content
-//                        .getRating()) / 20);
-//                if (content.getAuthor().getAvatar().length() > 0) {
-//                    Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
-//                } else {
-//                }
-//
-//
-//                holder.parentReplyImg.setOnClickListener(new OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent replyView = new Intent(context, ReplyReview.class);
-//                        replyView.putExtra("id", content.getId());
-//                        replyView.putExtra("isEdit", false);
-//                        activity.startActivityForResult(replyView, 1);
-////                        activity.overridePendingTransition(R.anim.right_in,
-////                                R.anim.left_out);
-//                    }
-//                });
-//                holder.parentReplyTv.setOnClickListener(new OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent replyView = new Intent(activity, ReplyReview.class);
-//                        replyView.putExtra("id", content.getId());
-//                        replyView.putExtra("isEdit", false);
-//                        activity.startActivityForResult(replyView, 1);
-////                        activity.overridePendingTransition(R.anim.right_in,
-////                                R.anim.left_out);
-//                    }
-//                });
-//                holder.parentsHelpfulImg.setOnClickListener(new OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        helpfulDialog(
-//                                knowHelpfulValue(
-//                                        application
-//                                                .getDataFromSharedPreferences(LFSAppConstants.ID),
-//                                        content.getVote()), content.getId());
-//                    }
-//                });
-//                holder.parentHelpfulTv.setOnClickListener(new OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        helpfulDialog(
-//                                knowHelpfulValue(
-//                                        application
-//                                                .getDataFromSharedPreferences(LFSAppConstants.ID),
-//                                        content.getVote()), content.getId());
-//                    }
-//                });
-//                holder.parentMoreOptions.setOnClickListener(new OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (content.getIsFeatured() != null) {
-//                            if (content.getIsFeatured()) {
-//                                moreDialog(content.getId(), true, true);
-//                            } else {
-//                                moreDialog(content.getId(), false, true);
-//                            }
-//                        } else {
-//                            moreDialog(content.getId(), false, true);
-//                        }
-//                    }
-//                });
+                List<Attachments> img = content.getAttachments();
+                if (img != null) {
+                    Attachments mAttachments = content.getAttachments().get(0);
+                    if (mAttachments.getUrl() != null) {
+                        if (mAttachments.getUrl().length() > 0) {
+                            holder.image_header.setVisibility(View.VISIBLE);
+                            Picasso.with(context).load(mAttachments.getUrl()).fit().into(holder.image_header);
+                        } else {
+                            holder.image_header.setVisibility(View.GONE);
+                        }
+                    } else {
+                        holder.image_header.setImageResource(R.mipmap.img_bac);
+                    }
+                } else {
+                    holder.image_header.setImageResource(R.mipmap.img_bac);
+                }
+                if (content.getNewReplyCount() > 0) {
+                    holder.parentNotifRV.setVisibility(View.VISIBLE);
+                    if (content.getNewReplyCount() != 1)
+                        holder.detailReplyNotificationTV.setText(content
+                                .getNewReplyCount() + " New Replies");
+                    else
+                        holder.detailReplyNotificationTV.setText(content
+                                .getNewReplyCount() + " New Reply");
+                } else {
+                    holder.parentNotifRV.setVisibility(View.GONE);
+                }
+
+                if (content.getIsModerator() != null) {
+                    if (content.getIsModerator().equals("true")) {
+                        holder.isParenrMod.setText("Moderator");
+                        holder.isParenrMod
+                                .setTextColor(Color.parseColor("#0F98EC"));
+                        holder.isParenrMod.setVisibility(View.VISIBLE);
+                        holder.mainReviewerDisplayName.setMaxWidth(330);
+                    } else {
+                        holder.isParenrMod.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.isParenrMod.setVisibility(View.GONE);
+                }
+
+                if (content.getIsFeatured() != null) {
+                    if (content.getIsFeatured()) {
+                        holder.isParenrMod.setText("Feature");
+                        holder.isParenrMod
+                                .setTextColor(Color.parseColor("#FEB33B"));
+                        holder.isParenrMod.setVisibility(View.VISIBLE);
+                        holder.mainReviewerDisplayName.setMaxWidth(380);
+
+                    }
+                }
+
+                if (content.getVote() != null) {// know helpful value and set color
+                    if (content.getVote().size() > 0) {
+                        helpfulFlag = 0;
+                        helpfulFlag = knowHelpfulValue(
+                                application
+                                        .getDataFromSharedPreferences(LFSAppConstants.ID),
+                                content.getVote());
+
+                        if (helpfulFlag == 1) {
+                            holder.parentHelpfulImg
+                                    .setImageResource(R.mipmap.helpful);
+                            holder.parentHelpfulTv.setTextColor(Color
+                                    .parseColor("#ff0000"));
+                            holder.parentHelpfulTv.setText("HELPFUL");
+                        } else if (helpfulFlag == 2) {
+                            holder.parentHelpfulImg
+                                    .setImageResource(R.mipmap.unhelpful);
+                            holder.parentHelpfulTv.setTextColor(Color
+                                    .parseColor("#848484"));
+                            holder.parentHelpfulTv.setText("UNHELPFUL");
+                        } else {
+                            holder.parentHelpfulImg
+                                    .setImageResource(R.mipmap.help_initial);
+                            holder.parentHelpfulTv.setTextColor(Color
+                                    .parseColor("#0F98EC"));
+                            holder.parentHelpfulTv.setText("HELPFUL?");
+                        }
+                    } else {
+                        holder.parentHelpfulImg
+                                .setImageResource(R.mipmap.help_initial);
+                        holder.parentHelpfulTv.setTextColor(Color
+                                .parseColor("#0F98EC"));
+                    }
+
+                } else {
+                    holder.parentHelpfulImg
+                            .setImageResource(R.mipmap.help_initial);
+                    holder.parentHelpfulTv
+                            .setTextColor(Color.parseColor("#0F98EC"));
+                }
+
+                holder.titleForReviewInDetail.setText(content.getTitle());
+
+                holder.ratingBarInDetailView.setRating(Float.parseFloat(content
+                        .getRating()) / 20);
+                if (content.getAuthor().getAvatar().length() > 0) {
+                    Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
+                } else {
+                    Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
+                }
+                holder.mainReviewerDisplayName.setText(content.getAuthor().getDisplayName());
+                holder.isParenrMod.setText(content.getIsModerator());
+                holder.mainReviewDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
+                holder.mainReviewBody.setText(LFUtils.trimTrailingWhitespace(Html
+                                .fromHtml(content.getBodyHtml())),
+                        TextView.BufferType.SPANNABLE);
+
+                holder.parentReplyImg.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent replyView = new Intent(context, ReplyReview.class);
+                        replyView.putExtra("id", content.getId());
+                        replyView.putExtra("isEdit", false);
+                        activity.startActivityForResult(replyView, 1);
+//                        activity.overridePendingTransition(R.anim.right_in,
+//                                R.anim.left_out);
+                    }
+                });
+                holder.parentReplyTv.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent replyView = new Intent(activity, ReplyReview.class);
+                        replyView.putExtra("id", content.getId());
+                        replyView.putExtra("isEdit", false);
+                        activity.startActivityForResult(replyView, 1);
+//                        activity.overridePendingTransition(R.anim.right_in,
+//                                R.anim.left_out);
+                    }
+                });
+                holder.parentsHelpfulImg.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        helpfulDialog(
+                                knowHelpfulValue(
+                                        application
+                                                .getDataFromSharedPreferences(LFSAppConstants.ID),
+                                        content.getVote()), content.getId());
+                    }
+                });
+                holder.parentHelpfulTv.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        helpfulDialog(
+                                knowHelpfulValue(
+                                        application
+                                                .getDataFromSharedPreferences(LFSAppConstants.ID),
+                                        content.getVote()), content.getId());
+                    }
+                });
+                holder.parentMoreOptions.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (content.getIsFeatured() != null) {
+                            if (content.getIsFeatured()) {
+                                moreDialog(content.getId(), true, true);
+                            } else {
+                                moreDialog(content.getId(), false, true);
+                            }
+                        } else {
+                            moreDialog(content.getId(), false, true);
+                        }
+                    }
+                });
                 break;
             case CHILD:
 
