@@ -4,252 +4,255 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <ScrollView
+
+    <LinearLayout
+        android:id="@+id/parentviewLL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/parentviewLL"
+
+        <ListView
+            android:id="@+id/commentsLV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:divider="#d6d6d6"
+            android:dividerHeight="1dp"
+            android:paddingBottom="16dp" />
 
-            <ImageView
-                android:id="@+id/image_header"
-                android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/img_bac" />
-            </RelativeLayout>
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/reviewBodyImageRL"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorPrimary">-->
 
-            <RelativeLayout
-                android:id="@+id/reviewBodyImageRL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary">
+        <!--<TextView-->
+        <!--android:id="@+id/titleForReviewInDetail"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="16dp"-->
+        <!--android:text="Title In Detail View"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textIsSelectable="true"-->
+        <!--android:textSize="30dp"-->
+        <!--android:textStyle="bold" />-->
 
-                <TextView
-                    android:id="@+id/titleForReviewInDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Title In Detail View"
-                    android:textColor="@color/white"
-                    android:textIsSelectable="true"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
+        <!--<RatingBar-->
+        <!--android:id="@+id/ratingBarInDetailView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/titleForReviewInDetail"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:isIndicator="true"-->
+        <!--android:numStars="5"-->
+        <!--android:progressDrawable="@drawable/medium_starbar" />-->
+        <!--</RelativeLayout>-->
 
-                <RatingBar
-                    android:id="@+id/ratingBarInDetailView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/titleForReviewInDetail"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:progressDrawable="@drawable/medium_starbar" />
-            </RelativeLayout>
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/reviewerImageAndRevieweridLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/reviewBodyImageRL"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingRight="16dp">-->
 
-            <RelativeLayout
-                android:id="@+id/reviewerImageAndRevieweridLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/reviewBodyImageRL"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+        <!--<ImageView-->
+        <!--android:id="@+id/mainReviewerImage"-->
+        <!--android:layout_width="@dimen/reviewerImagewidth"-->
+        <!--android:layout_height="@dimen/reviewerImageHight" />-->
 
-                <ImageView
-                    android:id="@+id/mainReviewerImage"
-                    android:layout_width="@dimen/reviewerImagewidth"
-                    android:layout_height="@dimen/reviewerImageHight" />
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@+id/mainReviewerImage"-->
+        <!--android:orientation="vertical"-->
+        <!--android:paddingLeft="16dp">-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/mainReviewerImage"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp">
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/revieweridLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-                    <RelativeLayout
-                        android:id="@+id/revieweridLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+        <!--<RelativeLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-                        <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content">
+        <!--<TextView-->
+        <!--android:id="@+id/mainReviewerDisplayName"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingRight="5dp"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#4D4D4D"-->
+        <!--android:textSize="@dimen/revieweridTextSize"-->
+        <!--android:textStyle="bold" />-->
 
-                            <TextView
-                                android:id="@+id/mainReviewerDisplayName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingRight="5dp"
-                                android:singleLine="true"
-                                android:textColor="#4D4D4D"
-                                android:textSize="@dimen/revieweridTextSize"
-                                android:textStyle="bold" />
+        <!--<TextView-->
+        <!--android:id="@+id/isParentMod"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@+id/mainReviewerDisplayName"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#0F98EC" />-->
+        <!--</RelativeLayout>-->
+        <!--</RelativeLayout>-->
 
-                            <TextView
-                                android:id="@+id/isParentMod"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/mainReviewerDisplayName"
-                                android:singleLine="true"
-                                android:textColor="#0F98EC" />
-                        </RelativeLayout>
-                    </RelativeLayout>
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/revieweridLayout">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/revieweridLayout">
+        <!--<TextView-->
+        <!--android:id="@+id/mainReviewDate"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:textColor="#999" />-->
+        <!--</LinearLayout>-->
+        <!--</RelativeLayout>-->
+        <!--</RelativeLayout>-->
 
-                        <TextView
-                            android:id="@+id/mainReviewDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="#999" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </RelativeLayout>
+        <!--<LinearLayout-->
+        <!--android:id="@+id/titleAndBodyAndImageView"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/reviewerImageAndRevieweridLayout"-->
+        <!--android:orientation="vertical">-->
 
-            <LinearLayout
-                android:id="@+id/titleAndBodyAndImageView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/reviewerImageAndRevieweridLayout"
-                android:orientation="vertical">
+        <!--<TextView-->
+        <!--android:id="@+id/mainReviewBody"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:lineSpacingExtra="5sp"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingRight="16dp"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:textColor="#4c4c4c"-->
+        <!--android:textIsSelectable="true"-->
+        <!--android:textSize="@dimen/reviewBodyTextSize" />-->
 
-                <TextView
-                    android:id="@+id/mainReviewBody"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:lineSpacingExtra="5sp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="10dp"
-                    android:textColor="#4c4c4c"
-                    android:textIsSelectable="true"
-                    android:textSize="@dimen/reviewBodyTextSize" />
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/parentOptionsLL"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/mainReviewBody"-->
+        <!--android:layout_marginRight="10dp">-->
 
-                <RelativeLayout
-                    android:id="@+id/parentOptionsLL"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mainReviewBody"
-                    android:layout_marginRight="10dp">
+        <!--<ImageView-->
+        <!--android:id="@+id/parentsHelpfulImg"-->
+        <!--android:layout_width="25dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:src="@mipmap/help_initial" />-->
 
-                    <ImageView
-                        android:id="@+id/parentsHelpfulImg"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="16dp"
-                        android:src="@mipmap/help_initial" />
+        <!--<TextView-->
+        <!--android:id="@+id/parentsHelpfulTv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_toRightOf="@+id/parentsHelpfulImg"-->
+        <!--android:paddingTop="3dp"-->
+        <!--android:text="HELPFUL ?"-->
+        <!--android:textColor="@color/colorPrimary" />-->
 
-                    <TextView
-                        android:id="@+id/parentsHelpfulTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/parentsHelpfulImg"
-                        android:paddingTop="3dp"
-                        android:text="HELPFUL ?"
-                        android:textColor="@color/colorPrimary" />
+        <!--<ImageView-->
+        <!--android:id="@+id/parentReplyImg"-->
+        <!--android:layout_width="25dp"-->
+        <!--android:layout_height="28dp"-->
+        <!--android:layout_marginLeft="22dp"-->
+        <!--android:layout_toRightOf="@+id/parentsHelpfulTv"-->
+        <!--android:src="@mipmap/reply" />-->
 
-                    <ImageView
-                        android:id="@+id/parentReplyImg"
-                        android:layout_width="25dp"
-                        android:layout_height="28dp"
-                        android:layout_marginLeft="22dp"
-                        android:layout_toRightOf="@+id/parentsHelpfulTv"
-                        android:src="@mipmap/reply" />
+        <!--<TextView-->
+        <!--android:id="@+id/parentReplyTv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_toRightOf="@+id/parentReplyImg"-->
+        <!--android:paddingTop="3dp"-->
+        <!--android:text="REPLY"-->
+        <!--android:textColor="@color/colorPrimary" />-->
 
-                    <TextView
-                        android:id="@+id/parentReplyTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/parentReplyImg"
-                        android:paddingTop="3dp"
-                        android:text="REPLY"
-                        android:textColor="@color/colorPrimary" />
+        <!--<ImageView-->
+        <!--android:id="@+id/parentMoreOptions"-->
+        <!--android:layout_width="22dp"-->
+        <!--android:layout_height="22dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:src="@mipmap/more" />-->
 
-                    <ImageView
-                        android:id="@+id/parentMoreOptions"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="10dp"
-                        android:src="@mipmap/more" />
+        <!--<View-->
+        <!--android:id="@+id/mainLine"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/parentsHelpfulImg"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:background="#d6d6d6" />-->
 
-                    <View
-                        android:id="@+id/mainLine"
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/parentsHelpfulImg"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
-                        android:background="#d6d6d6" />
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/parentNotifRV"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:layout_below="@+id/mainLine"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:visibility="gone">-->
 
-                    <RelativeLayout
-                        android:id="@+id/parentNotifRV"
-                        android:layout_width="fill_parent"
-                        android:layout_height="44dp"
-                        android:layout_below="@+id/mainLine"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:visibility="gone">
+        <!--<Button-->
+        <!--android:id="@+id/parentNotifBtn"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:background="@drawable/round_corner_button"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="16dp" />-->
 
-                        <Button
-                            android:id="@+id/parentNotifBtn"
-                            android:layout_width="fill_parent"
-                            android:layout_height="44dp"
-                            android:background="@drawable/round_corner_button"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+        <!--<RelativeLayout-->
+        <!--android:layout_width="180dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_centerHorizontal="true">-->
 
-                        <RelativeLayout
-                            android:layout_width="180dp"
-                            android:layout_height="40dp"
-                            android:layout_centerHorizontal="true">
+        <!--<TextView-->
+        <!--android:id="@+id/detailReplyNotificationTV"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:textSize="16sp" />-->
 
-                            <TextView
-                                android:id="@+id/detailReplyNotificationTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:textColor="#ffffff"
-                                android:textSize="16sp" />
+        <!--<ImageView-->
+        <!--android:layout_width="12dp"-->
+        <!--android:layout_height="12dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:layout_toRightOf="@+id/detailReplyNotificationTV"-->
+        <!--android:src="@mipmap/downarrow" />-->
+        <!--</RelativeLayout>-->
+        <!--</RelativeLayout>-->
+        <!--</RelativeLayout>-->
+        <!--</LinearLayout>-->
 
-                            <ImageView
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_toRightOf="@+id/detailReplyNotificationTV"
-                                android:src="@mipmap/downarrow" />
-                        </RelativeLayout>
-                    </RelativeLayout>
-                </RelativeLayout>
-            </LinearLayout>
+        <!--<ListView-->
+        <!--android:id="@+id/commentsLV"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:divider="#d6d6d6"-->
+        <!--android:clipChildren="true"-->
+        <!--android:dividerHeight="1dp"-->
+        <!--android:paddingTop="16dp"-->
+        <!--android:paddingBottom="16dp" />-->
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/commentsRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="8dp" />
-        </LinearLayout>
-    </ScrollView>
+        <!--&lt;!&ndash;<android.support.v7.widget.RecyclerView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/commentsRV"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:clipToPadding="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:paddingTop="8dp" />&ndash;&gt;-->
+    </LinearLayout>
 </RelativeLayout>

@@ -5,17 +5,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+
 import livefyre.R;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.otto.Bus;
@@ -26,6 +33,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,6 +47,8 @@ import livefyre.LivefyreApplication;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.listeners.ContentUpdateListener;
 import livefyre.models.Content;
+import livefyre.models.ContentBean;
+import livefyre.models.ContentTypeEnum;
 import livefyre.parsers.ContentParser;
 import livefyre.streamhub.AdminClient;
 import livefyre.streamhub.BootstrapClient;
@@ -57,6 +69,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     public String adminClintId = "No";
     ContentParser content;
     private Toolbar toolbar;
+    Spinner activityTitleSpinner;
+    private String selectedCategory;
     Bus mBus;
     ArrayList<String> newReviews;
 
@@ -73,9 +87,133 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         setListenersToViews();
         buildToolBar();
         adminClintCall();
-
     }
+    void sortReviews(Boolean viewpoint) {
 
+        if (!isNetworkAvailable()) {
+            showToast("Network Not Available");
+            return;
+        } else
+           dismissProgressDialog();
+        char sortCase = activityTitleSpinner.getPrompt().toString().charAt(0);
+        reviewCollectiontoBuild = new ArrayList<Content>();
+        HashMap<String, Content> mainContent = ContentParser.ContentMap;
+        if (mainContent != null)
+            for (Content t : mainContent.values()) {
+                if (t.getContentType() == ContentTypeEnum.PARENT
+                        && t.getVisibility().equals("1")) {
+                    reviewCollectiontoBuild.add(t);
+                }
+            }
+
+        switch (sortCase) {
+            case 'N':
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p2, Content p1) {
+                                return Integer.parseInt(p1.getCreatedAt())
+                                        - Integer.parseInt(p2.getCreatedAt());
+                            }
+                        });
+                break;
+            case 'O':
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p1, Content p2) {
+                                return Integer.parseInt(p1.getCreatedAt())
+                                        - Integer.parseInt(p2.getCreatedAt());
+                            }
+                        });
+                break;
+            case 'H':
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p2, Content p1) {
+                                return Integer.parseInt(p1.getRating())
+                                        - Integer.parseInt(p2.getRating());
+                            }
+                        });
+                break;
+            case 'L':
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p1, Content p2) {
+                                return Integer.parseInt(p1.getRating())
+                                        - Integer.parseInt(p2.getRating());
+                            }
+                        });
+                break;
+            case 'M':
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p1, Content p2) {
+                                int t1 = 0, t2 = 0;
+                                if (p1.getVote() != null) {
+                                    t1 = p1.getVote().size();
+                                }
+                                if (p2.getVote() != null) {
+                                    t2 = p2.getVote().size();
+                                }
+                                // return p1.getVote().size()- p2.getVote().size();
+                                return t1 - t2;
+                            }
+                        });
+                Collections.sort(reviewCollectiontoBuild,
+                        new Comparator<Content>() {
+                            @Override
+                            public int compare(Content p2, Content p1) {
+                                int t1 = 0, t2 = 0;
+                                if (p1.getVote() != null) {
+                                    t1 = p1.getHelpfulcount();
+                                }
+                                if (p2.getVote() != null) {
+                                    t2 = p2.getHelpfulcount();
+                                }
+                                return t1 - t2;
+                                // return p1.getVote().size()- p2.getVote().size();
+                            }
+                        });
+                break;
+            default:
+                break;
+        }
+        // Move Own Review To Top.
+        if (reviewCollectiontoBuild != null && !adminClintId.equals("NO")) {
+            for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
+                if (reviewCollectiontoBuild.get(i).getAuthorId()
+                        .equals(adminClintId)) {
+                    Content temp = reviewCollectiontoBuild.get(i);
+                    reviewCollectiontoBuild.remove(temp);
+                    reviewCollectiontoBuild.add(0, temp);
+                    break;
+                }
+            }
+        }
+        // Hide Notification
+        notification.setVisibility(View.GONE);
+
+        reviewListAdapter = null;
+        reviewListAdapter = (ReviewListAdapter) reviewsRV.getAdapter();
+        if (reviewListAdapter != null) {
+            reviewListAdapter.updateContentResult(reviewCollectiontoBuild);
+        } else {
+            reviewListAdapter = new ReviewListAdapter(getApplicationContext(),
+                    reviewCollectiontoBuild);
+
+        }
+//        Parcelable state = reviewsRV.onSaveInstanceState();
+
+        reviewListAdapter.notifyDataSetChanged();
+        reviewsRV.setAdapter(reviewListAdapter);
+//        reviewsRV.onRestoreInstanceState(state);
+        if (viewpoint)
+            reviewsRV.scrollToPosition(0);
+    }
     void isReviewPosted() {
 
         Boolean isGiven = false;
@@ -110,7 +248,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         public void onClick(View v) {
             Intent detailViewIntent = new Intent(ReviewsActivity.this,
-                    ReviewIndetailActivity.class);
+                    ReviewInDetailActivity.class);
             detailViewIntent.putExtra("id", ownReviewId);
             startActivity(detailViewIntent);
 //            overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -170,7 +308,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 @Override
                 public void onClick(View view, int position) {
 
-                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewIndetailActivity.class);
+                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
                     detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
                     startActivity(detailViewIntent);
 
@@ -277,8 +415,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
-        activityTitle.setText("Most Helpful");
-
+        activityTitle.setVisibility(View.GONE);
+        activityTitleSpinner.setVisibility(View.VISIBLE);
     }
 
     private void setListenersToViews() {
@@ -286,8 +424,40 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         postNewReviewIv.setOnClickListener(postNewReviewsListener);
         reviewsRV.setOnScrollListener(onScrollListener);
         activityTitle.setOnClickListener(activityTitleListenerHide);
+        activityTitleSpinner.setOnItemSelectedListener(activityTitleSpinnerListener);
     }
+    AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
 
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String[] helpfulCategories = getResources().getStringArray(R.array.helpful_categories);
+            selectedCategory = helpfulCategories[position];
+
+            if (selectedCategory.equals("Most Helpful")) {
+                activityTitleSpinner.setPrompt("Most Helpful");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Highest Rating")) {
+                activityTitleSpinner.setPrompt("Highest Rating");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Lowest Rating")) {
+                activityTitleSpinner.setPrompt("Lowest Rating");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Newest")) {
+                activityTitleSpinner.setPrompt("Newest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Oldest")) {
+                activityTitleSpinner.setPrompt("Oldest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+        }
+        public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+    };
     public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         boolean hideToolBar = false;
 
@@ -331,14 +501,11 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 activityTitle.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
             }
-
             postNewReviewIv.setVisibility(View.GONE);
-
-
             activityTitle.setOnClickListener(activityTitleListenerShow);
-
         }
     };
+
     View.OnClickListener postNewReviewsListener = new View.OnClickListener() {
 
         public void onClick(View v) {
@@ -393,6 +560,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
     public static interface ClickListener {
         public void onClick(View view, int position);
+
         public void onLongClick(View view, int position);
     }
 
@@ -409,6 +577,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         reviewsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         postNewReviewIv = (ImageButton) findViewById(R.id.postNewReviewIv);
         activityTitle = (TextView) findViewById(R.id.activityTitle);
+        activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
         actionTv = (TextView) findViewById(R.id.actionTv);
         notification = (LinearLayout) findViewById(R.id.notification);
     }
@@ -468,9 +637,9 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                     notifMsgTV.setText(newReviews.size() + " New Comments");
                 }
                 notification.setVisibility(View.VISIBLE);
-//                YoYo.with(Techniques.DropOut)
-//                        .duration(700)
-//                        .playOn(findViewById(R.id.notification));
+                YoYo.with(Techniques.DropOut)
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
 
             } else {
                 notification.setVisibility(View.GONE);

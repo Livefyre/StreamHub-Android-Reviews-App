@@ -7,7 +7,7 @@
     <dimen name="reviewCellPadding">16dp</dimen>
     <dimen name="reviewerImageHight">40dp</dimen>
     <dimen name="reviewerImagewidth">40dp</dimen>
-    <dimen name="activity_image_height">500dp</dimen>
+    <dimen name="activity_image_height">200dp</dimen>
 
     <dimen name="revieweridTextSize">14sp</dimen>
 

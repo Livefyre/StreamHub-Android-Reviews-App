@@ -135,12 +135,6 @@
                 android:src="@mipmap/more" />
         </RelativeLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/childReviewBody"
-            android:layout_marginTop="5dp"
-            android:background="#d6d6d6" />
     </LinearLayout>
 
 </RelativeLayout>

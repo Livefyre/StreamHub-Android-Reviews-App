@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">LivefyreReviewsAppv3.1</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -14,9 +14,10 @@
     <string name="Disagree">Disagree</string>
     <string name="helpful_spinner">Most Helpful</string>
     <string-array name="helpful_categories">
-        <item>Highest Rating</item>
-        <item>Lowest Rating</item>
-        <item>Newest</item>
-        <item>Oldest</item>
+        <item android:textColor="#000000">Most Helpful</item>
+        <item android:textColor="#000000">Highest Rating</item>
+        <item android:textColor="#000000">Lowest Rating</item>
+        <item android:textColor="#000000">Newest</item>
+        <item android:textColor="#000000">Oldest</item>
     </string-array>
 </resources>

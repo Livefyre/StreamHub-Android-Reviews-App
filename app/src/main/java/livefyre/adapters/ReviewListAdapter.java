@@ -22,6 +22,7 @@ import livefyre.LFUtils;
 import livefyre.RoundedTransformation;
 import livefyre.models.Attachments;
 import livefyre.models.Content;
+import livefyre.models.ContentBean;
 import livefyre.models.Vote;
 
 
@@ -37,7 +38,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
-
+    public void updateContentResult(List<Content> ContentMap) {
+        this.ContentMap = ContentMap;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemViewType(int position) {
