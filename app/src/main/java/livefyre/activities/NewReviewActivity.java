@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -67,7 +68,7 @@ public class NewReviewActivity extends BaseActivity {
     private void buildToolBar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         //disable title on toolbar
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
         activityTitle.setText("New Review");
@@ -216,6 +217,7 @@ public class NewReviewActivity extends BaseActivity {
         newReviewProsTv = (TextView) findViewById(R.id.newReviewProsTv);
         newReviewConsTv = (TextView) findViewById(R.id.newReviewConsTv);
         newReviewBodyTv = (TextView) findViewById(R.id.newReviewBodyTv);
+        activityTitle = (TextView) findViewById(R.id.activityTitle);
         actionTv = (TextView) findViewById(R.id.actionTv);
 
         newReviewRatingBar = (RatingBar) findViewById(R.id.newReviewRatingBar);
@@ -225,6 +227,8 @@ public class NewReviewActivity extends BaseActivity {
         deleteCapturedImage = (RelativeLayout) findViewById(R.id.deleteCapturedImage);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        addPhotoLL = (LinearLayout) findViewById(R.id.addPhotoLL);
 
     }
 
@@ -242,26 +246,32 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
         String cons = newReviewConsEt.getText().toString();
         int reviewRating = (int) (newReviewRatingBar.getRating() * 20);
         if (title.length() == 0) {
-            showAlert("Please Enter Title.", "OK",tryAgain);
+
+            ((EditText) findViewById(R.id.newReviewTitleEt)).setError("Enter Title");
+//            showAlert("Please Enter Title.", "OK",tryAgain);
             return;
         }
 
         if (reviewRating == 0) {
-            showAlert("Please give Rating.", "OK",tryAgain);
+//            ((RatingBar) findViewById(R.id.newReviewRatingBar)).setError("Enter Pros");
+            showAlert("Please give Rating.", "ok",tryAgain);
             return;
         }
         if (pros.length() == 0) {
-            showAlert("Please Enter Pros.", "OK",tryAgain);
+            ((EditText) findViewById(R.id.newReviewProsEt)).setError("Enter Pros");
+//            showAlert("Please Enter Pros.", "OK",tryAgain);
             return;
         }
 
         if (cons.length() == 0) {
-            showAlert("Please Enter Cons.", "OK",tryAgain);
+            ((EditText) findViewById(R.id.newReviewConsEt)).setError("Enter Cons");
+//            showAlert("Please Enter Cons.", "OK",tryAgain);
             return;
         }
 
         if (description.length() == 0) {
-            showAlert("Please Enter Description.", "OK",tryAgain);
+            ((EditText) findViewById(R.id.newReviewProsEt)).setError("Enter Description");
+//            showAlert("Please Enter Description.", "OK",tryAgain);
             return;
         }
         String descriptionHTML = Html.toHtml(newReviewBodyEt.getText());

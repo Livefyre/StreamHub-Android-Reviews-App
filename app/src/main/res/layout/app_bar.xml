@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@color/colorPrimary"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark">
+    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
+    app:theme="@style/Toolbar" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
             <Spinner
                 android:id="@+id/activityTitleSpinner"
                 android:layout_width="wrap_content"
+                style="@style/Spinner"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"

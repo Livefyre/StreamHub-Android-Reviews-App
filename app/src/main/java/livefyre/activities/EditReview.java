@@ -71,7 +71,7 @@ public class EditReview extends BaseActivity {
                     editReviewTitleTv.setVisibility(View.VISIBLE);
                     editReviewTitleEt.setHintTextColor(Color
                             .parseColor("#ffffff"));
-                } else {
+                }  else {
                     editReviewTitleTv.setVisibility(View.INVISIBLE);
                     editReviewTitleEt.setHintTextColor(Color
                             .parseColor("#cdcdcd"));
