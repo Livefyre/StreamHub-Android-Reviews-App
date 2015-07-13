@@ -22,9 +22,7 @@ import livefyre.LFUtils;
 import livefyre.RoundedTransformation;
 import livefyre.models.Attachments;
 import livefyre.models.Content;
-import livefyre.models.ContentBean;
 import livefyre.models.Vote;
-
 
 @SuppressLint("SimpleDateFormat")
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyViewHolder> {
@@ -95,7 +93,8 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.reviewedDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
         holder.reviewTitle.setText(content.getTitle());
         holder.reviewBody.setText(LFUtils.trimTrailingWhitespace(Html.fromHtml(content.getBodyHtml())), TextView.BufferType.SPANNABLE);
-        holder.reviewRatingBar.setRating(Float.parseFloat(content.getRating()) / 20);
+        if(content.getRating()!=null)
+            holder.reviewRatingBar.setRating(Float.parseFloat(content.getRating()) / 20);
 
         if (content.getAuthor().getAvatar().length() > 0) {
             Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.reviewerImage);

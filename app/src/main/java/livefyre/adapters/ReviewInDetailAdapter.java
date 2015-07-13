@@ -248,22 +248,22 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         switch (viewType) {
             case PARENT:
 //                break;
-                List<Attachments> img = content.getAttachments();
-                if (img != null) {
-                    Attachments mAttachments = content.getAttachments().get(0);
-                    if (mAttachments.getUrl() != null) {
-                        if (mAttachments.getUrl().length() > 0) {
-                            holder.image_header.setVisibility(View.VISIBLE);
-                            Picasso.with(context).load(mAttachments.getUrl()).fit().into(holder.image_header);
-                        } else {
-                            holder.image_header.setVisibility(View.GONE);
-                        }
-                    } else {
-                        holder.image_header.setImageResource(R.mipmap.img_bac);
-                    }
-                } else {
-                    holder.image_header.setImageResource(R.mipmap.img_bac);
-                }
+//                List<Attachments> img = content.getAttachments();
+//                if (img != null) {
+//                    Attachments mAttachments = content.getAttachments().get(0);
+//                    if (mAttachments.getUrl() != null) {
+//                        if (mAttachments.getUrl().length() > 0) {
+//                            holder.image_header.setVisibility(View.VISIBLE);
+//                            Picasso.with(context).load(mAttachments.getUrl()).fit().into(holder.image_header);
+//                        } else {
+//                            holder.image_header.setVisibility(View.GONE);
+//                        }
+//                    } else {
+//                        holder.image_header.setImageResource(R.mipmap.img_bac);
+//                    }
+//                } else {
+//                    holder.image_header.setImageResource(R.mipmap.img_bac);
+//                }
                 if (content.getNewReplyCount() > 0) {
                     holder.parentNotifRV.setVisibility(View.VISIBLE);
                     if (content.getNewReplyCount() != 1)
@@ -426,8 +426,11 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
                 float density = context.getResources().getDisplayMetrics().density;
                 int px = (int) (40 * density);
-
-                switch (content.getDepth()) {
+                int depthValue = 0;
+                if (content.getParentPath() != null) {
+                    depthValue = content.getParentPath().size();
+                }
+                switch (depthValue) {
                     case 1:
                         holder.childMain.setPadding(px * 0, 16, 16, 16);
                         break;
@@ -554,8 +557,11 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
                 float densityDtl = context.getResources().getDisplayMetrics().density;
                 int pxDtl = (int) (40 * densityDtl);
-
-                switch (content.getDepth()) {
+                int depth = 0;
+                if (content.getParentPath() != null) {
+                    depth = content.getParentPath().size();
+                }
+                switch (depth) {
                     case 1:
                         holder.deletedCell.setPadding(pxDtl * 0, 16, 16, 16);
                         break;
@@ -568,9 +574,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                     default:
                         holder.deletedCell.setPadding(pxDtl * 3, 16, 16, 16);
                         break;
-
                 }
-
                 break;
         }
     }
@@ -779,9 +783,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 //                    activity.overridePendingTransition(R.anim.right_in,
 //                            R.anim.left_out);
                 }
-
                 dialog.dismiss();
-
             }
         });
 

@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +25,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.otto.Bus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +46,6 @@ import livefyre.LivefyreApplication;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.listeners.ContentUpdateListener;
 import livefyre.models.Content;
-import livefyre.models.ContentBean;
 import livefyre.models.ContentTypeEnum;
 import livefyre.parsers.ContentParser;
 import livefyre.streamhub.AdminClient;
@@ -71,7 +69,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     private Toolbar toolbar;
     Spinner activityTitleSpinner;
     private String selectedCategory;
-    Bus mBus;
+    private SwipeRefreshLayout swipeView;
+//    Bus mBus;
     ArrayList<String> newReviews;
 
     LinearLayout notification;
@@ -82,19 +81,31 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviews);
         application = AppSingleton.getInstance().getApplication();
-
+//        mBus = application.getBus();
         pullViews();
         setListenersToViews();
         buildToolBar();
         adminClintCall();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContentParser.ContentMap != null)
+            if (!ContentParser.ContentMap.isEmpty()) {
+                sortReviews(LFSAppConstants.MOVE_TO_VIEW_POINT);
+                isReviewPosted();
+                streamClintCall();
+            }
+    }
+
     void sortReviews(Boolean viewpoint) {
 
         if (!isNetworkAvailable()) {
             showToast("Network Not Available");
             return;
         } else
-           dismissProgressDialog();
+            dismissProgressDialog();
         char sortCase = activityTitleSpinner.getPrompt().toString().charAt(0);
         reviewCollectiontoBuild = new ArrayList<Content>();
         HashMap<String, Content> mainContent = ContentParser.ContentMap;
@@ -207,13 +218,13 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         }
 //        Parcelable state = reviewsRV.onSaveInstanceState();
-
         reviewListAdapter.notifyDataSetChanged();
         reviewsRV.setAdapter(reviewListAdapter);
 //        reviewsRV.onRestoreInstanceState(state);
         if (viewpoint)
             reviewsRV.scrollToPosition(0);
     }
+
     void isReviewPosted() {
 
         Boolean isGiven = false;
@@ -287,7 +298,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         public void onSuccess(String data) {
             application.printLog(false, TAG + "-InitCallback-onSuccess", data.toString());
             buildReviewsList(data);
-//            swipeView.setRefreshing(false);
+            swipeView.setRefreshing(false);
         }
 
         @Override
@@ -318,13 +329,13 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 public void onLongClick(View view, int position) {
                 }
             }));
-//            streamClintCall();
+            streamClintCall();
             isReviewPosted();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         newReviews = new ArrayList<>();
-//        swipeView.setEnabled(true);
+        swipeView.setEnabled(true);
         dismissProgressDialog();
     }
 
@@ -425,7 +436,25 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         reviewsRV.setOnScrollListener(onScrollListener);
         activityTitle.setOnClickListener(activityTitleListenerHide);
         activityTitleSpinner.setOnItemSelectedListener(activityTitleSpinnerListener);
+        actionTv.setOnClickListener(myReviewListener);
+        swipeView.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeView.setRefreshing(true);
+                reviewListAdapter = null;
+                reviewCollectiontoBuild.clear();
+                reviewListAdapter = new ReviewListAdapter(getApplication(), reviewCollectiontoBuild);
+                reviewsRV.setAdapter(reviewListAdapter);
+                bootstrapClientCall();
+
+                YoYo.with(Techniques.FadeIn)
+                        .duration(700)
+                        .playOn(findViewById(R.id.reviewsRV));
+            }
+        });
     }
+
     AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
 
         @Override
@@ -454,9 +483,10 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 sortReviews(LFSAppConstants.MOVE_TO_TOP);
             }
         }
+
         public void onNothingSelected(AdapterView<?> parentView) {
 
-            }
+        }
     };
     public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         boolean hideToolBar = false;
@@ -580,70 +610,131 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
         actionTv = (TextView) findViewById(R.id.actionTv);
         notification = (LinearLayout) findViewById(R.id.notification);
+        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
     }
 
     @Override
-    public void onDataUpdate(HashSet<String> authorsSet, HashSet<String> statesSet, HashSet<String> annotationsSet, HashSet<String> updates) {
-        for (String stateBeanId : statesSet) {
-            Content stateBean = ContentParser.ContentMap.get(stateBeanId);
-            if (stateBean.getVisibility().equals("1")) {
+    public void onDataUpdate(HashSet<String> updates) {
 
-                if (isExistComment(stateBeanId)) continue;
-
-                if (adminClintId.equals(stateBean.getAuthorId())) {
-                    int flag = 0;
-                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-                        Content content = reviewCollectiontoBuild.get(i);
-                        if (content.getId().equals(stateBean.getParentId())) {
-                            reviewCollectiontoBuild.add(i + 1, stateBean);
-                            reviewListAdapter.notifyItemInserted(i + 1);
-                            flag = 1;
-                            break;
+        for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
+            Content mContentBean = reviewCollectiontoBuild.get(i);
+            if (mContentBean.getContentType() == ContentTypeEnum.DELETED) {
+                reviewCollectiontoBuild.remove(mContentBean);
+            }
+        }
+        HashMap<String, Content> mainContent = ContentParser.ContentMap;
+        String authorId = application.getDataFromSharedPreferences(LFSAppConstants.ID);
+        for (Content mContentBean : mainContent.values()) {
+            if (mContentBean.getContentType() == ContentTypeEnum.PARENT) {
+                if (mContentBean.getAuthorId().equals(authorId)) {
+                    Boolean flag = true;
+                    for (Content t : reviewCollectiontoBuild) {
+                        if (t.getAuthorId().equals(authorId)) {
+                            flag = false;
                         }
                     }
-                    if (flag == 0) {
-                        reviewCollectiontoBuild.add(0, stateBean);
-                        reviewListAdapter.notifyItemInserted(0);
-                    }
-                } else {
-                    newReviews.add(0, stateBeanId);
-                }
-            } else {
-                if (!content.hasVisibleChildContents(stateBeanId)) {
-                    application.printLog(true, TAG, "Deleted Content");
-
-                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-                        Content bean = reviewCollectiontoBuild.get(i);
-                        if (bean.getId().equals(stateBeanId)) {
-                            reviewCollectiontoBuild.remove(i);
-                            reviewListAdapter.notifyItemRemoved(i);
-                            break;
-                        }
-                    }
+                    if (flag)
+                        reviewCollectiontoBuild.add(0, mContentBean);
+                    break;
                 }
             }
         }
-        if (updates.size() > 0) {
-            mBus.post(updates);
-            reviewListAdapter.notifyDataSetChanged();
-        }
+        reviewListAdapter.notifyDataSetChanged();
+        ReviewInDetailActivity.notifyDatainDetail();
 
-        if (newReviews != null)
-            if (newReviews.size() > 0) {
-                if (newReviews.size() == 1) {
-                    notifMsgTV.setText(newReviews.size() + " New Comment");
+        int oldCount = 0;
+        if (reviewCollectiontoBuild != null)
+            oldCount = reviewCollectiontoBuild.size();
 
-                } else {
-                    notifMsgTV.setText(newReviews.size() + " New Comments");
-                }
-                notification.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.DropOut)
-                        .duration(700)
-                        .playOn(findViewById(R.id.notification));
-
-            } else {
-                notification.setVisibility(View.GONE);
+        List<Content> newList = new ArrayList();
+        for (Content t : mainContent.values()) {
+            if (t.getContentType() == ContentTypeEnum.PARENT
+                    && t.getVisibility().equals("1")) {
+                newList.add(t);
             }
+        }
+//        if (newReviews != null)
+//            if (newReviews.size() > 0) {
+//            if (newReviews.size() == 1) {
+//                notifMsgTV.setText(newReviews.size() + " New Comment");
+//
+//            } else {
+//                notifMsgTV.setText(newReviews.size() + " New Comments");
+//            }
+//            notification.setVisibility(View.VISIBLE);
+//            YoYo.with(Techniques.DropOut)
+//                    .duration(700)
+//                    .playOn(findViewById(R.id.notification));
+//
+//        } else {
+//            notification.setVisibility(View.GONE);
+//        }
         isReviewPosted();
     }
+//    public void onDataUpdate(HashSet<String> authorsSet, HashSet<String> statesSet, HashSet<String> annotationsSet, HashSet<String> updates) {
+//
+//        for (String stateBeanId : statesSet) {
+//            Content stateBean = ContentParser.ContentMap.get(stateBeanId);
+//            if (stateBean.getVisibility().equals("1")) {
+//
+//                if (isExistComment(stateBeanId)) continue;
+//
+//                if (adminClintId.equals(stateBean.getAuthorId())) {
+//                    int flag = 0;
+//                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
+//                        Content content = reviewCollectiontoBuild.get(i);
+//                        if (content.getId().equals(stateBean.getParentId())) {
+//                            reviewCollectiontoBuild.add(i + 1, stateBean);
+//                            reviewListAdapter.notifyItemInserted(i + 1);
+//                            flag = 1;
+//                            break;
+//                        }
+//                    }
+//                    if (flag == 0) {
+//                        reviewCollectiontoBuild.add(0, stateBean);
+//                        reviewListAdapter.notifyItemInserted(0);
+//                    }
+//                } else {
+//                    newReviews.add(0, stateBeanId);
+//                }
+//            } else {
+//                if (!content.hasVisibleChildContents(stateBeanId)) {
+//                    application.printLog(true, TAG, "Deleted Content");
+//
+//                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
+//                        Content bean = reviewCollectiontoBuild.get(i);
+//                        if (bean.getId().equals(stateBeanId)) {
+//                            reviewCollectiontoBuild.remove(i);
+//                            reviewListAdapter.notifyItemRemoved(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        reviewListAdapter.notifyDataSetChanged();
+////        ReviewInDetailActivity.notifyDatainDetail();
+//        if (updates.size() > 0) {
+////            mBus.post(updates);
+//            reviewListAdapter.notifyDataSetChanged();
+//        }
+//
+//        if (newReviews != null)
+//            if (newReviews.size() > 0) {
+//                if (newReviews.size() == 1) {
+//                    notifMsgTV.setText(newReviews.size() + " New Comment");
+//
+//                } else {
+//                    notifMsgTV.setText(newReviews.size() + " New Comments");
+//                }
+//                notification.setVisibility(View.VISIBLE);
+//                YoYo.with(Techniques.DropOut)
+//                        .duration(700)
+//                        .playOn(findViewById(R.id.notification));
+//
+//            } else {
+//                notification.setVisibility(View.GONE);
+//            }
+//        isReviewPosted();
+//    }
 }

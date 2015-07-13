@@ -531,7 +531,7 @@ public class ContentParser {
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        l1.onDataUpdate(authorsSet, statesSet, annotationsSet, updateSet);
+        l1.onDataUpdate(updateSet);
     }
 
     private void handleAnnotationsData(Map<String, JSONObject> map) {

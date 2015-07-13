@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -22,6 +21,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import livefyre.AppSingleton;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
@@ -42,19 +42,22 @@ public class EditReview extends BaseActivity {
     String id, title, body;
     Content selectedReview;
     int rating;
-    ImageView homeIcon;
+    ImageView activityIcon;
     private LivefyreApplication application;
-    Toolbar toolbar;
 
-    //    application = AppSingleton.getInstance().getApplication();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit);
+
         pullViews();
-        setListenersToViews();
+
         buildToolbar();
+
+        setListenersToViews();
+
         getDataFromIntent();
+
         setData();
 
         editReviewTitleEt.addTextChangedListener(new TextWatcher() {
@@ -130,33 +133,32 @@ public class EditReview extends BaseActivity {
     }
 
     private void setListenersToViews() {
+        activityIcon.setOnClickListener(backtoReviewInDetailActivityListener);
         actionTv.setOnClickListener(editPostReplyListener);
         editReviewTitleEt.setOnClickListener(editReviewTitleListener);
-        homeIcon.setOnClickListener(backtoReviewInDetailActivityListener);
     }
 
     private void buildToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        //disable title on toolbar
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        homeIcon = (ImageView) findViewById(R.id.activityIcon);
-        homeIcon.setBackgroundResource(R.mipmap.back_arrow);
+        activityIcon = (ImageView) findViewById(R.id.activityIcon);
+        activityIcon.setBackgroundResource(R.mipmap.back_arrow);
         activityTitle.setText("Edit Review");
         actionTv.setText("Post");
     }
 
 
     private void pullViews() {
-        editReviewTitleTv = (TextView) findViewById(R.id.editReviewTitleTv);
-        editReviewBodyTv = (TextView) findViewById(R.id.editReviewBodyTv);
 
-        editReviewTitleEt = (EditText) findViewById(R.id.editReviewTitleEt);
-        editReviewBodyEt = (EditText) findViewById(R.id.editReviewBodyEt);
-
-        editReviewRatingBar = (RatingBar) findViewById(R.id.editReviewRatingBar);
+        application = AppSingleton.getInstance().getApplication();
 
         actionTv = (TextView) findViewById(R.id.actionTv);
         activityTitle = (TextView) findViewById(R.id.activityTitle);
+
+        editReviewTitleTv = (TextView) findViewById(R.id.editReviewTitleTv);
+        editReviewBodyTv = (TextView) findViewById(R.id.editReviewBodyTv);
+        editReviewTitleEt = (EditText) findViewById(R.id.editReviewTitleEt);
+        editReviewBodyEt = (EditText) findViewById(R.id.editReviewBodyEt);
+        editReviewRatingBar = (RatingBar) findViewById(R.id.editReviewRatingBar);
+
     }
 
     void getDataFromIntent() {
@@ -203,17 +205,17 @@ public class EditReview extends BaseActivity {
 
             if (title.length() == 0) {
                 showAlert("Please enter title before post.",
-                        "OK", tryAgain);
+                        "ok", tryAgain);
                 return;
             }
             if (body.length() == 0) {
                 showAlert("Please enter description before post.",
-                        "OK", tryAgain);
+                        "ok", tryAgain);
                 return;
             }
             if (rating == 0) {
                 showAlert("Please give rating before post.",
-                        "OK", tryAgain);
+                        "ok", tryAgain);
                 return;
             }
             String htmlBody = Html.toHtml(editReviewBodyEt.getText());

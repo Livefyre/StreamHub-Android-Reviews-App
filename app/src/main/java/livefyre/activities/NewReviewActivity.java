@@ -20,8 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.filepicker.Filepicker;
+import io.filepicker.utils.ImageLoader;
 import livefyre.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -396,7 +398,7 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
                 try {
                     progressBar.setVisibility(View.VISIBLE);
                     Picasso.with(getBaseContext()).load(imgUrl).fit()
-                            .into(capturedImage);
+                            .into(capturedImage, new ImageLoadCallBack());
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -404,6 +406,19 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+    }
+    private class ImageLoadCallBack implements Callback {
+
+        @Override
+        public void onSuccess() {
+            //Hide
+            progressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onError() {
+            //Hide
         }
     }
 }

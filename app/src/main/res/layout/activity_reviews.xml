@@ -7,13 +7,21 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar">
+
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/app_bar"
         android:id="@+id/reviewsRV"
+        android:layout_below="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="8dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ImageButton
         android:id="@+id/postNewReviewIv"

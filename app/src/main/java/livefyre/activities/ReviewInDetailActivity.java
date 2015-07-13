@@ -1,23 +1,14 @@
 package livefyre.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RatingBar;
-
-import android.widget.TextView;
-
-
-import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,29 +21,26 @@ import livefyre.BaseActivity;
 import livefyre.LivefyreApplication;
 import livefyre.R;
 import livefyre.adapters.ReviewInDetailAdapter;
+import livefyre.models.Attachments;
 import livefyre.models.Content;
+
 import livefyre.parsers.ContentParser;
 
 /**
  * Created by kvanadev5 on 18/06/15.
  */
+
 @SuppressLint("ResourceAsColor")
 public class ReviewInDetailActivity extends BaseActivity {
 
-    ImageView image_header, mainReviewerImage,parentMoreOptions,parentHelpfulImg;
-    TextView titleForReviewInDetail, mainReviewerDisplayName, isParentMod, mainReviewDate, mainReviewBody,parentReplyTv,parentHelpfulTv;
-    RatingBar ratingBarInDetailView;
-    ReviewInDetailAdapter reviewInDetailAdapter;
-    Button parentNotifBtn;
-    private ProgressDialog dialog;
-    ContentParser content;
-    Activity activity;
+    ImageView image_header;
+    static ReviewInDetailAdapter reviewInDetailAdapter;
+
     Content selectedReviews;
     static String reviewId;
-    List<Content> reviewCollectiontoBuild;
+    static List<Content> reviewCollectiontoBuild;
     ListView commentsLV;
-    int helpfulFlag = 0;
-    List<Content> childMap;
+    static List<Content> childMap;
     private LivefyreApplication application;
 
     @Override
@@ -70,12 +58,6 @@ public class ReviewInDetailActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_indetail);
-//        FadingActionBarHelper helper = new FadingActionBarHelper()
-//                .actionBarBackground(getResources().getDrawable(R.color.colorPrimary))
-//                .headerLayout(R.layout.activity_parent_row)
-//                .contentLayout(R.layout.activity_review_indetail);
-//        setContentView(helper.createView(this));
-//        helper.initActionBar(this);
         application = AppSingleton.getInstance().getApplication();
         pullViews();
         getDataFromIntent();
@@ -109,6 +91,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         }
     };
 
+
     private void loadAllData() {
         reviewCollectiontoBuild = new ArrayList();
         Content mContentBean = ContentParser.ContentMap
@@ -125,6 +108,29 @@ public class ReviewInDetailActivity extends BaseActivity {
 
         if (reviewInDetailAdapter != null) {
             reviewInDetailAdapter.updateReviewInDetailAdapter(reviewCollectiontoBuild);
+        }
+    }
+    public static void notifyDatainDetail() {
+//        Log.d("Stream", "Stream detail");
+        if (reviewInDetailAdapter != null)
+            reviewInDetailAdapter.notifyDataSetChanged();
+        if (reviewCollectiontoBuild != null) {
+            childMap = ContentParser.getChildForContent(reviewId);
+            List<Content> childTemp = new ArrayList<Content>();
+            if (childMap != null)
+                for (Content content : childMap) {
+                    childTemp.add(content);
+                }
+            int newReplyCount = childTemp.size()
+                    - (reviewCollectiontoBuild.size() - 1);
+            Log.d("New Count", "" + childTemp.size());
+            Log.d("Old Count", "" + reviewCollectiontoBuild.size());
+
+            if (newReplyCount > 0) {
+                Content mContentBean = ContentParser.ContentMap
+                        .get(reviewId);
+                mContentBean.setNewReplyCount(newReplyCount);
+            }
         }
     }
 
@@ -153,6 +159,50 @@ public class ReviewInDetailActivity extends BaseActivity {
         reviewId = fromReviewsActivity.getStringExtra("id");
         selectedReviews = ContentParser.ContentMap.get(reviewId);
 //        getActionBar().setTitle("  " + selectedReviews.getTitle());
+//        List<Attachments> img = selectedReviews.getAttachments();
+//        if (img != null) {
+//            if (img.size() > 0) {
+//                Attachments mAttachments = selectedReviews.getAttachments().get(0);
+//
+//                if (mAttachments.getType().equals("video")) {
+//                    if (mAttachments.getThumbnail_url() != null) {
+//                        if (mAttachments.getThumbnail_url().length() > 0) {
+//                            image_header.setVisibility(View.VISIBLE);
+//                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
+//                        } else {
+//                            image_header.setImageResource(R.mipmap.img_bac);
+//                        }
+//                    } else {
+//                        image_header.setImageResource(R.mipmap.img_bac);
+//                    }
+//                } else {
+//                    if (mAttachments.getUrl() != null) {
+//                        if (mAttachments.getUrl().length() > 0) {
+//                            image_header.setVisibility(View.VISIBLE);
+//                            Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+//                        } else {
+//                            image_header.setImageResource(R.mipmap.img_bac);
+//                        }
+//                    } else {
+//                        image_header.setImageResource(R.mipmap.img_bac);
+//                    }
+//                }
+////            if (mAttachments.getUrl() != null) {
+////                if (mAttachments.getUrl().length() > 0) {
+////                    image_header.setVisibility(View.VISIBLE);
+////                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+////                } else {
+////                    image_header.setVisibility(View.GONE);
+////                }
+////            } else {
+////                image_header.setImageResource(R.mipmap.img_bac);
+////            }
+//            } else {
+//                image_header.setImageResource(R.mipmap.img_bac);
+//            }
+//        } else {
+//            image_header.setImageResource(R.mipmap.img_bac);
+//        }
     }
 
     void buildList() {
