@@ -128,7 +128,7 @@
 
             <ImageView
                 android:id="@+id/childMoreOptions"
-                android:layout_width="22dp"
+                android:layout_width="33dp"
                 android:layout_height="22dp"
                 android:layout_alignParentRight="true"
                 android:paddingRight="10dp"

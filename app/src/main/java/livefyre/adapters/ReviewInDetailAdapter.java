@@ -3,7 +3,7 @@ package livefyre.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
+//import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -58,7 +58,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
     private static final int CHILD = 1;
     OnClickListener notificationHandler;
 
-    private ProgressDialog dialog;
+//    private ProgressDialog dialog;
     String mainReviewId;
     int helpfulFlag = 0;
     private LayoutInflater inflater;
