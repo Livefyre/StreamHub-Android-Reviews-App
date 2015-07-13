@@ -107,6 +107,7 @@
                         android:singleLine="true"
                         android:textColor="#0F98EC" />
                 </RelativeLayout>
+
             </RelativeLayout>
 
             <LinearLayout

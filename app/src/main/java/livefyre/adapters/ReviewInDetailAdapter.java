@@ -3,7 +3,7 @@ package livefyre.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-//import android.app.ProgressDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -58,7 +58,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
     private static final int CHILD = 1;
     OnClickListener notificationHandler;
 
-//    private ProgressDialog dialog;
+    private ProgressDialog dialog;
     String mainReviewId;
     int helpfulFlag = 0;
     private LayoutInflater inflater;
@@ -121,7 +121,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         TextView mainReviewerDisplayName;
         TextView mainReviewDate;
         TextView mainReviewBody;
-        TextView isParenrMod;
+        TextView isParentMod;
         TextView parentReplyTv;
         TextView parentHelpfulTv;
 
@@ -183,7 +183,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                 holder.mainReviewerDisplayName = (TextView) view.findViewById(R.id.mainReviewerDisplayName);
                 holder.mainReviewDate = (TextView) view.findViewById(R.id.mainReviewDate);
                 holder.mainReviewBody = (TextView) view.findViewById(R.id.mainReviewBody);
-                holder.isParenrMod = (TextView) view.findViewById(R.id.isParentMod);
+                holder.isParentMod = (TextView) view.findViewById(R.id.isParentMod);
 
                 holder.parentHelpfulImg = (ImageView) view.findViewById(R.id.parentsHelpfulImg);
 
@@ -278,24 +278,24 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
                 if (content.getIsModerator() != null) {
                     if (content.getIsModerator().equals("true")) {
-                        holder.isParenrMod.setText("Moderator");
-                        holder.isParenrMod
+                        holder.isParentMod.setText("Moderator");
+                        holder.isParentMod
                                 .setTextColor(Color.parseColor("#0F98EC"));
-                        holder.isParenrMod.setVisibility(View.VISIBLE);
+                        holder.isParentMod.setVisibility(View.VISIBLE);
                         holder.mainReviewerDisplayName.setMaxWidth(330);
                     } else {
-                        holder.isParenrMod.setVisibility(View.GONE);
+                        holder.isParentMod.setVisibility(View.GONE);
                     }
                 } else {
-                    holder.isParenrMod.setVisibility(View.GONE);
+                    holder.isParentMod.setVisibility(View.GONE);
                 }
 
                 if (content.getIsFeatured() != null) {
                     if (content.getIsFeatured()) {
-                        holder.isParenrMod.setText("Feature");
-                        holder.isParenrMod
+                        holder.isParentMod.setText("Feature");
+                        holder.isParentMod
                                 .setTextColor(Color.parseColor("#FEB33B"));
-                        holder.isParenrMod.setVisibility(View.VISIBLE);
+                        holder.isParentMod.setVisibility(View.VISIBLE);
                         holder.mainReviewerDisplayName.setMaxWidth(380);
 
                     }
@@ -352,7 +352,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                     Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
                 }
                 holder.mainReviewerDisplayName.setText(content.getAuthor().getDisplayName());
-                holder.isParenrMod.setText(content.getIsModerator());
+                holder.isParentMod.setText(content.getIsModerator());
                 holder.mainReviewDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
                 holder.mainReviewBody.setText(LFUtils.trimTrailingWhitespace(Html
                                 .fromHtml(content.getBodyHtml())),

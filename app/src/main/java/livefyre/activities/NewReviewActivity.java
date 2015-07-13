@@ -412,7 +412,6 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
 
         @Override
         public void onSuccess() {
-            //Hide
             progressBar.setVisibility(View.GONE);
         }
 

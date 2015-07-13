@@ -244,15 +244,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             postNewReviewIv.setVisibility(View.VISIBLE);
             actionTv.setVisibility(View.GONE);
         }
-
-    }
-
-    Boolean isExistComment(String reviewId) {
-        for (Content bean : reviewCollectiontoBuild) {
-            if (bean.getId().equals(reviewId))
-                return true;
-        }
-        return false;
     }
 
     View.OnClickListener myReviewListener = new View.OnClickListener() {
@@ -453,6 +444,22 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                         .playOn(findViewById(R.id.reviewsRV));
             }
         });
+        reviewsRV.setOnScrollListener(onScrollListener);
+        notification.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                activityTitleSpinner.setPrompt("Newest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+                YoYo.with(Techniques.BounceInUp)
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
+                notification.setVisibility(View.GONE);
+                reviewsRV.smoothScrollToPosition(0);
+
+            }
+        });
     }
 
     AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
@@ -495,10 +502,10 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (hideToolBar) {
-                postNewReviewIv.setVisibility(View.GONE);
+//                postNewReviewIv.setVisibility(View.GONE);
                 getSupportActionBar().hide();
             } else {
-                postNewReviewIv.setVisibility(View.VISIBLE);
+//                postNewReviewIv.setVisibility(View.VISIBLE);
                 getSupportActionBar().show();
             }
         }
@@ -517,7 +524,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         @Override
         public void onClick(View v) {
 
-            postNewReviewIv.setVisibility(View.VISIBLE);
+//            postNewReviewIv.setVisibility(View.VISIBLE);
             activityTitle.setOnClickListener(activityTitleListenerHide);
 
         }
@@ -531,7 +538,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 activityTitle.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
             }
-            postNewReviewIv.setVisibility(View.GONE);
+//            postNewReviewIv.setVisibility(View.GONE);
             activityTitle.setOnClickListener(activityTitleListenerShow);
         }
     };
@@ -589,6 +596,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     public static interface ClickListener {
+
         public void onClick(View view, int position);
 
         public void onLongClick(View view, int position);
@@ -653,22 +661,23 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 newList.add(t);
             }
         }
-//        if (newReviews != null)
-//            if (newReviews.size() > 0) {
-//            if (newReviews.size() == 1) {
-//                notifMsgTV.setText(newReviews.size() + " New Comment");
-//
-//            } else {
-//                notifMsgTV.setText(newReviews.size() + " New Comments");
-//            }
-//            notification.setVisibility(View.VISIBLE);
-//            YoYo.with(Techniques.DropOut)
-//                    .duration(700)
-//                    .playOn(findViewById(R.id.notification));
-//
-//        } else {
-//            notification.setVisibility(View.GONE);
-//        }
+        if (newList.size() > 0) {
+            if (newList.size() - oldCount > 0) {
+                notification.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.DropOut)
+                    .duration(700)
+                    .playOn(findViewById(R.id.notification));
+                if ((newList.size() - oldCount) == 1)
+                    notifMsgTV.setText("" + (newList.size() - oldCount)
+                            + " New Review ");
+                else {
+                    notifMsgTV.setText("" + (newList.size() - oldCount)
+                            + " New Reviews ");
+                }
+            } else {
+                notification.setVisibility(View.GONE);
+            }
+        }
         isReviewPosted();
     }
 //    public void onDataUpdate(HashSet<String> authorsSet, HashSet<String> statesSet, HashSet<String> annotationsSet, HashSet<String> updates) {
