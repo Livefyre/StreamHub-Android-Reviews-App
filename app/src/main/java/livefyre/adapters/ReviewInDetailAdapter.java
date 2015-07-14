@@ -358,6 +358,8 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                                 .fromHtml(content.getBodyHtml())),
                         TextView.BufferType.SPANNABLE);
 
+                holder.parentNotifBtn.setOnClickListener(notificationHandler);
+
                 holder.parentReplyImg.setOnClickListener(new OnClickListener() {
 
                     @Override

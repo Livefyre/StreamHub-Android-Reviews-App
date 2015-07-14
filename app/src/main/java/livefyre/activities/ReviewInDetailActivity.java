@@ -5,10 +5,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +66,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         pullViews();
         getDataFromIntent();
         buildList();
+
     }
 
     View.OnClickListener notificationHandler = new View.OnClickListener() {
@@ -159,50 +164,50 @@ public class ReviewInDetailActivity extends BaseActivity {
         reviewId = fromReviewsActivity.getStringExtra("id");
         selectedReviews = ContentParser.ContentMap.get(reviewId);
 //        getActionBar().setTitle("  " + selectedReviews.getTitle());
-//        List<Attachments> img = selectedReviews.getAttachments();
-//        if (img != null) {
-//            if (img.size() > 0) {
-//                Attachments mAttachments = selectedReviews.getAttachments().get(0);
-//
-//                if (mAttachments.getType().equals("video")) {
-//                    if (mAttachments.getThumbnail_url() != null) {
-//                        if (mAttachments.getThumbnail_url().length() > 0) {
-//                            image_header.setVisibility(View.VISIBLE);
-//                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
-//                        } else {
-//                            image_header.setImageResource(R.mipmap.img_bac);
-//                        }
-//                    } else {
-//                        image_header.setImageResource(R.mipmap.img_bac);
-//                    }
+        List<Attachments> img = selectedReviews.getAttachments();
+        if (img != null) {
+            if (img.size() > 0) {
+                Attachments mAttachments = selectedReviews.getAttachments().get(0);
+
+                if (mAttachments.getType().equals("video")) {
+                    if (mAttachments.getThumbnail_url() != null) {
+                        if (mAttachments.getThumbnail_url().length() > 0) {
+                            image_header.setVisibility(View.VISIBLE);
+                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
+                        } else {
+                            image_header.setImageResource(R.mipmap.img_bac);
+                        }
+                    } else {
+                        image_header.setImageResource(R.mipmap.img_bac);
+                    }
+                } else {
+                    if (mAttachments.getUrl() != null) {
+                        if (mAttachments.getUrl().length() > 0) {
+                            image_header.setVisibility(View.VISIBLE);
+                            Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+                        } else {
+                            image_header.setImageResource(R.mipmap.img_bac);
+                        }
+                    } else {
+                        image_header.setImageResource(R.mipmap.img_bac);
+                    }
+                }
+//            if (mAttachments.getUrl() != null) {
+//                if (mAttachments.getUrl().length() > 0) {
+//                    image_header.setVisibility(View.VISIBLE);
+//                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
 //                } else {
-//                    if (mAttachments.getUrl() != null) {
-//                        if (mAttachments.getUrl().length() > 0) {
-//                            image_header.setVisibility(View.VISIBLE);
-//                            Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-//                        } else {
-//                            image_header.setImageResource(R.mipmap.img_bac);
-//                        }
-//                    } else {
-//                        image_header.setImageResource(R.mipmap.img_bac);
-//                    }
+//                    image_header.setVisibility(View.GONE);
 //                }
-////            if (mAttachments.getUrl() != null) {
-////                if (mAttachments.getUrl().length() > 0) {
-////                    image_header.setVisibility(View.VISIBLE);
-////                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-////                } else {
-////                    image_header.setVisibility(View.GONE);
-////                }
-////            } else {
-////                image_header.setImageResource(R.mipmap.img_bac);
-////            }
 //            } else {
 //                image_header.setImageResource(R.mipmap.img_bac);
 //            }
-//        } else {
-//            image_header.setImageResource(R.mipmap.img_bac);
-//        }
+            } else {
+                image_header.setImageResource(R.mipmap.img_bac);
+            }
+        } else {
+            image_header.setImageResource(R.mipmap.img_bac);
+        }
     }
 
     void buildList() {

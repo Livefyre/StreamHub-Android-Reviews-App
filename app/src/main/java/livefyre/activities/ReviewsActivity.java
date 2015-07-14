@@ -630,6 +630,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 reviewCollectiontoBuild.remove(mContentBean);
             }
         }
+
         HashMap<String, Content> mainContent = ContentParser.ContentMap;
         String authorId = application.getDataFromSharedPreferences(LFSAppConstants.ID);
         for (Content mContentBean : mainContent.values()) {
@@ -647,6 +648,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 }
             }
         }
+
         reviewListAdapter.notifyDataSetChanged();
         ReviewInDetailActivity.notifyDatainDetail();
 

@@ -37,4 +37,21 @@
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:textColor">#212121</item>
     </style>
+
+    <style name="Base.Widget.AppCompat.ActionBar.Solid">
+        <item name="background">?attr/colorPrimary</item>
+        <item name="backgroundStacked">?attr/colorPrimary</item>
+        <item name="backgroundSplit">?attr/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+
+    <!--<style name="Base.Widget.AppCompat.Toolbar" parent="android:Widget">-->
+
+        <!--<item name="titleMargins">4dp</item>-->
+        <!--<item name="maxButtonHeight">56dp</item>-->
+        <!--<item name="collapseIcon">?attr/homeAsUpIndicator</item>-->
+        <!--<item name="collapseContentDescription">@string/abc_toolbar_collapse_description</item>-->
+        <!--<item name="contentInsetStart">16dp</item>-->
+    <!--</style>-->
+
 </resources>
