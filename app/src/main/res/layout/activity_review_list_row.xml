@@ -17,7 +17,7 @@
             android:id="@+id/reviewerImage"
             android:layout_width="@dimen/reviewerImagewidth"
             android:layout_height="@dimen/reviewerImageHight"
-            android:src="@mipmap/profile_default" />
+ />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -83,8 +83,8 @@ public class LFUtils {
 					return "Posted " +diffSeconds+" Second ago";
 				else
 					return "Posted " +diffSeconds+" Seconds ago";
-				
-				
+
+
 			} else if (diffHours < 1) {
 				if (diffMinutes == 1)
 					return "Posted " +diffMinutes+" Month ago";

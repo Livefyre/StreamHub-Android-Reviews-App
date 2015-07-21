@@ -34,22 +34,22 @@
 
 
 
-        <TextView
-            android:id="@+id/titleForReviewInDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Title In Detail View"
-            android:textColor="@color/white"
-            android:textSize="30dp"
-            android:textStyle="bold" 
-             android:textIsSelectable="true" />
+        <!--<TextView-->
+            <!--android:id="@+id/titleForReviewInDetail"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="16dp"-->
+            <!--android:text="Title In Detail View"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="30dp"-->
+            <!--android:textStyle="bold" -->
+             <!--android:textIsSelectable="true" />-->
 
         <RatingBar
             android:id="@+id/ratingBarInDetailView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/titleForReviewInDetail"
+
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="16dp"
             android:isIndicator="true"
@@ -69,8 +69,7 @@
         <ImageView
             android:id="@+id/mainReviewerImage"
             android:layout_width="@dimen/reviewerImagewidth"
-            android:layout_height="@dimen/reviewerImageHight"
-            android:src="@mipmap/profile_default" />
+            android:layout_height="@dimen/reviewerImageHight" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -106,6 +105,13 @@
                         android:layout_toRightOf="@+id/mainReviewerDisplayName"
                         android:singleLine="true"
                         android:textColor="#0F98EC" />
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/isParentMod"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/mainReviewerDisplayName"-->
+                        <!--android:textColor="#0F98EC" />-->
                 </RelativeLayout>
 
             </RelativeLayout>

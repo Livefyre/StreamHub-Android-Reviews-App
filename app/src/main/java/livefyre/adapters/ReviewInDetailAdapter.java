@@ -42,7 +42,6 @@ import livefyre.LivefyreApplication;
 import livefyre.RoundedTransformation;
 import livefyre.activities.EditReview;
 import livefyre.activities.ReplyReview;
-import livefyre.models.Attachments;
 import livefyre.models.Content;
 import livefyre.models.Vote;
 import livefyre.parsers.ContentParser;
@@ -79,7 +78,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         this.context = context;
         this.activity = activity;
         application = AppSingleton.getInstance().getApplication();
-
     }
 
     public void updateReviewInDetailAdapter(List<Content> ContentCollection) {
@@ -170,12 +168,11 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
         switch (viewType) {
             case PARENT:
-//                break;
                 view = inflater.inflate(R.layout.activity_parent_row, null);
                 holder.image_header = (ImageView) view.findViewById(R.id.image_header);
                 holder.parentNotifBtn = (Button) view.findViewById(R.id.parentNotifBtn);
 
-                holder.titleForReviewInDetail = (TextView) view.findViewById(R.id.titleForReviewInDetail);
+//                holder.titleForReviewInDetail = (TextView) view.findViewById(R.id.titleForReviewInDetail);
 
                 holder.ratingBarInDetailView = (RatingBar) view.findViewById(R.id.ratingBarInDetailView);
 
@@ -342,7 +339,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                             .setTextColor(Color.parseColor("#0F98EC"));
                 }
 
-                holder.titleForReviewInDetail.setText(content.getTitle());
+//                holder.titleForReviewInDetail.setText(content.getTitle());
 
                 holder.ratingBarInDetailView.setRating(Float.parseFloat(content
                         .getRating()) / 20);
@@ -352,8 +349,8 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                     Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
                 }
                 holder.mainReviewerDisplayName.setText(content.getAuthor().getDisplayName());
-                holder.isParentMod.setText(content.getIsModerator());
-                holder.mainReviewDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
+                holder.mainReviewDate.setText(LFUtils.getFormatedDate(
+                        content.getCreatedAt(), LFSAppConstants.DETAIL));
                 holder.mainReviewBody.setText(LFUtils.trimTrailingWhitespace(Html
                                 .fromHtml(content.getBodyHtml())),
                         TextView.BufferType.SPANNABLE);
@@ -368,8 +365,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                         replyView.putExtra("id", content.getId());
                         replyView.putExtra("isEdit", false);
                         activity.startActivityForResult(replyView, 1);
-//                        activity.overridePendingTransition(R.anim.right_in,
-//                                R.anim.left_out);
                     }
                 });
                 holder.parentReplyTv.setOnClickListener(new OnClickListener() {
@@ -380,8 +375,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                         replyView.putExtra("id", content.getId());
                         replyView.putExtra("isEdit", false);
                         activity.startActivityForResult(replyView, 1);
-//                        activity.overridePendingTransition(R.anim.right_in,
-//                                R.anim.left_out);
                     }
                 });
                 holder.parentsHelpfulImg.setOnClickListener(new OnClickListener() {
@@ -425,7 +418,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                 });
                 break;
             case CHILD:
-
                 float density = context.getResources().getDisplayMetrics().density;
                 int px = (int) (40 * density);
                 int depthValue = 0;
@@ -519,8 +511,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                         replyView.putExtra("id", content.getId());
                         replyView.putExtra("isEdit", false);
                         activity.startActivityForResult(replyView, 1);
-//                        activity.overridePendingTransition(R.anim.right_in,
-//                                R.anim.left_out);
                     }
                 });
 
@@ -541,6 +531,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         if (content.getIsFeatured() != null) {
                             if (content.getIsFeatured()) {
+                                ((Activity) context).openOptionsMenu();
                                 moreDialog(content.getId(), true, false);
                             } else {
                                 moreDialog(content.getId(), false, false);
@@ -609,8 +600,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
     }
 
     private void helpfulDialog(final int HFVal, final String id) {
-        final Dialog dialog = new Dialog(activity,
-                android.R.style.Theme_Translucent_NoTitleBar);
+        final Dialog dialog = new Dialog(activity);
 
         dialog.setTitle("");
         dialog.setContentView(R.layout.helpfull_dialog);
@@ -691,13 +681,10 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                             LFSConfig.USER_TOKEN, LFSActions.VOTE, parameters,
                             new helpfulCallback());
                     dialog.dismiss();
-
                 }
-
             }
         });
         dialog.show();
-
     }
 
     private void moreDialog(final String id, final Boolean isFeatured,
@@ -706,7 +693,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
         final Dialog dialog = new Dialog(activity,
                 android.R.style.Theme_Translucent_NoTitleBar);
-        dialog.setTitle("Hari");
         dialog.setContentView(R.layout.more);
         dialog.setCancelable(true);
         if (isFeatured) {
@@ -898,9 +884,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
     }
 
     private void flagDialog(final String id) {
-        final Dialog dialog = new Dialog(activity,
-                android.R.style.Theme_Translucent_NoTitleBar);
-
+        final Dialog dialog = new Dialog(activity,android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setTitle("");
         dialog.setContentView(R.layout.flag);
         dialog.setCancelable(true);
@@ -1645,7 +1629,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 //
 //		final Dialog dialog = new Dialog(activity,
 //				android.R.style.Theme_Translucent_NoTitleBar);
-//		dialog.setTitle("Hari");
+//		dialog.setTitle("Abc");
 //		dialog.setContentView(R.layout.more);
 //		dialog.setCancelable(true);
 //		if (isFeatured) {

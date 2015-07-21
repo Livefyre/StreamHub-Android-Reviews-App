@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -62,11 +63,12 @@ public class ReviewInDetailActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_indetail);
-        application = AppSingleton.getInstance().getApplication();
+//        application = AppSingleton.getInstance().getApplication();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         pullViews();
         getDataFromIntent();
         buildList();
-
     }
 
     View.OnClickListener notificationHandler = new View.OnClickListener() {
@@ -92,6 +94,7 @@ public class ReviewInDetailActivity extends BaseActivity {
                     }
                 }
             }
+
             commentsLV.smoothScrollToPosition(position + 1);
         }
     };
@@ -115,6 +118,7 @@ public class ReviewInDetailActivity extends BaseActivity {
             reviewInDetailAdapter.updateReviewInDetailAdapter(reviewCollectiontoBuild);
         }
     }
+
     public static void notifyDatainDetail() {
 //        Log.d("Stream", "Stream detail");
         if (reviewInDetailAdapter != null)
@@ -142,45 +146,50 @@ public class ReviewInDetailActivity extends BaseActivity {
     private void pullViews() {
         image_header = (ImageView) findViewById(R.id.image_header);
         commentsLV = (ListView) findViewById(R.id.commentsLV);
+
+//        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         if (!isNetworkAvailable()) {
             showToast("Network Not Available");
             return;
         }
     }
 
-    View.OnClickListener backtoReviewActivityFromInDetailViewListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            Intent mainViewIntent = new Intent(ReviewInDetailActivity.this,
-                    ReviewsActivity.class);
-            startActivity(mainViewIntent);
-        }
-    };
+//    View.OnClickListener backtoReviewActivityFromInDetailViewListener = new View.OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//            Intent mainViewIntent = new Intent(ReviewInDetailActivity.this,
+//                    ReviewsActivity.class);
+//            startActivity(mainViewIntent);
+//        }
+//    };
 
     @SuppressLint("ResourceAsColor")
     void getDataFromIntent() {
         Intent fromReviewsActivity = getIntent();
         reviewId = fromReviewsActivity.getStringExtra("id");
         selectedReviews = ContentParser.ContentMap.get(reviewId);
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(selectedReviews.getTitle());
 //        getActionBar().setTitle("  " + selectedReviews.getTitle());
         List<Attachments> img = selectedReviews.getAttachments();
         if (img != null) {
             if (img.size() > 0) {
                 Attachments mAttachments = selectedReviews.getAttachments().get(0);
 
-                if (mAttachments.getType().equals("video")) {
-                    if (mAttachments.getThumbnail_url() != null) {
-                        if (mAttachments.getThumbnail_url().length() > 0) {
-                            image_header.setVisibility(View.VISIBLE);
-                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
-                        } else {
-                            image_header.setImageResource(R.mipmap.img_bac);
-                        }
-                    } else {
-                        image_header.setImageResource(R.mipmap.img_bac);
-                    }
-                } else {
+//                if (mAttachments.getType().equals("video")) {
+//                    if (mAttachments.getThumbnail_url() != null) {
+//                        if (mAttachments.getThumbnail_url().length() > 0) {
+//                            image_header.setVisibility(View.VISIBLE);
+//                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
+//                        } else {
+//                            image_header.setImageResource(R.mipmap.img_bac);
+//                        }
+//                    } else {
+//                        image_header.setImageResource(R.mipmap.img_bac);
+//                    }
+//                }
+//                else {
                     if (mAttachments.getUrl() != null) {
                         if (mAttachments.getUrl().length() > 0) {
                             image_header.setVisibility(View.VISIBLE);
@@ -191,7 +200,7 @@ public class ReviewInDetailActivity extends BaseActivity {
                     } else {
                         image_header.setImageResource(R.mipmap.img_bac);
                     }
-                }
+//                }
 //            if (mAttachments.getUrl() != null) {
 //                if (mAttachments.getUrl().length() > 0) {
 //                    image_header.setVisibility(View.VISIBLE);

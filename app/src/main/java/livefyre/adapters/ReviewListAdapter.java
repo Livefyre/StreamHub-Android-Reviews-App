@@ -99,6 +99,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         if (content.getAuthor().getAvatar().length() > 0) {
             Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.reviewerImage);
         } else {
+            Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.reviewerImage);
         }
         if (content.getAttachments() != null) {
             if (content.getAttachments().size() > 0) {
