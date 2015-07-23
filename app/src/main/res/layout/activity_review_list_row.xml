@@ -16,8 +16,7 @@
         <ImageView
             android:id="@+id/reviewerImage"
             android:layout_width="@dimen/reviewerImagewidth"
-            android:layout_height="@dimen/reviewerImageHight"
- />
+            android:layout_height="@dimen/reviewerImageHight"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

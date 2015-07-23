@@ -158,7 +158,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
         ViewHolder holder = (ViewHolder) convertView.getTag();
         updateView(position, holder);
         convertView.setId(position);
-
         return convertView;
     }
 
@@ -172,7 +171,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                 holder.image_header = (ImageView) view.findViewById(R.id.image_header);
                 holder.parentNotifBtn = (Button) view.findViewById(R.id.parentNotifBtn);
 
-//                holder.titleForReviewInDetail = (TextView) view.findViewById(R.id.titleForReviewInDetail);
+//              holder.titleForReviewInDetail = (TextView) view.findViewById(R.id.titleForReviewInDetail);
 
                 holder.ratingBarInDetailView = (RatingBar) view.findViewById(R.id.ratingBarInDetailView);
 
@@ -531,7 +530,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         if (content.getIsFeatured() != null) {
                             if (content.getIsFeatured()) {
-                                ((Activity) context).openOptionsMenu();
+//                                ((Activity) context).openOptionsMenu();
                                 moreDialog(content.getId(), true, false);
                             } else {
                                 moreDialog(content.getId(), false, false);

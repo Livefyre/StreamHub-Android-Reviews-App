@@ -1,8 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
@@ -44,14 +44,5 @@
         <item name="backgroundSplit">?attr/colorPrimary</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
-
-    <!--<style name="Base.Widget.AppCompat.Toolbar" parent="android:Widget">-->
-
-        <!--<item name="titleMargins">4dp</item>-->
-        <!--<item name="maxButtonHeight">56dp</item>-->
-        <!--<item name="collapseIcon">?attr/homeAsUpIndicator</item>-->
-        <!--<item name="collapseContentDescription">@string/abc_toolbar_collapse_description</item>-->
-        <!--<item name="contentInsetStart">16dp</item>-->
-    <!--</style>-->
 
 </resources>

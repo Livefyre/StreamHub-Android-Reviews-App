@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +47,7 @@ public class ReviewInDetailActivity extends BaseActivity {
     static List<Content> reviewCollectiontoBuild;
     ListView commentsLV;
     static List<Content> childMap;
+    RatingBar ratingBarInDetailView;
     private LivefyreApplication application;
 
     @Override
@@ -64,9 +66,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_indetail);
 //        application = AppSingleton.getInstance().getApplication();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        pullViews();
+        init();
         getDataFromIntent();
         buildList();
     }
@@ -94,11 +94,9 @@ public class ReviewInDetailActivity extends BaseActivity {
                     }
                 }
             }
-
             commentsLV.smoothScrollToPosition(position + 1);
         }
     };
-
 
     private void loadAllData() {
         reviewCollectiontoBuild = new ArrayList();
@@ -143,26 +141,17 @@ public class ReviewInDetailActivity extends BaseActivity {
         }
     }
 
-    private void pullViews() {
+    private void init() {
         image_header = (ImageView) findViewById(R.id.image_header);
         commentsLV = (ListView) findViewById(R.id.commentsLV);
-
-//        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+//        ratingBarInDetailView = (RatingBar)findViewById(R.id.ratingBarInDetailView);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (!isNetworkAvailable()) {
             showToast("Network Not Available");
             return;
         }
     }
-
-//    View.OnClickListener backtoReviewActivityFromInDetailViewListener = new View.OnClickListener() {
-//
-//        @Override
-//        public void onClick(View v) {
-//            Intent mainViewIntent = new Intent(ReviewInDetailActivity.this,
-//                    ReviewsActivity.class);
-//            startActivity(mainViewIntent);
-//        }
-//    };
 
     @SuppressLint("ResourceAsColor")
     void getDataFromIntent() {
@@ -172,24 +161,12 @@ public class ReviewInDetailActivity extends BaseActivity {
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(selectedReviews.getTitle());
 //        getActionBar().setTitle("  " + selectedReviews.getTitle());
+//        ratingBarInDetailView.setRating(Float.parseFloat(selectedReviews
+//                        .getRating()) / 20);
         List<Attachments> img = selectedReviews.getAttachments();
         if (img != null) {
             if (img.size() > 0) {
                 Attachments mAttachments = selectedReviews.getAttachments().get(0);
-
-//                if (mAttachments.getType().equals("video")) {
-//                    if (mAttachments.getThumbnail_url() != null) {
-//                        if (mAttachments.getThumbnail_url().length() > 0) {
-//                            image_header.setVisibility(View.VISIBLE);
-//                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
-//                        } else {
-//                            image_header.setImageResource(R.mipmap.img_bac);
-//                        }
-//                    } else {
-//                        image_header.setImageResource(R.mipmap.img_bac);
-//                    }
-//                }
-//                else {
                     if (mAttachments.getUrl() != null) {
                         if (mAttachments.getUrl().length() > 0) {
                             image_header.setVisibility(View.VISIBLE);
@@ -200,17 +177,6 @@ public class ReviewInDetailActivity extends BaseActivity {
                     } else {
                         image_header.setImageResource(R.mipmap.img_bac);
                     }
-//                }
-//            if (mAttachments.getUrl() != null) {
-//                if (mAttachments.getUrl().length() > 0) {
-//                    image_header.setVisibility(View.VISIBLE);
-//                    Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-//                } else {
-//                    image_header.setVisibility(View.GONE);
-//                }
-//            } else {
-//                image_header.setImageResource(R.mipmap.img_bac);
-//            }
             } else {
                 image_header.setImageResource(R.mipmap.img_bac);
             }
