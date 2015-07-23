@@ -423,7 +423,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
-        
+
         Spinner mSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
         String[] items = getResources().getStringArray(R.array.helpful_categories);
         mSpinner.setVisibility(View.VISIBLE);

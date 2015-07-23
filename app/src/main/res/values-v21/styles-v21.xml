@@ -5,12 +5,4 @@
         <item name="android:colorPrimary">@color/colorPrimary</item>
     </style>
 
-    <!--<style name="AppTheme.Toolbar" parent="Toolbar">-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimary</item>-->
-
-        <!--<item name="android:spinnerItemStyle">@style/AppTheme.SpinnerItemStyle</item>-->
-        <!--<item name="android:spinnerDropDownItemStyle">@style/AppTheme.SpinnerDropDownItemStyle-->
-        <!--</item>-->
-    <!--</style>-->
 </resources>
