@@ -167,7 +167,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
         switch (viewType) {
             case PARENT:
-                view = inflater.inflate(R.layout.activity_parent_row, null);
+                view = inflater.inflate(R.layout.layout_parent_row, null);
                 holder.image_header = (ImageView) view.findViewById(R.id.image_header);
                 holder.parentNotifBtn = (Button) view.findViewById(R.id.parentNotifBtn);
 

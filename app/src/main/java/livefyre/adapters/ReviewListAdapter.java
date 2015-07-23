@@ -50,7 +50,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder holder = null;
         View view = null;
-        view = inflater.inflate(R.layout.activity_review_list_row, parent, false);
+        view = inflater.inflate(R.layout.layout_review_list_row, parent, false);
         holder = new MyViewHolder(view);
         return holder;
     }
