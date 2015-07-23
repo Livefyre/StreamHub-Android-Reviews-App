@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@color/colorPrimary"
-    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-    app:theme="@style/Toolbar" >
+    app:popupTheme="@style/Theme.AppCompat.Light">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,14 +33,12 @@
             <Spinner
                 android:id="@+id/activityTitleSpinner"
                 android:layout_width="wrap_content"
-                style="@style/Spinner"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:entries="@array/helpful_categories"
-                android:prompt="@string/helpful_spinner"
-                android:spinnerMode="dropdown"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="?android:selectableItemBackground"
+                android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
             <TextView
                 android:id="@+id/activityTitle"

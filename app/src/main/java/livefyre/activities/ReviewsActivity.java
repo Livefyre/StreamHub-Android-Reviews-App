@@ -1,11 +1,13 @@
 package livefyre.activities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +46,7 @@ import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
 import livefyre.LivefyreApplication;
 import livefyre.adapters.ReviewListAdapter;
+import livefyre.adapters.SpinnerAdapter;
 import livefyre.listeners.ContentUpdateListener;
 import livefyre.models.Content;
 import livefyre.models.ContentTypeEnum;
@@ -70,7 +73,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     Spinner activityTitleSpinner;
     private String selectedCategory;
     private SwipeRefreshLayout swipeView;
-//    Bus mBus;
+    //    Bus mBus;
     ArrayList<String> newReviews;
 
     LinearLayout notification;
@@ -409,6 +412,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void buildToolBar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -417,8 +421,26 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        
+        Spinner mSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
+        String[] items = getResources().getStringArray(R.array.helpful_categories);
+        mSpinner.setVisibility(View.VISIBLE);
         activityTitle.setVisibility(View.GONE);
-        activityTitleSpinner.setVisibility(View.VISIBLE);
+        List<String> spinnerItems = new ArrayList<String>();
+
+        for (int i = 0; i < items.length; i++) {
+            spinnerItems.add(items[i]);
+        }
+
+        SpinnerAdapter adapter = new SpinnerAdapter(actionBar.getThemedContext(), spinnerItems);
+        mSpinner.setAdapter(adapter);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mSpinner.setDropDownVerticalOffset(-116);
+        }
+
     }
 
     private void setListenersToViews() {
@@ -494,6 +516,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         public void onNothingSelected(AdapterView<?> parentView) {
 
         }
+
     };
     public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         boolean hideToolBar = false;
@@ -502,10 +525,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (hideToolBar) {
-//                postNewReviewIv.setVisibility(View.GONE);
                 getSupportActionBar().hide();
             } else {
-//                postNewReviewIv.setVisibility(View.VISIBLE);
                 getSupportActionBar().show();
             }
         }
@@ -667,8 +688,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             if (newList.size() - oldCount > 0) {
                 notification.setVisibility(View.VISIBLE);
                 YoYo.with(Techniques.DropOut)
-                    .duration(700)
-                    .playOn(findViewById(R.id.notification));
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
                 if ((newList.size() - oldCount) == 1)
                     notifMsgTV.setText("" + (newList.size() - oldCount)
                             + " New Review ");
