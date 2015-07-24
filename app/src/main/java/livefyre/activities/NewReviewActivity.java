@@ -41,54 +41,38 @@ import livefyre.streamhub.WriteClient;
 
 public class NewReviewActivity extends BaseActivity {
 
-    EditText newReviewTitleEt, newReviewProsEt, newReviewConsEt, newReviewBodyEt;
-    TextView activityTitle, actionTv;
-    ImageView capturedImage;
-    RelativeLayout deleteCapturedImage;
-    RatingBar newReviewRatingBar;
-    ProgressBar progressBar;
-    LinearLayout addPhotoLL;
-    Toolbar toolbar;
-    JSONObject imgObj;
-    String imgUrl;
+    private EditText newReviewTitleEt, newReviewProsEt, newReviewConsEt, newReviewBodyEt;
+    private TextView activityTitle, actionTv;
+    private ImageView capturedImage;
+    private RelativeLayout deleteCapturedImage;
+    private RatingBar newReviewRatingBar;
+    private ProgressBar progressBar;
+    private LinearLayout addPhotoLL;
+    private Toolbar toolbar;
+    private JSONObject imgObj;
+    private String imgUrl;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_review);
-        pullViews();
-        setListenersToViews();
-        buildToolBar();
-    }
 
     private void buildToolBar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
+        activityTitle = (TextView) findViewById(R.id.activityTitle);
+        actionTv = (TextView) findViewById(R.id.actionTv);
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
         activityTitle.setText("New Review");
         actionTv.setText("Post");
     }
 
     private void pullViews() {
-
         newReviewTitleEt = (EditText) findViewById(R.id.newReviewTitleEt);
         newReviewProsEt = (EditText) findViewById(R.id.newReviewProsEt);
         newReviewConsEt = (EditText) findViewById(R.id.newReviewConsEt);
         newReviewBodyEt = (EditText) findViewById(R.id.newReviewBodyEt);
-
-        activityTitle = (TextView) findViewById(R.id.activityTitle);
-        actionTv = (TextView) findViewById(R.id.actionTv);
-
         newReviewRatingBar = (RatingBar) findViewById(R.id.newReviewRatingBar);
-
         capturedImage = (ImageView) findViewById(R.id.capturedImage);
-
         deleteCapturedImage = (RelativeLayout) findViewById(R.id.deleteCapturedImage);
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
         addPhotoLL = (LinearLayout) findViewById(R.id.addPhotoLL);
-
     }
 
     private void setListenersToViews() {
@@ -97,7 +81,7 @@ public class NewReviewActivity extends BaseActivity {
         actionTv.setOnClickListener(postReviewListener);
     }
 
-    View.OnClickListener postReviewListener = new View.OnClickListener() {
+    private View.OnClickListener postReviewListener = new View.OnClickListener() {
 
         public void onClick(View v) {
             String title = newReviewTitleEt.getText().toString();
@@ -106,32 +90,23 @@ public class NewReviewActivity extends BaseActivity {
             String cons = newReviewConsEt.getText().toString();
             int reviewRating = (int) (newReviewRatingBar.getRating() * 20);
             if (title.length() == 0) {
-
                 ((EditText) findViewById(R.id.newReviewTitleEt)).setError("Enter Title");
-//            showAlert("Please Enter Title.", "OK",tryAgain);
                 return;
             }
-
             if (reviewRating == 0) {
-//            ((RatingBar) findViewById(R.id.newReviewRatingBar)).setError("Enter Pros");
                 showAlert("Please give Rating.", "ok", tryAgain);
                 return;
             }
             if (pros.length() == 0) {
                 ((EditText) findViewById(R.id.newReviewProsEt)).setError("Enter Pros");
-//            showAlert("Please Enter Pros.", "OK",tryAgain);
                 return;
             }
-
             if (cons.length() == 0) {
                 ((EditText) findViewById(R.id.newReviewConsEt)).setError("Enter Cons");
-//            showAlert("Please Enter Cons.", "OK",tryAgain);
                 return;
             }
-
             if (description.length() == 0) {
                 ((EditText) findViewById(R.id.newReviewProsEt)).setError("Enter Description");
-//            showAlert("Please Enter Description.", "OK",tryAgain);
                 return;
             }
             String descriptionHTML = Html.toHtml(newReviewBodyEt.getText());
@@ -147,13 +122,13 @@ public class NewReviewActivity extends BaseActivity {
                     descriptionHTML, reviewRating);
         }
     };
-    DialogInterface.OnClickListener tryAgain = new DialogInterface.OnClickListener() {
+    private DialogInterface.OnClickListener tryAgain = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface arg0, int arg1) {
         }
     };
 
-    void postNewReview(String title, String body, int reviewRating) {
+    private void postNewReview(String title, String body, int reviewRating) {
         if (!isNetworkAvailable()) {
             showToast("Network Not Available");
             return;
@@ -178,7 +153,7 @@ public class NewReviewActivity extends BaseActivity {
         }
     }
 
-    public class writeclientCallback extends JsonHttpResponseHandler {
+    private class writeclientCallback extends JsonHttpResponseHandler {
         public void onSuccess(JSONObject data) {
             dismissProgressDialog();
             showAlert("Review Posted Successfully.", "OK", null);
@@ -203,7 +178,7 @@ public class NewReviewActivity extends BaseActivity {
         }
     }
 
-    View.OnClickListener captureImageListener = new View.OnClickListener() {
+    private View.OnClickListener captureImageListener = new View.OnClickListener() {
 
         public void onClick(View v) {
             Intent intent = new Intent(NewReviewActivity.this, Filepicker.class);
@@ -212,7 +187,7 @@ public class NewReviewActivity extends BaseActivity {
         }
     };
 
-    View.OnClickListener deleteCapturedImageListener = new View.OnClickListener() {
+    private View.OnClickListener deleteCapturedImageListener = new View.OnClickListener() {
 
         public void onClick(View v) {
             addPhotoLL.setVisibility(View.VISIBLE);
@@ -224,7 +199,7 @@ public class NewReviewActivity extends BaseActivity {
     };
 
     // Dialog Listeners
-    DialogInterface.OnClickListener selectImageDialogAction = new DialogInterface.OnClickListener() {
+    private DialogInterface.OnClickListener selectImageDialogAction = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface arg0, int arg1) {
             Intent intent = new Intent(NewReviewActivity.this, Filepicker.class);
@@ -253,26 +228,22 @@ public class NewReviewActivity extends BaseActivity {
                 imgObj = new JSONObject();
                 imgObj.put("link", imgUrl);
                 imgObj.put("provider_name", "LivefyreFilePicker");
-                // imgObj.put("thumbnail_height",320);
                 imgObj.put("thumbnail_url", imgUrl);
                 imgObj.put("type", "photo");
                 imgObj.put("url", imgUrl);
                 try {
                     progressBar.setVisibility(View.VISIBLE);
-                    Picasso.with(getBaseContext()).load(imgUrl).fit()
-                            .into(capturedImage, new ImageLoadCallBack());
+                    Picasso.with(getBaseContext()).load(imgUrl).fit().into(capturedImage, new ImageLoadCallBack());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
 
     private class ImageLoadCallBack implements Callback {
-
         @Override
         public void onSuccess() {
             progressBar.setVisibility(View.GONE);
@@ -283,4 +254,15 @@ public class NewReviewActivity extends BaseActivity {
             //Hide
         }
     }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_review);
+        pullViews();
+        buildToolBar();
+        setListenersToViews();
+    }
+
 }
