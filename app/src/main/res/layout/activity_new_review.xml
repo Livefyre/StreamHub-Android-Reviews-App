@@ -20,138 +20,88 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="40dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="16dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/newReviewTitleTv"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/Title"
-                android:textColor="@color/black"
-                android:visibility="invisible" />
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/newReviewTitleEt"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@color/white"
-                android:hint="@string/Title"
-                android:imeOptions="flagNavigateNext"
-                android:lineSpacingExtra="3dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/textColor"
-                android:textColorHint="@color/textHint"
-                android:textSize="24sp">
+                <EditText
+                    android:id="@+id/newReviewTitleEt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Title"
+                    android:imeOptions="flagNavigateNext"
+                    android:lineSpacingExtra="3dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/textHint"
+                    android:textSize="24sp" />
 
-
-            </EditText>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/lineColor" />
+            </android.support.design.widget.TextInputLayout>
 
             <RatingBar
                 android:id="@+id/newReviewRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="35dp"
                 android:numStars="5"
                 android:progressDrawable="@drawable/big_starbar" />
 
-            <TextView
-
-                android:id="@+id/newReviewProsTv"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/Pros"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:visibility="invisible" />
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/newReviewProsEt"
-                android:layout_width="fill_parent"
+                <EditText
+                    android:id="@+id/newReviewProsEt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Pros"
+                    android:lineSpacingExtra="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHighlight="@color/textHint"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@color/white"
-                android:ems="10"
-                android:hint="@string/Pros"
-                android:lineSpacingExtra="5dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/textColor"
-                android:textColorHighlight="@color/textHint"
-                android:textSize="14sp" />
+                android:layout_marginBottom="16dp">
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dip"
-                android:layout_marginTop="8dp"
-                android:background="@color/lineColor" />
+                <EditText
+                    android:id="@+id/newReviewConsEt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Cons"
+                    android:lineSpacingExtra="5dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHighlight="@color/textHint"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/newReviewConsTv"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/Cons"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:visibility="invisible" />
+                android:layout_marginBottom="16dp">
 
-            <EditText
-                android:id="@+id/newReviewConsEt"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@color/white"
-                android:ems="10"
-                android:hint="@string/Cons"
-                android:lineSpacingExtra="5dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/textColor"
-                android:textColorHighlight="@color/textHint"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dip"
-                android:layout_marginTop="8dp"
-                android:background="@color/lineColor" />
-
-            <TextView
-                android:id="@+id/newReviewBodyTv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/Description"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/newReviewBodyEt"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@color/white"
-                android:hint="@string/Description"
-                android:lineSpacingExtra="5dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/textColor"
-                android:textColorHighlight="@color/textHint"
-                android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/newReviewBodyEt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/Description"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHighlight="@color/textHint"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/addPhotoLL"
