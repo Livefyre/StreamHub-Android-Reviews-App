@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="16dp" >
+    android:paddingTop="16dp">
 
     <RelativeLayout
         android:id="@+id/reviewerImageAndRevieweridLayout"
@@ -11,30 +11,30 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
+        android:paddingRight="16dp">
 
         <ImageView
             android:id="@+id/reviewerImage"
             android:layout_width="@dimen/reviewerImagewidth"
-            android:layout_height="@dimen/reviewerImageHight"/>
+            android:layout_height="@dimen/reviewerImageHight" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/reviewerImage"
             android:orientation="vertical"
-            android:paddingLeft="16dp" >
+            android:paddingLeft="16dp">
 
             <RelativeLayout
                 android:id="@+id/revieweridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/reviewedDate" >
+                    android:layout_toLeftOf="@+id/reviewedDate">
 
                     <TextView
                         android:id="@+id/reviewerid"
@@ -70,7 +70,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/revieweridLayout" >
+                android:layout_below="@+id/revieweridLayout">
 
                 <RatingBar
                     android:id="@+id/reviewRatingBar"
@@ -89,7 +89,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reviewerImageAndRevieweridLayout"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/reviewTitle"
@@ -102,26 +102,42 @@
             android:textSize="@dimen/reviewTitleTextSize"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/reviewImage"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_image_height"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:scaleType="fitXY"
-            />
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <ImageView
+                android:id="@+id/reviewImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_image_height"
+                android:adjustViewBounds="true"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:scaleType="centerCrop" />
+
+            <WebView
+                android:id="@+id/videoPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_image_height"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="8dp"
+                android:scrollbars="none"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/reviewBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5sp"
+            android:paddingBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="10dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/reviewBodyTextSize"
-            android:paddingBottom="16dp"/>
+            android:textSize="@dimen/reviewBodyTextSize" />
     </LinearLayout>
 
     <LinearLayout
@@ -133,14 +149,14 @@
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="8dp" >
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/helpful"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#999"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:textColor="#999" />
 
         <TextView
             android:id="@+id/replies"
@@ -152,12 +168,12 @@
 
     <View
         android:id="@+id/bottomLine"
-        android:layout_below="@+id/reviewCount"
         android:layout_width="match_parent"
         android:layout_height=".5dp"
+        android:layout_below="@+id/reviewCount"
         android:layout_marginTop="8dp"
         android:background="#d6d6d6"
-        android:paddingTop="16dp"
-        android:paddingBottom="32dp"/>
+        android:paddingBottom="32dp"
+        android:paddingTop="16dp" />
 
 </RelativeLayout>

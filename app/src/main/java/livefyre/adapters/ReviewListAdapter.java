@@ -103,7 +103,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         }
         if (content.getAttachments() != null) {
             if (content.getAttachments().size() > 0) {
+
                 Attachments mAttachments = content.getAttachments().get(0);
+
                 if (mAttachments.getType().equals("video")) {
                     if (mAttachments.getThumbnail_url() != null) {
                         if (mAttachments.getThumbnail_url().length() > 0) {
@@ -123,7 +125,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
                         } else {
                             holder.reviewImage.setVisibility(View.GONE);
                         }
-                    }  else {
+                    } else {
                         holder.reviewImage.setVisibility(View.GONE);
                     }
                 }
@@ -133,6 +135,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         } else {
             holder.reviewImage.setVisibility(View.GONE);
         }
+
         if (content.getVote() != null) {
             if (content.getVote().size() > 0)
                 holder.helpful.setText(foundHelpfull(content.getVote()));

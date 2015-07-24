@@ -7,10 +7,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,6 +26,7 @@ import java.util.List;
 
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
+import livefyre.LFUtils;
 import livefyre.R;
 import livefyre.adapters.ReviewInDetailAdapter;
 import livefyre.models.Attachments;
@@ -36,7 +42,7 @@ public class ReviewInDetailActivity extends BaseActivity {
     RecyclerView recyclerView;
     static List<Content> childMap;
     private RecyclerView.LayoutManager mLayoutManager;
-    private WebView videoPlayer;
+    private WebView webView;
 
     @Override
     protected void onResume() {
@@ -85,7 +91,7 @@ public class ReviewInDetailActivity extends BaseActivity {
     private void init() {
         image_header = (ImageView) findViewById(R.id.image_header);
         recyclerView = (RecyclerView) findViewById(R.id.commentsRV);
-        videoPlayer = (WebView) findViewById(R.id.videoPlayer);
+        webView = (WebView) findViewById(R.id.videoPlayer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -165,24 +171,32 @@ public class ReviewInDetailActivity extends BaseActivity {
                 if (mAttachments.getType().equals("video")) {
                     if (mAttachments.getThumbnail_url() != null) {
                         if (mAttachments.getThumbnail_url().length() > 0) {
-                            image_header.setVisibility(View.VISIBLE);
-                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
-                        } else {
-                            Picasso.with(getApplicationContext()).load(R.mipmap.img_bac).fit().into(image_header);
+                            application.printLog(true, "comment.getAttachments()", selectedReviews.getAttachments() + " URL");
+                            image_header.setVisibility(View.GONE);
+                            webView.setVisibility(View.VISIBLE);
+                            webView.setWebViewClient(new WebViewClient());
+                            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+                            webView.setInitialScale(140);
+                            webView.getSettings().setJavaScriptEnabled(true);
+                            webView.getSettings().setDomStorageEnabled(true);
+                            if (mAttachments.getProvider_name().equals("YouTube")) {
+                                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, this.getResources().getDisplayMetrics());
+                                webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height));
+                                String youtubeId = LFUtils.getYoutubeVideoId(mAttachments.getUrl());
+                                webView.loadUrl("http://www.youtube.com/embed/" + youtubeId);
+                            } else {
+                                webView.loadDataWithBaseURL(mAttachments.getLink(), mAttachments.getHTML(), "text/html", "UTF-8", "");
+                            }
                         }
-                    } else {
-                        image_header.setVisibility(View.GONE);
                     }
                 } else {
                     if (mAttachments.getUrl() != null) {
                         if (mAttachments.getUrl().length() > 0) {
                             image_header.setVisibility(View.VISIBLE);
-                            Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
-                        } else {
-                            Picasso.with(getApplicationContext()).load(R.mipmap.img_bac).fit().into(image_header);
+                            webView.setVisibility(View.GONE);
+                            application.printLog(true, "comment.getAttachments()", selectedReviews.getAttachments() + " URL");
+                            Picasso.with(getApplication()).load(mAttachments.getUrl()).fit().into(image_header);
                         }
-                    } else {
-                        image_header.setImageResource(R.mipmap.img_bac);
                     }
                 }
             } else {
