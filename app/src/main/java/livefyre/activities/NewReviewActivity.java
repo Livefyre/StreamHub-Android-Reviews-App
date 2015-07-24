@@ -10,7 +10,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,9 +18,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import io.filepicker.Filepicker;
-import io.filepicker.utils.ImageLoader;
-import livefyre.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -31,10 +27,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.filepicker.Filepicker;
+import io.filepicker.models.FPFile;
 import livefyre.BaseActivity;
 import livefyre.LFSConfig;
+import livefyre.R;
 import livefyre.streamhub.LFSConstants;
 import livefyre.streamhub.WriteClient;
 
@@ -383,7 +383,8 @@ View.OnClickListener postReviewListener = new View.OnClickListener() {
             addPhotoLL.setVisibility(View.GONE);
             capturedImage.setVisibility(View.VISIBLE);
             deleteCapturedImage.setVisibility(View.VISIBLE);
-            String imgUrl = data.getExtras().getString("fpurl");
+            ArrayList<FPFile> fpFiles = data.getParcelableArrayListExtra(Filepicker.FPFILES_EXTRA);
+            String imgUrl = fpFiles.get(0).getUrl();
             Log.d("url", imgUrl + "");
             try {
                 imgObj = new JSONObject();
