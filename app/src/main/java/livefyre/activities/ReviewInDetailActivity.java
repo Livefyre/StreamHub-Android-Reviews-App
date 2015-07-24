@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -35,6 +36,7 @@ public class ReviewInDetailActivity extends BaseActivity {
     RecyclerView recyclerView;
     static List<Content> childMap;
     private RecyclerView.LayoutManager mLayoutManager;
+    private WebView videoPlayer;
 
     @Override
     protected void onResume() {
@@ -48,7 +50,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_review_indetail);
 
         init();
-        getDataFromIntent();
+        getData();
         buildList();
     }
 
@@ -83,6 +85,7 @@ public class ReviewInDetailActivity extends BaseActivity {
     private void init() {
         image_header = (ImageView) findViewById(R.id.image_header);
         recyclerView = (RecyclerView) findViewById(R.id.commentsRV);
+        videoPlayer = (WebView) findViewById(R.id.videoPlayer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -133,6 +136,7 @@ public class ReviewInDetailActivity extends BaseActivity {
             }
         }
     }
+
     private void buildList() {
         populateData();
         mLayoutManager = new LinearLayoutManager(this);
@@ -148,7 +152,7 @@ public class ReviewInDetailActivity extends BaseActivity {
         }
     }
 
-    void getDataFromIntent() {
+    void getData() {
         Intent intent = getIntent();
         reviewId = intent.getStringExtra(LFSAppConstants.ID);
         selectedReviews = ContentParser.ContentMap.get(reviewId);
@@ -158,15 +162,28 @@ public class ReviewInDetailActivity extends BaseActivity {
         if (img != null) {
             if (img.size() > 0) {
                 Attachments mAttachments = selectedReviews.getAttachments().get(0);
-                if (mAttachments.getUrl() != null) {
-                    if (mAttachments.getUrl().length() > 0) {
-                        image_header.setVisibility(View.VISIBLE);
-                        Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+                if (mAttachments.getType().equals("video")) {
+                    if (mAttachments.getThumbnail_url() != null) {
+                        if (mAttachments.getThumbnail_url().length() > 0) {
+                            image_header.setVisibility(View.VISIBLE);
+                            Picasso.with(getApplicationContext()).load(mAttachments.getThumbnail_url()).fit().into(image_header);
+                        } else {
+                            Picasso.with(getApplicationContext()).load(R.mipmap.img_bac).fit().into(image_header);
+                        }
+                    } else {
+                        image_header.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (mAttachments.getUrl() != null) {
+                        if (mAttachments.getUrl().length() > 0) {
+                            image_header.setVisibility(View.VISIBLE);
+                            Picasso.with(getApplicationContext()).load(mAttachments.getUrl()).fit().into(image_header);
+                        } else {
+                            Picasso.with(getApplicationContext()).load(R.mipmap.img_bac).fit().into(image_header);
+                        }
                     } else {
                         image_header.setImageResource(R.mipmap.img_bac);
                     }
-                } else {
-                    image_header.setImageResource(R.mipmap.img_bac);
                 }
             } else {
                 image_header.setImageResource(R.mipmap.img_bac);
@@ -215,7 +232,7 @@ public class ReviewInDetailActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;

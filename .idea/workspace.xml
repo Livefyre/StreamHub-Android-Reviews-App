@@ -29,34 +29,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ReviewsActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewsActivity.java">
+      <file leaf-file-name="activity_review_indetail.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_review_indetail.xml">
+          <provider editor-type-id="android-designer">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="562" column="0" selection-start-line="562" selection-start-column="0" selection-end-line="562" selection-end-column="0" />
+            <state vertical-scroll-proportion="-15.875">
+              <caret line="41" column="48" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="48" />
               <folding>
-                <element signature="e#15962#15970#0" expanded="true" />
+                <element signature="e#520#550#0" expanded="true" />
+                <element signature="e#1537#1567#0" expanded="true" />
+                <element signature="e#1898#1928#0" expanded="true" />
+                <element signature="e#3229#3269#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReplyReview.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReplyReview.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="92" column="12" selection-start-line="92" selection-start-column="12" selection-end-line="92" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SplashActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/SplashActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -64,87 +50,8 @@
       <file leaf-file-name="ReviewInDetailActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewInDetailActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39353612">
-              <caret line="152" column="54" selection-start-line="152" selection-start-column="54" selection-end-line="152" selection-end-column="54" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1564#2607#0" expanded="true" />
-                <element signature="e#1867#2167#0" expanded="true" />
-                <element signature="e#2166#2167#0" expanded="true" />
-                <element signature="e#2606#2607#0" expanded="true" />
-                <element signature="e#7113#7437#0" expanded="true" />
-                <element signature="e#7436#7437#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReviewInDetailAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/adapters/ReviewInDetailAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-39.689655">
-              <caret line="685" column="0" selection-start-line="685" selection-start-column="0" selection-end-line="685" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#19343#20247#0" expanded="true" />
-                <element signature="e#20246#20247#0" expanded="true" />
-                <element signature="e#20932#21034#0" expanded="true" />
-                <element signature="e#21033#21034#0" expanded="true" />
-                <element signature="e#22564#23129#0" expanded="true" />
-                <element signature="e#23128#23129#0" expanded="true" />
-                <element signature="e#23162#23858#0" expanded="true" />
-                <element signature="e#23857#23858#0" expanded="true" />
-                <element signature="e#25038#25478#0" expanded="true" />
-                <element signature="e#25477#25478#0" expanded="true" />
-                <element signature="e#26337#26750#0" expanded="true" />
-                <element signature="e#26749#26750#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/BaseActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="52" column="16" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1482#1660#0" expanded="true" />
-                <element signature="e#1659#1660#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditReview.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/EditReview.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="254" column="12" selection-start-line="254" selection-start-column="12" selection-end-line="254" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/streamHubAndroidSDK/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="reply.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/reply.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.59375">
-              <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+            <state vertical-scroll-proportion="6.121673">
+              <caret line="172" column="28" selection-start-line="172" selection-start-column="28" selection-end-line="172" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -2276,12 +2183,13 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values-v21/styles-v21.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_parent_row.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/livefyre/activities/NewReviewActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewsActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/livefyre/BaseActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/livefyre/adapters/ReviewInDetailAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_parent_row.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_review_indetail.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewInDetailActivity.java" />
       </list>
     </option>
@@ -2345,6 +2253,28 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StreamHub-Android-Reviews-App" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2920,6 +2850,8 @@
           <caret line="412" column="5" selection-start-line="412" selection-start-column="5" selection-end-line="412" selection-end-column="5" />
           <folding>
             <element signature="e#15962#15970#0" expanded="true" />
+            <element signature="e#23318#23484#0" expanded="true" />
+            <element signature="e#23483#23484#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3001,6 +2933,8 @@
           <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
             <element signature="e#15962#15970#0" expanded="true" />
+            <element signature="e#23318#23484#0" expanded="true" />
+            <element signature="e#23483#23484#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3131,17 +3065,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_review_indetail.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09311741">
-          <caret line="19" column="30" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6939163">
@@ -3155,17 +3078,6 @@
             <element signature="e#1958#1976#0" expanded="true" />
             <element signature="e#2123#2141#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_parent_row.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13967611">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3204,16 +3116,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="562" column="0" selection-start-line="562" selection-start-column="0" selection-end-line="562" selection-end-column="0" />
-          <folding>
-            <element signature="e#15962#15970#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-22/android/app/Activity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33208254">
@@ -3242,22 +3144,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReplyReview.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="92" column="12" selection-start-line="92" selection-start-column="12" selection-end-line="92" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/SplashActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/adapters/ReviewInDetailAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-39.689655">
@@ -3280,19 +3166,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReplyReview.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="92" column="12" selection-start-line="92" selection-start-column="12" selection-end-line="92" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/SplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-298.7931">
+          <caret line="717" column="20" selection-start-line="717" selection-start-column="20" selection-end-line="717" selection-end-column="20" />
+          <folding>
+            <element signature="e#15962#15970#0" expanded="true" />
+            <element signature="e#23318#23484#0" expanded="true" />
+            <element signature="e#23483#23484#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_parent_row.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7876712">
+          <caret line="31" column="0" selection-start-line="7" selection-start-column="8" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_review_indetail.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.875">
+          <caret line="41" column="48" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="48" />
+          <folding>
+            <element signature="e#520#550#0" expanded="true" />
+            <element signature="e#1537#1567#0" expanded="true" />
+            <element signature="e#1898#1928#0" expanded="true" />
+            <element signature="e#3229#3269#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/livefyre/activities/ReviewInDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39353612">
-          <caret line="152" column="54" selection-start-line="152" selection-start-column="54" selection-end-line="152" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1564#2607#0" expanded="true" />
-            <element signature="e#1867#2167#0" expanded="true" />
-            <element signature="e#2166#2167#0" expanded="true" />
-            <element signature="e#2606#2607#0" expanded="true" />
-            <element signature="e#7113#7437#0" expanded="true" />
-            <element signature="e#7436#7437#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="6.121673">
+          <caret line="172" column="28" selection-start-line="172" selection-start-column="28" selection-end-line="172" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
