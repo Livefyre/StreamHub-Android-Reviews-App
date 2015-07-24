@@ -51,13 +51,9 @@ public class EditReview extends BaseActivity {
         setContentView(R.layout.edit);
 
         pullViews();
-
         buildToolbar();
-
         setListenersToViews();
-
         getDataFromIntent();
-
         setData();
 
         editReviewTitleEt.addTextChangedListener(new TextWatcher() {

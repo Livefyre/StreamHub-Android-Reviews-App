@@ -61,7 +61,7 @@ import livefyre.streamhub.StreamClient;
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
     public static final String TAG = ReviewsActivity.class.getSimpleName();
 
-    ImageButton postNewReviewIv;
+    ImageView postNewReviewIv;
     RecyclerView reviewsRV;
     List<Content> reviewCollectiontoBuild;
     ReviewListAdapter reviewListAdapter;
@@ -623,7 +623,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     private void pullViews() {
         reviewsRV = (RecyclerView) findViewById(R.id.reviewsRV);
         reviewsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        postNewReviewIv = (ImageButton) findViewById(R.id.postNewReviewIv);
+        postNewReviewIv = (ImageView) findViewById(R.id.postNewReviewIv);
         activityTitle = (TextView) findViewById(R.id.activityTitle);
         activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
         actionTv = (TextView) findViewById(R.id.actionTv);

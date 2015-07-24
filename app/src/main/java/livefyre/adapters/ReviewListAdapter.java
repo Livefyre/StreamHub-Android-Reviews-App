@@ -23,6 +23,7 @@ import livefyre.RoundedTransformation;
 import livefyre.models.Attachments;
 import livefyre.models.Content;
 import livefyre.models.Vote;
+import livefyre.parsers.ContentParser;
 
 @SuppressLint("SimpleDateFormat")
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyViewHolder> {
@@ -143,14 +144,14 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
                 holder.helpful.setVisibility(View.GONE);
         } else
             holder.helpful.setVisibility(View.GONE);
-
-        if (content.getVisibilityCount() > 0) {
+        int visibilityCount = (ContentParser.getChildForContent(content.getId())).size();
+        if (visibilityCount > 0) {
             holder.replies.setVisibility(View.VISIBLE);
-            if (content.getVisibilityCount() == 1)
-                holder.replies.setText(content.getVisibilityCount()
+            if (visibilityCount == 1)
+                holder.replies.setText(visibilityCount
                         + " Reply");
             else
-                holder.replies.setText(content.getVisibilityCount()
+                holder.replies.setText(visibilityCount
                         + " Replies");
         } else
             holder.replies.setVisibility(View.GONE);

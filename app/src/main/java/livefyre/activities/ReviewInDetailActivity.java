@@ -56,7 +56,8 @@ public class ReviewInDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_review_indetail);
 
         init();
-        getData();
+        getDataFromIntent();
+        setData();
         buildList();
     }
 
@@ -158,9 +159,13 @@ public class ReviewInDetailActivity extends BaseActivity {
         }
     }
 
-    void getData() {
+    void getDataFromIntent() {
         Intent intent = getIntent();
         reviewId = intent.getStringExtra(LFSAppConstants.ID);
+    }
+
+    void setData() {
+
         selectedReviews = ContentParser.ContentMap.get(reviewId);
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(selectedReviews.getTitle());

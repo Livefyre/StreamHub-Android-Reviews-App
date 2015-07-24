@@ -13,17 +13,17 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/app_bar">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reviewsRV"
-        android:layout_below="@+id/swipe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="8dp" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviewsRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/swipe"
+            android:clipToPadding="false"
+            android:paddingTop="8dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/postNewReviewIv"
         android:layout_width="56dp"
         android:layout_height="56dp"
@@ -31,8 +31,18 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="16dp"
-        android:background="@drawable/round_button"
-        android:src="@mipmap/starw" />
+        android:src="@mipmap/livefyreappicon" />
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/postNewReviewIv"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginBottom="24dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:background="@drawable/round_button"-->
+    <!--android:src="@mipmap/starw" />-->
 
     <LinearLayout
         android:id="@+id/notification"

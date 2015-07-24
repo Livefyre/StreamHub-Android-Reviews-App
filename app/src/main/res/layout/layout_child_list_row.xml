@@ -134,7 +134,15 @@
                 android:paddingRight="10dp"
                 android:src="@mipmap/more" />
         </RelativeLayout>
-
+        <View
+            android:id="@+id/bottomLine"
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_below="@+id/reviewCount"
+            android:layout_marginTop="8dp"
+            android:background="#d6d6d6"
+            android:paddingBottom="32dp"
+            android:paddingTop="16dp" />
     </LinearLayout>
 
 </RelativeLayout>
