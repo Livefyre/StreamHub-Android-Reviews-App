@@ -63,14 +63,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.reviewerid.setText(content.getAuthor().getDisplayName());
         holder.reviewCount.setVisibility(View.VISIBLE);
 
-        if (content.getVote() != null) {
-            if (content.getVisibilityCount() == 0
-                    && content.getVote().size() == 0) {
-                holder.reviewCount.setVisibility(View.GONE);
-            }
-        } else if (content.getVisibilityCount() == 0) {
-            holder.reviewCount.setVisibility(View.GONE);
-        }
         if (content.getIsModerator() != null) {
             if (content.getIsModerator().equals("true")) {
                 holder.isMod.setText("Moderator");
@@ -83,6 +75,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         } else {
             holder.isMod.setVisibility(View.GONE);
         }
+
         if (content.getIsFeatured() != null) {
             if (content.getIsFeatured()) {
                 holder.isMod.setText("Feature");

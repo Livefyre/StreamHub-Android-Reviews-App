@@ -208,14 +208,6 @@ public class Content implements Serializable {
         this.depth = depth;
     }
 
-    public int getVisibilityCount() {
-        return visibilityCount;
-    }
-
-    public void setVisibilityCount(int visibilityCount) {
-        this.visibilityCount = visibilityCount;
-    }
-
     public String getIsModerator() {
         return isModerator;
     }
@@ -232,30 +224,6 @@ public class Content implements Serializable {
         this.helpfulcount = helpfulcount;
     }
 
-    public String getOembedUrl() {
-        return oembedUrl;
-    }
-
-    public void setOembedUrl(String oembedUrl) {
-        this.oembedUrl = oembedUrl;
-    }
-
-    public JSONArray getChildContent() {
-        return childContent;
-    }
-
-    public void setChildContent(JSONArray childContent) {
-        this.childContent = childContent;
-    }
-
-    public List<String> getChildBeanContent() {
-        return childBeanContent;
-    }
-
-    public void setChildBeanContent(List<String> childBeanContent) {
-        this.childBeanContent = childBeanContent;
-    }
-
     public ContentTypeEnum getContentType() {
         return contentType;
     }
@@ -270,10 +238,6 @@ public class Content implements Serializable {
 
     public void setNewReplyCount(int newReplyCount) {
         this.newReplyCount = newReplyCount;
-    }
-
-    public String getAncestorId() {
-        return ancestorId;
     }
 
     public void setAncestorId(String ancestorId) {

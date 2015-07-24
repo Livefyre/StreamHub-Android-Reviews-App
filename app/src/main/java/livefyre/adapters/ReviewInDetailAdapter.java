@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -21,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -113,15 +114,14 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 		final Content content = (Content) ContentArray.get(position);
 		switch (viewType) {
 		case PARENT:
-
-			if (content.getNewReplyCount() > 0) {
-				holder.parentNotifRV.setVisibility(View.VISIBLE);
-				if (content.getNewReplyCount() != 1)
-					holder.detailReplyNotificationTV.setText(content
-							.getNewReplyCount() + " New Replies");
-				else
-					holder.detailReplyNotificationTV.setText(content
+			if (content.getNewReplyCount()  > 0) {
+				if (content.getNewReplyCount() == 1)
+					holder.notifMsgTV.setText(content
 							.getNewReplyCount() + " New Reply");
+				else
+					holder.notifMsgTV.setText(content
+							.getNewReplyCount() + " New Replies");
+				holder.parentNotifRV.setVisibility(View.VISIBLE);
 			} else {
 				holder.parentNotifRV.setVisibility(View.GONE);
 			}
@@ -152,6 +152,7 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 			if (content.getAuthor().getAvatar().length() > 0) {
 				Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
 			} else {
+				Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
 			}
 			if (content.getVote() != null) {// know helpful value and set color
 				if (content.getVote().size() > 0) {
@@ -206,7 +207,7 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 							.fromHtml(content.getBodyHtml())),
 					TextView.BufferType.SPANNABLE);
 
-			holder.parentNotifBtn.setOnClickListener(notificationHandler);
+			holder.parentNotifRV.setOnClickListener(notificationHandler);
 			holder.parentReplyImg.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -441,10 +442,9 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         RatingBar ratingBarInDetailView;
-        TextView mainReviewerDisplayName, mainReviewDate, mainReviewBody, isParentMod, parentReplyTv, parentHelpfulTv,detailReplyNotificationTV;
+        TextView mainReviewerDisplayName, mainReviewDate, mainReviewBody, isParentMod, parentReplyTv, parentHelpfulTv,notifMsgTV;
         ImageView parentMoreOptions, parentHelpfulImg, parentsHelpfulImg, parentReplyImg, mainReviewerImage;
-        Button parentNotifBtn;
-        RelativeLayout parentNotifRV;
+        LinearLayout parentNotifRV;
         // child
         RelativeLayout childMain;
         ImageView childReviewerImage, childHelpfulImg, childReplyImg, childMoreOptions;
@@ -455,7 +455,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
         public MyViewHolder(View item) {
             super(item);
             //parent views
-            parentNotifBtn = (Button) item.findViewById(R.id.parentNotifBtn);
             ratingBarInDetailView = (RatingBar) item.findViewById(R.id.ratingBarInDetailView);
             mainReviewerImage = (ImageView) item.findViewById(R.id.mainReviewerImage);
             mainReviewerDisplayName = (TextView) item.findViewById(R.id.mainReviewerDisplayName);
@@ -466,10 +465,10 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
             parentHelpfulTv = (TextView) item.findViewById(R.id.parentsHelpfulTv);
             parentReplyTv = (TextView) item.findViewById(R.id.parentReplyTv);
             parentMoreOptions = (ImageView) item.findViewById(R.id.parentMoreOptions);
-            detailReplyNotificationTV = (TextView) item.findViewById(R.id.detailReplyNotificationTV);
+			notifMsgTV = (TextView) item.findViewById(R.id.notifMsgTV);
             parentsHelpfulImg = (ImageView) item.findViewById(R.id.parentsHelpfulImg);
             parentReplyImg = (ImageView) item.findViewById(R.id.parentReplyImg);
-            parentNotifRV = (RelativeLayout) item.findViewById(R.id.parentNotifRV);
+            parentNotifRV = (LinearLayout) item.findViewById(R.id.parentNotifRV);
             //child views
             childMain = (RelativeLayout) item.findViewById(R.id.childMain);
             childReviewerImage = (ImageView) item.findViewById(R.id.childReviewerImage);

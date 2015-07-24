@@ -51,7 +51,6 @@ public class StreamClient {
 			public void onSuccess(String response) {
 				handler.onSuccess(response);
 				try {
-
 					if (response != null) {
 						Log.d("Stream Clint Call", "Success" + response);
 						JSONObject responseJson = new JSONObject(response);
@@ -63,7 +62,6 @@ public class StreamClient {
 							pollStreamEndpoint( collectionId,
 									lastEvent, handler);
 						}
-
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -87,7 +85,6 @@ public class StreamClient {
 					e.printStackTrace();
 				}
 			}
-
 		});
 	}
 }

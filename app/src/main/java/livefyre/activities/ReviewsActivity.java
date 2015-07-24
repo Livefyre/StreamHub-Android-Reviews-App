@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,7 +74,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     Spinner activityTitleSpinner;
     private String selectedCategory;
     private SwipeRefreshLayout swipeView;
-    ArrayList<String> newReviews;
     LinearLayout notification;
     TextView notifMsgTV, activityTitle, actionTv;
 
@@ -167,7 +168,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                                 if (p2.getVote() != null) {
                                     t2 = p2.getVote().size();
                                 }
-                                // return p1.getVote().size()- p2.getVote().size();
                                 return t1 - t2;
                             }
                         });
@@ -319,7 +319,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        newReviews = new ArrayList<>();
         swipeView.setEnabled(true);
         dismissProgressDialog();
     }
@@ -343,7 +342,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 content.setStreamData(data);
             }
         }
-
         @Override
         public void onFailure(Throwable error, String content) {
             super.onFailure(error, content);
@@ -628,6 +626,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
         actionTv = (TextView) findViewById(R.id.actionTv);
         notification = (LinearLayout) findViewById(R.id.notification);
+        notifMsgTV = (TextView) findViewById(R.id.notifMsgTV);
         swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
     }
 
@@ -658,7 +657,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 }
             }
         }
-
         reviewListAdapter.notifyDataSetChanged();
         ReviewInDetailActivity.notifyDatainDetail();
 
@@ -675,10 +673,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         }
         if (newList.size() > 0) {
             if (newList.size() - oldCount > 0) {
-                notification.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.DropOut)
-                        .duration(700)
-                        .playOn(findViewById(R.id.notification));
+
                 if ((newList.size() - oldCount) == 1)
                     notifMsgTV.setText("" + (newList.size() - oldCount)
                             + " New Review ");
@@ -686,76 +681,15 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                     notifMsgTV.setText("" + (newList.size() - oldCount)
                             + " New Reviews ");
                 }
+                notification.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.DropOut)
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
             } else {
                 notification.setVisibility(View.GONE);
             }
         }
+
         isReviewPosted();
     }
-//    public void onDataUpdate(HashSet<String> authorsSet, HashSet<String> statesSet, HashSet<String> annotationsSet, HashSet<String> updates) {
-//
-//        for (String stateBeanId : statesSet) {
-//            Content stateBean = ContentParser.ContentMap.get(stateBeanId);
-//            if (stateBean.getVisibility().equals("1")) {
-//
-//                if (isExistComment(stateBeanId)) continue;
-//
-//                if (adminClintId.equals(stateBean.getAuthorId())) {
-//                    int flag = 0;
-//                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-//                        Content content = reviewCollectiontoBuild.get(i);
-//                        if (content.getId().equals(stateBean.getParentId())) {
-//                            reviewCollectiontoBuild.add(i + 1, stateBean);
-//                            reviewListAdapter.notifyItemInserted(i + 1);
-//                            flag = 1;
-//                            break;
-//                        }
-//                    }
-//                    if (flag == 0) {
-//                        reviewCollectiontoBuild.add(0, stateBean);
-//                        reviewListAdapter.notifyItemInserted(0);
-//                    }
-//                } else {
-//                    newReviews.add(0, stateBeanId);
-//                }
-//            } else {
-//                if (!content.hasVisibleChildContents(stateBeanId)) {
-//                    application.printLog(true, TAG, "Deleted Content");
-//
-//                    for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-//                        Content bean = reviewCollectiontoBuild.get(i);
-//                        if (bean.getId().equals(stateBeanId)) {
-//                            reviewCollectiontoBuild.remove(i);
-//                            reviewListAdapter.notifyItemRemoved(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        reviewListAdapter.notifyDataSetChanged();
-////        ReviewInDetailActivity.notifyDatainDetail();
-//        if (updates.size() > 0) {
-////            mBus.post(updates);
-//            reviewListAdapter.notifyDataSetChanged();
-//        }
-//
-//        if (newReviews != null)
-//            if (newReviews.size() > 0) {
-//                if (newReviews.size() == 1) {
-//                    notifMsgTV.setText(newReviews.size() + " New Comment");
-//
-//                } else {
-//                    notifMsgTV.setText(newReviews.size() + " New Comments");
-//                }
-//                notification.setVisibility(View.VISIBLE);
-//                YoYo.with(Techniques.DropOut)
-//                        .duration(700)
-//                        .playOn(findViewById(R.id.notification));
-//
-//            } else {
-//                notification.setVisibility(View.GONE);
-//            }
-//        isReviewPosted();
-//    }
 }
