@@ -3,89 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical">
     <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/image_header"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="260dp"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:scaleType="centerCrop"-->
-            <!--android:src="@mipmap/img_bac" />-->
+    <!--<ImageView-->
+    <!--android:id="@+id/image_header"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="260dp"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/img_bac" />-->
 
-        <!--<WebView-->
-            <!--android:id="@+id/videoPlayer"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:scrollbars="none"-->
-            <!--android:visibility="gone" />-->
+    <!--<WebView-->
+    <!--android:id="@+id/videoPlayer"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:scrollbars="none"-->
+    <!--android:visibility="gone" />-->
 
     <!--</RelativeLayout>-->
     <RelativeLayout
         android:id="@+id/reviewBodyImageRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" >
-
-
-
-        <!--<TextView-->
-            <!--android:id="@+id/titleForReviewInDetail"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="16dp"-->
-            <!--android:text="Title In Detail View"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="30dp"-->
-            <!--android:textStyle="bold" -->
-             <!--android:textIsSelectable="true" />-->
+        android:background="@color/colorPrimary">
 
         <RatingBar
             android:id="@+id/ratingBarInDetailView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-android:layout_below="@+id/titleForReviewInDetail"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="16dp"
             android:isIndicator="true"
             android:numStars="5"
+            android:paddingTop="20dp"
             android:progressDrawable="@drawable/medium_starbar" />
     </RelativeLayout>
-    <!--<LinearLayout-->
-        <!--android:id="@+id/reviewBodyImageRL"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/colorPrimary" -->
-        <!--android:orientation="vertical">-->
-
-
-
-        <!--<TextView-->
-            <!--android:id="@+id/titleForReviewInDetail"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="16dp"-->
-            <!--android:text="Title In Detail View"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="30dp"-->
-            <!--android:textStyle="bold"-->
-            <!--android:textIsSelectable="true" />-->
-
-        <!--<RatingBar-->
-            <!--android:id="@+id/ratingBarInDetailView"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:isIndicator="true"-->
-            <!--android:numStars="5"-->
-            <!--android:progressDrawable="@drawable/medium_starbar" />-->
-    <!--</LinearLayout>-->
-
 
     <RelativeLayout
         android:id="@+id/reviewerImageAndRevieweridLayout"
@@ -94,7 +51,7 @@ android:layout_below="@+id/titleForReviewInDetail"
 
         android:layout_marginTop="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
+        android:paddingRight="16dp">
 
         <ImageView
             android:id="@+id/mainReviewerImage"
@@ -106,17 +63,17 @@ android:layout_below="@+id/titleForReviewInDetail"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/mainReviewerImage"
             android:orientation="vertical"
-            android:paddingLeft="16dp" >
+            android:paddingLeft="16dp">
 
             <RelativeLayout
                 android:id="@+id/revieweridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/mainReviewerDisplayName"
@@ -136,19 +93,13 @@ android:layout_below="@+id/titleForReviewInDetail"
                         android:singleLine="true"
                         android:textColor="#0F98EC" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/isParentMod"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_toRightOf="@+id/mainReviewerDisplayName"-->
-                        <!--android:textColor="#0F98EC" />-->
                 </RelativeLayout>
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/revieweridLayout" >
+                android:layout_below="@+id/revieweridLayout">
 
                 <TextView
                     android:id="@+id/mainReviewDate"
@@ -165,7 +116,7 @@ android:layout_below="@+id/titleForReviewInDetail"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reviewerImageAndRevieweridLayout"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/mainReviewBody"
@@ -177,15 +128,15 @@ android:layout_below="@+id/titleForReviewInDetail"
             android:paddingRight="16dp"
             android:paddingTop="10dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/reviewBodyTextSize"
-             android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            android:textSize="@dimen/reviewBodyTextSize" />
 
         <RelativeLayout
             android:id="@+id/parentOptionsLL"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mainReviewBody"
-            android:layout_marginRight="10dp" >
+            android:layout_marginRight="10dp">
 
             <ImageView
                 android:id="@+id/parentsHelpfulImg"
@@ -231,7 +182,6 @@ android:layout_below="@+id/titleForReviewInDetail"
                 android:src="@mipmap/more" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/parentNotifRV"
                 android:layout_width="fill_parent"
                 android:layout_height="44dp"
@@ -239,7 +189,8 @@ android:layout_below="@+id/titleForReviewInDetail"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" >
+                android:layout_marginRight="16dp"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/parentNotifBtn"
@@ -252,7 +203,7 @@ android:layout_below="@+id/titleForReviewInDetail"
                 <RelativeLayout
                     android:layout_width="180dp"
                     android:layout_height="40dp"
-                    android:layout_centerHorizontal="true" >
+                    android:layout_centerHorizontal="true">
 
                     <TextView
                         android:id="@+id/detailReplyNotificationTV"
