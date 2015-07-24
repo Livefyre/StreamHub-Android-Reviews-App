@@ -65,7 +65,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     RecyclerView reviewsRV;
     List<Content> reviewCollectiontoBuild;
     ReviewListAdapter reviewListAdapter;
-    private LivefyreApplication application;
     public String ownReviewId;
     public String adminClintId = "No";
     ContentParser content;
@@ -73,9 +72,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     Spinner activityTitleSpinner;
     private String selectedCategory;
     private SwipeRefreshLayout swipeView;
-    //    Bus mBus;
     ArrayList<String> newReviews;
-
     LinearLayout notification;
     TextView notifMsgTV, activityTitle, actionTv;
 
@@ -83,8 +80,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviews);
-        application = AppSingleton.getInstance().getApplication();
-//        mBus = application.getBus();
         pullViews();
         setListenersToViews();
         buildToolBar();
@@ -103,7 +98,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     void sortReviews(Boolean viewpoint) {
-
         if (!isNetworkAvailable()) {
             showToast("Network Not Available");
             return;
@@ -220,10 +214,8 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                     reviewCollectiontoBuild);
 
         }
-//        Parcelable state = reviewsRV.onSaveInstanceState();
         reviewListAdapter.notifyDataSetChanged();
         reviewsRV.setAdapter(reviewListAdapter);
-//        reviewsRV.onRestoreInstanceState(state);
         if (viewpoint)
             reviewsRV.scrollToPosition(0);
     }
@@ -256,7 +248,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                     ReviewInDetailActivity.class);
             detailViewIntent.putExtra("id", ownReviewId);
             startActivity(detailViewIntent);
-//            overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
     };
 
@@ -363,7 +354,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
         public void onSuccess(JSONObject AdminClintJsonResponseObject) {
             JSONObject data;
-//            application.printLog(true, TAG + "-AdminCallback-onSuccess", AdminClintJsonResponseObject.toString());
             try {
                 data = AdminClintJsonResponseObject.getJSONObject("data");
                 if (!data.isNull("permissions")) {
@@ -570,7 +560,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             Intent newPostIntent = new Intent(ReviewsActivity.this,
                     NewReviewActivity.class);
             startActivity(newPostIntent);
-//                overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
     };
 

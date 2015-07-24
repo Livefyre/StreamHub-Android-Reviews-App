@@ -13,6 +13,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private AlertDialog alertDialog;
     private ProgressDialog dialog;
+    protected LivefyreApplication application = AppSingleton.getInstance().getApplication();
 
     protected void showProgressDialog(String message) {
         dialog = new ProgressDialog(this);
@@ -69,15 +70,4 @@ public class BaseActivity extends AppCompatActivity {
             return false;
         }
     }
-
-//	protected void customToast(){
-//		LayoutInflater li = getLayoutInflater();
-//		View layout = li.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
-//		Toast toast = new Toast(getApplicationContext());
-//		toast.setDuration(Toast.LENGTH_LONG);
-//		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-//		toast.setView(layout);
-//		toast.show();
-//	}
-
 }

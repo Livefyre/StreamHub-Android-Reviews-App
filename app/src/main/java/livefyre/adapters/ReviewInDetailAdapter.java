@@ -441,9 +441,9 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         RatingBar ratingBarInDetailView;
-        TextView mainReviewerDisplayName, mainReviewDate, mainReviewBody, isParentMod, parentReplyTv, parentHelpfulTv, titleForReviewInDetail, detailReplyNotificationTV;
-        ImageView parentMoreOptions, parentHelpfulImg, parentsHelpfulImg, parentReplyImg, mainReviewerImage, reviewImageInDetail;
-        Button parentNotifBtn, backtoReviewActivityFromInDetailView;
+        TextView mainReviewerDisplayName, mainReviewDate, mainReviewBody, isParentMod, parentReplyTv, parentHelpfulTv,detailReplyNotificationTV;
+        ImageView parentMoreOptions, parentHelpfulImg, parentsHelpfulImg, parentReplyImg, mainReviewerImage;
+        Button parentNotifBtn;
         RelativeLayout parentNotifRV;
         // child
         RelativeLayout childMain;
@@ -456,7 +456,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
             super(item);
             //parent views
             parentNotifBtn = (Button) item.findViewById(R.id.parentNotifBtn);
-//            titleForReviewInDetail = (TextView) item.findViewById(R.id.titleForReviewInDetail);
             ratingBarInDetailView = (RatingBar) item.findViewById(R.id.ratingBarInDetailView);
             mainReviewerImage = (ImageView) item.findViewById(R.id.mainReviewerImage);
             mainReviewerDisplayName = (TextView) item.findViewById(R.id.mainReviewerDisplayName);
@@ -610,7 +609,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 
 		final Dialog dialog = new Dialog(activity,
 				android.R.style.Theme_Translucent_NoTitleBar);
-		dialog.setTitle("Abc");
 		dialog.setContentView(R.layout.more);
 		dialog.setCancelable(true);
 		if (isFeatured) {
@@ -678,16 +676,12 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 					editView.putExtra("id", id);
 					editView.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(editView);
-//					activity.overridePendingTransition(R.anim.right_in,
-//							R.anim.left_out);
 				} else {
 					Intent replyView = new Intent(context, ReplyReview.class);
 					replyView.putExtra("id", id);
 					replyView.putExtra("isEdit", true);
 					replyView.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(replyView);
-//					activity.overridePendingTransition(R.anim.right_in,
-//							R.anim.left_out);
 				}
 
 				dialog.dismiss();
@@ -943,7 +937,6 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 			showToast("Something went wrong.");
 
 		}
-
 	}
 
 	private class flagCallback extends JsonHttpResponseHandler {

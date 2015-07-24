@@ -69,8 +69,6 @@ public class NewReviewActivity extends BaseActivity {
 
     private void buildToolBar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
-        //disable title on toolbar
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
         homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
         activityTitle.setText("New Review");

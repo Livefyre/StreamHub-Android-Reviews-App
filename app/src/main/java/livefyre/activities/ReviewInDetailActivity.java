@@ -133,19 +133,19 @@ public class ReviewInDetailActivity extends BaseActivity {
             }
         }
     }
-
-    void buildList() {
-
+    private void buildList() {
         populateData();
-//        recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
+        reviewInDetailAdapter = (ReviewInDetailAdapter) recyclerView.getAdapter();
 
-        if (reviewInDetailAdapter == null) {
+        if (reviewInDetailAdapter != null) {
+
+            reviewInDetailAdapter.updateReviewInDetailAdapter(reviewCollectiontoBuild);
+        } else {
             reviewInDetailAdapter = new ReviewInDetailAdapter(ReviewInDetailActivity.this, getApplicationContext(), reviewCollectiontoBuild, notificationHandler, selectedReviews.getId());
+            recyclerView.setAdapter(reviewInDetailAdapter);
         }
-
-        recyclerView.setAdapter(reviewInDetailAdapter);
     }
 
     void getDataFromIntent() {
