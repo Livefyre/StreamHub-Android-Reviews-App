@@ -14,10 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -42,11 +39,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import livefyre.AppSingleton;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
-import livefyre.LivefyreApplication;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.adapters.SpinnerAdapter;
 import livefyre.listeners.ContentUpdateListener;
@@ -57,9 +52,6 @@ import livefyre.streamhub.AdminClient;
 import livefyre.streamhub.BootstrapClient;
 import livefyre.streamhub.StreamClient;
 
-/**
- * Created by kvanadev5 on 16/06/15.
- */
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
     public static final String TAG = ReviewsActivity.class.getSimpleName();
 
@@ -183,7 +175,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                                     t2 = p2.getHelpfulcount();
                                 }
                                 return t1 - t2;
-                                // return p1.getVote().size()- p2.getVote().size();
                             }
                         });
                 break;
@@ -390,16 +381,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         }
     }
 
-    private void scrollToReviews(String mCommentBeanId) {
-        for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-            Content mBean = reviewCollectiontoBuild.get(i);
-            if (mBean.getId().equals(mCommentBeanId)) {
-                reviewsRV.smoothScrollToPosition(i);
-                break;
-            }
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void buildToolBar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -532,10 +513,7 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     View.OnClickListener activityTitleListenerShow = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-//            postNewReviewIv.setVisibility(View.VISIBLE);
             activityTitle.setOnClickListener(activityTitleListenerHide);
-
         }
     };
     View.OnClickListener activityTitleListenerHide = new View.OnClickListener() {
@@ -547,7 +525,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 activityTitle.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
             }
-//            postNewReviewIv.setVisibility(View.GONE);
             activityTitle.setOnClickListener(activityTitleListenerShow);
         }
     };

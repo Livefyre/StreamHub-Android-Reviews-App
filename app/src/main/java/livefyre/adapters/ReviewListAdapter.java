@@ -153,6 +153,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
     public long getItemId(int position) {
         return position;
     }
+
     @Override
     public int getItemCount() {
         return ContentMap.size();

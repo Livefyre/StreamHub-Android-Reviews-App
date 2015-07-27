@@ -1,7 +1,6 @@
 package livefyre.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -109,15 +108,12 @@ public class ReviewInDetailActivity extends BaseActivity {
         Content mContentBean = ContentParser.ContentMap
                 .get(reviewId);
         mContentBean.setNewReplyCount(0);
-
         reviewCollectiontoBuild.add(0, mContentBean);
         childMap = ContentParser.getChildForContent(reviewId);
-
         if (childMap != null)
             for (Content content : childMap) {
                 reviewCollectiontoBuild.add(content);
             }
-
         if (reviewInDetailAdapter != null) {
             reviewInDetailAdapter.updateReviewInDetailAdapter(reviewCollectiontoBuild);
         }
@@ -245,7 +241,6 @@ public class ReviewInDetailActivity extends BaseActivity {
                 recyclerView.smoothScrollToPosition(position + 1);
             }
             if (resultCode == RESULT_CANCELED) {
-                // Write your code if there's no result
                 Log.d("A", "RESULT_CANCELED");
             }
         }

@@ -48,9 +48,9 @@ public class NewReviewActivity extends BaseActivity {
     private RatingBar newReviewRatingBar;
     private ProgressBar progressBar;
     private LinearLayout addPhotoLL;
-    private Toolbar toolbar;
+    volatile Toolbar toolbar;
     private JSONObject imgObj;
-    private String imgUrl;
+    volatile String imgUrl;
 
 
     private void buildToolBar() {

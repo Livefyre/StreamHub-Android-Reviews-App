@@ -58,7 +58,6 @@ public class StreamClient {
 						if (responseJson.has("data")) {
 							lastEvent = responseJson.getJSONObject("data")
 									.getString("maxEventId");
-
 							pollStreamEndpoint( collectionId,
 									lastEvent, handler);
 						}
