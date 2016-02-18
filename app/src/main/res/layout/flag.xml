@@ -28,9 +28,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Flag Review"
+            android:text="@string/FlagReview"
             android:textColor="@color/ash"
-            android:textSize="16sp" 
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
 
         <TextView
@@ -39,9 +39,9 @@
             android:layout_height="48dp"
             android:padding="8dp"
             android:paddingLeft="15dp"
-            android:text="Spam"
+            android:text="@string/Spam"
             android:textColor="@color/ash"
-            android:textSize="16sp" 
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
 
         <TextView
@@ -50,9 +50,9 @@
             android:layout_height="48dp"
             android:padding="8dp"
             android:paddingLeft="15dp"
-            android:text="Offensive"
+            android:text="@string/Offensive"
             android:textColor="@color/ash"
-            android:textSize="16sp" 
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
 
         <TextView
@@ -61,9 +61,9 @@
             android:layout_height="48dp"
             android:padding="8dp"
             android:paddingLeft="15dp"
-            android:text="Off-Topic"
+            android:text="@string/OffTopic"
             android:textColor="@color/ash"
-            android:textSize="16sp" 
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
 
         <TextView
@@ -74,7 +74,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="8dp"
-            android:text="Disagree"
+            android:text="@string/Disagree"
             android:textColor="@color/ash"
             android:textSize="16sp"
             android:gravity="center_vertical" />

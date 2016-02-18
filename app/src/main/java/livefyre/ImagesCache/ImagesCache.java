@@ -5,7 +5,7 @@ import android.support.v4.util.LruCache;
 
 public class ImagesCache 
 {
-    private  LruCache<String, Bitmap> imagesWarehouse;
+    private LruCache<String, Bitmap> imagesWarehouse;
 
     private static ImagesCache cache;
 

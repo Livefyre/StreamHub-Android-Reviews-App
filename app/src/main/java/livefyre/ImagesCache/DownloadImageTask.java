@@ -1,9 +1,5 @@
 package livefyre.ImagesCache;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +11,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 	private int inSampleSize = 0;

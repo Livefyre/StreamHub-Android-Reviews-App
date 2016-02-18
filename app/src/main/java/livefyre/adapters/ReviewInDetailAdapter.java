@@ -1,23 +1,18 @@
 package livefyre.adapters;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -25,9 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.livefyre.R;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,15 +33,15 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import livefyre.AppSingleton;
-import livefyre.ImagesCache.DownloadImageTask;
-import livefyre.ImagesCache.ImagesCache;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
 import livefyre.LFUtils;
 import livefyre.LivefyreApplication;
-import livefyre.activities.Edit;
-import livefyre.activities.Reply;
-import livefyre.models.ContentBean;
+import livefyre.R;
+import livefyre.RoundedTransformation;
+import livefyre.activities.EditReview;
+import livefyre.activities.ReplyReview;
+import livefyre.models.Content;
 import livefyre.models.Vote;
 import livefyre.parsers.ContentParser;
 import livefyre.streamhub.LFSActions;
@@ -52,256 +49,111 @@ import livefyre.streamhub.LFSConstants;
 import livefyre.streamhub.LFSFlag;
 import livefyre.streamhub.WriteClient;
 
-public class ReviewInDetailAdapter extends BaseAdapter {
-	private static final int VIEW_COUNT = 3;
-	private static final int DELETED = -1;
-	private static final int PARENT = 0;
-	private static final int CHILD = 1;
-	ImagesCache cache = ImagesCache.getInstance();
-	OnClickListener notificationHandler;
+public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAdapter.MyViewHolder> {
+    private static final int VIEW_COUNT = 3;
+    private static final int DELETED = -1;
+    private static final int PARENT = 0;
+    private static final int CHILD = 1;
+    OnClickListener notificationHandler;
 
-	private ProgressDialog dialog;
-	String mainReviewId;
-	int helpfulFlag = 0;
-	private LayoutInflater inflater;
-	Context context;
-	Activity activity;
-	private LivefyreApplication application;
+    private ProgressDialog dialog;
+    String mainReviewId;
+    int helpfulFlag = 0;
+    private LayoutInflater inflater;
+    Context context;
+    Activity activity;
+    private LivefyreApplication application;
 
-	private List<ContentBean> detailContent;
+    private List<Content> ContentArray;
 
-	public ReviewInDetailAdapter(Activity activity, Context context,
-			List<ContentBean> detailContent,
-			OnClickListener notificationHandler, String mainReviewId) {
+    public ReviewInDetailAdapter(Activity activity, Context context,
+								 List<Content> ContentArray, OnClickListener notificationHandler, String mainReviewId) {
+        this.ContentArray = ContentArray;
+        this.inflater = LayoutInflater.from(context);
+        this.context = context;
+        this.notificationHandler = notificationHandler;
 		this.mainReviewId = mainReviewId;
-		this.notificationHandler = notificationHandler;
-		Log.d("Listener", "" + notificationHandler);
-		this.detailContent = detailContent;
-		this.inflater = LayoutInflater.from(context);
-		this.context = context;
 		this.activity = activity;
-		application = AppSingleton.getInstance().getApplication();
-
-	}
-
-	public void updateReviewInDetailAdapter(List<ContentBean> ContentCollection) {
-		this.detailContent = ContentCollection;
+        application = AppSingleton.getInstance().getApplication();
+    }
+	public void updateReviewInDetailAdapter(List<Content> ContentCollection) {
+		this.ContentArray = ContentCollection;
 		notifyDataSetChanged();
 	}
 
-	@Override
-	public int getCount() {
-		return detailContent.size();
-	}
+    @Override
+    public int getItemViewType(int position) {
+        return ContentArray.get(position).getContentType().getValue();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return detailContent.get(position);
-	}
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        MyViewHolder holder = null;
+        View view = null;
+        switch (viewType) {
+            case PARENT:
+                view = inflater.inflate(R.layout.layout_parent_row, parent, false);
+				holder = new MyViewHolder(view);
+                break;
+            case CHILD:
+                view = inflater.inflate(R.layout.layout_child_list_row, parent, false);
+                holder = new MyViewHolder(view);
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+                break;
+            case DELETED:
+                view = inflater.inflate(R.layout.deleted_item, parent, false);
+                holder = new MyViewHolder(view);
+                break;
+        }
+        return holder;
+    }
 
-	public int getItemViewType(int position) {
-		return detailContent.get(position).getContentType().getValue();
-	}
-
-	@Override
-	public int getViewTypeCount() {
-		return VIEW_COUNT;
-	}
-
-	private class ViewHolder {
-		// main
-		Button backtoReviewActivityFromInDetailView;
-		TextView titleForReviewInDetail;
-		ImageView reviewImageInDetail;
-		RatingBar ratingBarInDetailView;
-		ImageView mainReviewerImage;
-		TextView mainReviewerDisplayName;
-		TextView mainReviewDate;
-		TextView mainReviewBody;
-		TextView isParenrMod;
-		TextView parentReplyTv;
-		TextView parentHelpfulTv;
-
-		ImageView parentMoreOptions;
-
-		ImageView parentHelpfulImg;
-
-		ImageView parentsHelpfulImg, parentReplyImg;
-
-		TextView detailReplyNotificationTV;// notif Tv
-
-		Button parentNotifBtn;// Notif B
-
-		RelativeLayout parentNotifRV;
-
-		// child
-		RelativeLayout childMain;
-		ImageView childReviewerImage;
-		TextView childReviewerDisplayName;
-		TextView childReviewedDate;
-		TextView childReviewHelpful;
-		TextView childReviewBody;
-		TextView isChildMod;
-		ImageView childHelpfulImg;
-		ImageView childReplyImg;
-
-		ImageView childMoreOptions;
-
-		// deleted
-		LinearLayout deletedCell;
-
-	}
-
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null)
-			convertView = getConvertView(getItemViewType(position));
-
-		ViewHolder holder = (ViewHolder) convertView.getTag();
-		updateView(position, holder);
-
-		convertView.setId(position);
-
-		return convertView;
-	}
-
-	private View getConvertView(int viewType) {
-		ViewHolder holder = new ViewHolder();
-		View view = null;
-
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        int viewType = ContentArray.get(position).getContentType().getValue();
+		final Content content = (Content) ContentArray.get(position);
 		switch (viewType) {
 		case PARENT:
-
-			view = inflater.inflate(R.layout.parent, null);
-
-			holder.parentNotifBtn = (Button) view
-					.findViewById(R.id.parentNotifBtn);
-
-			holder.titleForReviewInDetail = (TextView) view
-					.findViewById(R.id.titleForReviewInDetail);
-
-			holder.ratingBarInDetailView = (RatingBar) view
-					.findViewById(R.id.ratingBarInDetailView);
-
-			holder.mainReviewerImage = (ImageView) view
-					.findViewById(R.id.mainReviewerImage);
-			holder.mainReviewerDisplayName = (TextView) view
-					.findViewById(R.id.mainReviewerDisplayName);
-			holder.mainReviewDate = (TextView) view
-					.findViewById(R.id.mainReviewDate);
-			holder.mainReviewBody = (TextView) view
-					.findViewById(R.id.mainReviewBody);
-			holder.isParenrMod = (TextView) view.findViewById(R.id.isParenrMod);
-
-			holder.parentHelpfulImg = (ImageView) view
-					.findViewById(R.id.parentsHelpfulImg);
-
-			holder.parentHelpfulTv = (TextView) view
-					.findViewById(R.id.parentsHelpfulTv);
-
-			holder.parentReplyTv = (TextView) view
-					.findViewById(R.id.parentReplyTv);
-
-			holder.parentMoreOptions = (ImageView) view
-					.findViewById(R.id.parentMoreOptions);
-
-			holder.detailReplyNotificationTV = (TextView) view
-					.findViewById(R.id.detailReplyNotificationTV);
-
-			holder.parentsHelpfulImg = (ImageView) view
-					.findViewById(R.id.parentsHelpfulImg);
-			holder.parentReplyImg = (ImageView) view
-					.findViewById(R.id.parentReplyImg);
-			holder.parentNotifRV = (RelativeLayout) view
-					.findViewById(R.id.parentNotifRV);
-			break;
-		case CHILD:
-			view = inflater.inflate(R.layout.child, null);
-			holder.childMain = (RelativeLayout) view
-					.findViewById(R.id.childMain);
-			holder.childReviewerImage = (ImageView) view
-					.findViewById(R.id.childReviewerImage);
-			holder.childReviewerDisplayName = (TextView) view
-					.findViewById(R.id.childReviewerDisplayName);
-			holder.childReviewedDate = (TextView) view
-					.findViewById(R.id.childReviewedDate);
-			holder.childReviewHelpful = (TextView) view
-					.findViewById(R.id.childReviewHelpful);
-			holder.childReviewBody = (TextView) view
-					.findViewById(R.id.childReviewBody);
-			holder.isChildMod = (TextView) view.findViewById(R.id.isChildMod);
-
-			holder.childHelpfulImg = (ImageView) view
-					.findViewById(R.id.childHelpfulImg);
-
-			holder.childReplyImg = (ImageView) view
-					.findViewById(R.id.childReplyImg);
-
-			holder.childMoreOptions = (ImageView) view
-					.findViewById(R.id.childMoreOptions);
-
-			break;
-		case DELETED:
-			view = inflater.inflate(R.layout.deleted_review_cell, null);
-			holder.deletedCell = (LinearLayout) view
-					.findViewById(R.id.deletedCell);
-
-			break;
-
-		}
-		view.setTag(holder);
-		return view;
-	}
-
-	@SuppressLint("ResourceAsColor")
-	private void updateView(int position, final ViewHolder holder) {
-
-		int viewType = detailContent.get(position).getContentType().getValue();
-		final ContentBean content = (ContentBean) detailContent.get(position);
-		switch (viewType) {
-		case PARENT:
-
-			if (content.getNewReplyCount() > 0) {
-				holder.parentNotifRV.setVisibility(View.VISIBLE);
-				if (content.getNewReplyCount() != 1)
-					holder.detailReplyNotificationTV.setText(content
-							.getNewReplyCount() + " New Replies");
-				else
-					holder.detailReplyNotificationTV.setText(content
+			if (content.getNewReplyCount()  > 0) {
+				if (content.getNewReplyCount() == 1)
+					holder.notifMsgTV.setText(content
 							.getNewReplyCount() + " New Reply");
+				else
+					holder.notifMsgTV.setText(content
+							.getNewReplyCount() + " New Replies");
+				holder.parentNotifRV.setVisibility(View.VISIBLE);
 			} else {
 				holder.parentNotifRV.setVisibility(View.GONE);
 			}
-
+            //moderator
 			if (content.getIsModerator() != null) {
 				if (content.getIsModerator().equals("true")) {
-					holder.isParenrMod.setText("Moderator");
-					holder.isParenrMod
+					holder.isParentMod.setText("Moderator");
+					holder.isParentMod
 							.setTextColor(Color.parseColor("#0F98EC"));
-					holder.isParenrMod.setVisibility(View.VISIBLE);
+					holder.isParentMod.setVisibility(View.VISIBLE);
 					holder.mainReviewerDisplayName.setMaxWidth(330);
 				} else {
-					holder.isParenrMod.setVisibility(View.GONE);
+					holder.isParentMod.setVisibility(View.GONE);
 				}
 			} else {
-				holder.isParenrMod.setVisibility(View.GONE);
+				holder.isParentMod.setVisibility(View.GONE);
 			}
-
+            //feature
 			if (content.getIsFeatured() != null) {
 				if (content.getIsFeatured()) {
-					holder.isParenrMod.setText("Feature");
-					holder.isParenrMod
+					holder.isParentMod.setText("Feature");
+					holder.isParentMod
 							.setTextColor(Color.parseColor("#FEB33B"));
-					holder.isParenrMod.setVisibility(View.VISIBLE);
+					holder.isParentMod.setVisibility(View.VISIBLE);
 					holder.mainReviewerDisplayName.setMaxWidth(380);
-
 				}
 			}
-
+			if (content.getAuthor().getAvatar().length() > 0) {
+				Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
+			} else {
+				Picasso.with(context).load(R.mipmap.profile_default).fit().transform(new RoundedTransformation(90, 0)).into(holder.mainReviewerImage);
+			}
 			if (content.getVote() != null) {// know helpful value and set color
 				if (content.getVote().size() > 0) {
 					helpfulFlag = 0;
@@ -312,95 +164,71 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
 					if (helpfulFlag == 1) {
 						holder.parentHelpfulImg
-								.setImageResource(R.drawable.helpful);
+								.setImageResource(R.mipmap.helpful);
 						holder.parentHelpfulTv.setTextColor(Color
 								.parseColor("#ff0000"));
 						holder.parentHelpfulTv.setText("HELPFUL");
 					} else if (helpfulFlag == 2) {
 						holder.parentHelpfulImg
-								.setImageResource(R.drawable.unhelpful);
+								.setImageResource(R.mipmap.unhelpful);
 						holder.parentHelpfulTv.setTextColor(Color
 								.parseColor("#848484"));
 						holder.parentHelpfulTv.setText("UNHELPFUL");
 					} else {
 						holder.parentHelpfulImg
-								.setImageResource(R.drawable.help_initial);
+								.setImageResource(R.mipmap.help_initial);
 						holder.parentHelpfulTv.setTextColor(Color
 								.parseColor("#0F98EC"));
 						holder.parentHelpfulTv.setText("HELPFUL?");
 					}
 				} else {
 					holder.parentHelpfulImg
-							.setImageResource(R.drawable.help_initial);
+							.setImageResource(R.mipmap.help_initial);
 					holder.parentHelpfulTv.setTextColor(Color
 							.parseColor("#0F98EC"));
 				}
 
 			} else {
 				holder.parentHelpfulImg
-						.setImageResource(R.drawable.help_initial);
+						.setImageResource(R.mipmap.help_initial);
 				holder.parentHelpfulTv
 						.setTextColor(Color.parseColor("#0F98EC"));
 			}
 
-			holder.titleForReviewInDetail.setText(content.getTitle());
-
 			holder.ratingBarInDetailView.setRating(Float.parseFloat(content
 					.getRating()) / 20);
-
-
-			Bitmap bitmapP = cache.getImageFromWarehouse(content.getAuthor()
-					.getAvatar());
-
-			if (bitmapP != null) {
-				holder.mainReviewerImage.setImageBitmap(bitmapP);
-			} else {
-				holder.mainReviewerImage.setImageBitmap(null);
-				DownloadImageTask imgTask = new DownloadImageTask(this);
-				imgTask.execute(content.getAuthor().getAvatar());
-
-			}
-			DownloadImageTask.getRoundedShape(holder.mainReviewerImage);
-
 			holder.mainReviewerDisplayName.setText(content.getAuthor()
 					.getDisplayName());
 
 			holder.mainReviewDate.setText(LFUtils.getFormatedDate(
-                    content.getCreatedAt(), LFSAppConstants.DETAIL));
+					content.getCreatedAt(), LFSAppConstants.DETAIL));
 
 			holder.mainReviewBody.setText(LFUtils.trimTrailingWhitespace(Html
-					.fromHtml(content.getBodyHtml())),
+							.fromHtml(content.getBodyHtml())),
 					TextView.BufferType.SPANNABLE);
 
-			holder.parentNotifBtn.setOnClickListener(notificationHandler);
-
-		
+			holder.parentNotifRV.setOnClickListener(notificationHandler);
 			holder.parentReplyImg.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Intent replyView = new Intent(context, Reply.class);
+					Intent replyView = new Intent(context, ReplyReview.class);
 					replyView.putExtra("id", content.getId());
 					replyView.putExtra("isEdit", false);
 					activity.startActivityForResult(replyView, 1);
-					activity.overridePendingTransition(R.anim.right_in,
-							R.anim.left_out);
 				}
 			});
 			holder.parentReplyTv.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Intent replyView = new Intent(activity, Reply.class);
+					Intent replyView = new Intent(activity, ReplyReview.class);
 					replyView.putExtra("id", content.getId());
 					replyView.putExtra("isEdit", false);
 					activity.startActivityForResult(replyView, 1);
-					activity.overridePendingTransition(R.anim.right_in,
-							R.anim.left_out);
 				}
 			});
 
-			//
 			holder.parentsHelpfulImg.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -438,17 +266,18 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 					} else {
 						moreDialog(content.getId(), false, true);
 					}
-
 				}
 			});
-
 			break;
 		case CHILD:
-
 			float density = context.getResources().getDisplayMetrics().density;
 			int px = (int) (40 * density);
+            int depthValue = 0;
+            if (content.getParentPath() != null) {
+                depthValue = content.getParentPath().size();
+            }
 
-			switch (content.getDepth()) {
+			switch (depthValue) {
 			case 1:
 				holder.childMain.setPadding(px * 0, 16, 16, 16);
 				break;
@@ -461,7 +290,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			default:
 				holder.childMain.setPadding(px * 3, 16, 16, 16);
 				break;
-
 			}
 
 			if (content.getIsModerator() != null) {
@@ -489,19 +317,10 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			}
 			holder.childReviewerDisplayName.setText(content.getAuthor()
 					.getDisplayName());
-			Bitmap bitmapC = cache.getImageFromWarehouse(content.getAuthor()
-					.getAvatar());
-
-			if (bitmapC != null) {
-				holder.childReviewerImage.setImageBitmap(bitmapC);
+			if (content.getAuthor().getAvatar().length() > 0) {
+				Picasso.with(context).load(content.getAuthor().getAvatar()).fit().transform(new RoundedTransformation(90, 0)).into(holder.childReviewerImage);
 			} else {
-				holder.childReviewerImage.setImageBitmap(null);
-				DownloadImageTask imgTask = new DownloadImageTask(this);
-				imgTask.execute(content.getAuthor().getAvatar());
-
 			}
-
-			DownloadImageTask.getRoundedShape(holder.childReviewerImage);
 			holder.childReviewedDate.setText(LFUtils.getFormatedDate(
 					content.getCreatedAt(), LFSAppConstants.SHART));
 
@@ -514,7 +333,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 					holder.childReviewHelpful.setVisibility(View.GONE);
 			} else
 				holder.childReviewHelpful.setVisibility(View.GONE);
-
 			if (content.getVote() != null) {// know helpful value and set color
 				if (content.getVote().size() > 0) {
 					helpfulFlag = knowHelpfulValue(
@@ -524,36 +342,34 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
 					if (helpfulFlag == 1)
 						holder.childHelpfulImg
-								.setImageResource(R.drawable.helpful);
+								.setImageResource(R.mipmap.helpful);
 					else if (helpfulFlag == 2)
 						holder.childHelpfulImg
-								.setImageResource(R.drawable.unhelpful);
+								.setImageResource(R.mipmap.unhelpful);
 					else
 						holder.childHelpfulImg
-								.setImageResource(R.drawable.help_initial);
+								.setImageResource(R.mipmap.help_initial);
 				} else {
 					holder.childHelpfulImg
-							.setImageResource(R.drawable.help_initial);
+							.setImageResource(R.mipmap.help_initial);
 				}
 
 			} else {
 				holder.childHelpfulImg
-						.setImageResource(R.drawable.help_initial);
+						.setImageResource(R.mipmap.help_initial);
 			}
 
 			holder.childReviewBody.setText(LFUtils.trimTrailingWhitespace(Html
-					.fromHtml(content.getBodyHtml())),
+							.fromHtml(content.getBodyHtml())),
 					TextView.BufferType.SPANNABLE);
 			holder.childReplyImg.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Intent replyView = new Intent(activity, Reply.class);
+					Intent replyView = new Intent(activity, ReplyReview.class);
 					replyView.putExtra("id", content.getId());
 					replyView.putExtra("isEdit", false);
 					activity.startActivityForResult(replyView, 1);
-					activity.overridePendingTransition(R.anim.right_in,
-							R.anim.left_out);
 				}
 			});
 
@@ -592,8 +408,11 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
 			float densityDtl = context.getResources().getDisplayMetrics().density;
 			int pxDtl = (int) (40 * densityDtl);
-
-			switch (content.getDepth()) {
+            depthValue = 0;
+            if (content.getParentPath() != null) {
+                depthValue = content.getParentPath().size();
+            }
+			switch (depthValue) {
 			case 1:
 				holder.deletedCell.setPadding(pxDtl * 0, 16, 16, 16);
 				break;
@@ -606,47 +425,98 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			default:
 				holder.deletedCell.setPadding(pxDtl * 3, 16, 16, 16);
 				break;
-
 			}
-
 			break;
 		}
-	}
+    }
 
-	String foundHelpfull(List<Vote> v) {
-		int count = 0;
-		for (int i = 0; i < v.size(); i++) {
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-			if (v.get(i).getValue().equals("1"))// for Count
-				count++;
+    @Override
+    public int getItemCount() {
+        return ContentArray.size();
+    }
 
-		}
-		return count + " of " + v.size() + " found helpful";
-	}
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        RatingBar ratingBarInDetailView;
+        TextView mainReviewerDisplayName, mainReviewDate, mainReviewBody, isParentMod, parentReplyTv, parentHelpfulTv,notifMsgTV;
+        ImageView parentMoreOptions, parentHelpfulImg, parentsHelpfulImg, parentReplyImg, mainReviewerImage;
+        LinearLayout parentNotifRV;
+        // child
+        RelativeLayout childMain;
+        ImageView childReviewerImage, childHelpfulImg, childReplyImg, childMoreOptions;
+        TextView childReviewerDisplayName, childReviewedDate, childReviewHelpful, childReviewBody, isChildMod;
+        // deleted
+        LinearLayout deletedCell;
 
-	int knowHelpfulValue(String authorId, List<Vote> v) {
+        public MyViewHolder(View item) {
+            super(item);
+            //parent views
+            ratingBarInDetailView = (RatingBar) item.findViewById(R.id.ratingBarInDetailView);
+            mainReviewerImage = (ImageView) item.findViewById(R.id.mainReviewerImage);
+            mainReviewerDisplayName = (TextView) item.findViewById(R.id.mainReviewerDisplayName);
+            mainReviewDate = (TextView) item.findViewById(R.id.mainReviewDate);
+            mainReviewBody = (TextView) item.findViewById(R.id.mainReviewBody);
+            isParentMod = (TextView) item.findViewById(R.id.isParentMod);
+            parentHelpfulImg = (ImageView) item.findViewById(R.id.parentsHelpfulImg);
+            parentHelpfulTv = (TextView) item.findViewById(R.id.parentsHelpfulTv);
+            parentReplyTv = (TextView) item.findViewById(R.id.parentReplyTv);
+            parentMoreOptions = (ImageView) item.findViewById(R.id.parentMoreOptions);
+			notifMsgTV = (TextView) item.findViewById(R.id.notifMsgTV);
+            parentsHelpfulImg = (ImageView) item.findViewById(R.id.parentsHelpfulImg);
+            parentReplyImg = (ImageView) item.findViewById(R.id.parentReplyImg);
+            parentNotifRV = (LinearLayout) item.findViewById(R.id.parentNotifRV);
+            //child views
+            childMain = (RelativeLayout) item.findViewById(R.id.childMain);
+            childReviewerImage = (ImageView) item.findViewById(R.id.childReviewerImage);
+            childReviewerDisplayName = (TextView) item.findViewById(R.id.childReviewerDisplayName);
+            childReviewedDate = (TextView) item.findViewById(R.id.childReviewedDate);
+            childReviewHelpful = (TextView) item.findViewById(R.id.childReviewHelpful);
+            childReviewBody = (TextView) item.findViewById(R.id.childReviewBody);
+            isChildMod = (TextView) item.findViewById(R.id.isChildMod);
+            childHelpfulImg = (ImageView) item.findViewById(R.id.childHelpfulImg);
+            childReplyImg = (ImageView) item.findViewById(R.id.childReplyImg);
+            childMoreOptions = (ImageView) item.findViewById(R.id.childMoreOptions);
+            //delete view
+            deletedCell = (LinearLayout) item.findViewById(R.id.deletedCell);
+        }
+    }
 
-		int helpfulValue = 0;
-		if (v != null)
-			for (int i = 0; i < v.size(); i++) {
-				if (v.get(i).getAuthor().equals(authorId)) { // helpful or not
-																// helpful
+    String foundHelpfull(List<Vote> v) {
+        int count = 0;
+        for (int i = 0; i < v.size(); i++) {
 
-					if (v.get(i).getValue().equals("1"))
-						helpfulValue = 1;
-					else
-						helpfulValue = 2;
-					break;
-				}
-			}
+            if (v.get(i).getValue().equals("1"))// for Count
+                count++;
 
-		return helpfulValue;
-	}
+        }
+        return count + " of " + v.size() + " found helpful";
+    }
 
+    int knowHelpfulValue(String authorId, List<Vote> v) {
+
+        int helpfulValue = 0;
+        if (v != null)
+            for (int i = 0; i < v.size(); i++) {
+                if (v.get(i).getAuthor().equals(authorId)) { // helpful or not
+                    // helpful
+
+                    if (v.get(i).getValue().equals("1"))
+                        helpfulValue = 1;
+                    else
+                        helpfulValue = 2;
+                    break;
+                }
+            }
+
+        return helpfulValue;
+    }
 	private void helpfulDialog(final int HFVal, final String id) {
 		final Dialog dialog = new Dialog(activity,
 				android.R.style.Theme_Translucent_NoTitleBar);
-
 		dialog.setTitle("");
 		dialog.setContentView(R.layout.helpfull_dialog);
 		dialog.setCancelable(true);
@@ -654,12 +524,9 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 		LinearLayout emptyDialogSpace = (LinearLayout) dialog
 				.findViewById(R.id.emptyDialogSpace);
 		emptyDialogSpace.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
 				dialog.dismiss();
-
 			}
 		});
 
@@ -668,7 +535,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				showProgress();
+
 				if (HFVal == 1) {
 					RequestParams parameters = new RequestParams();
 					parameters.put("value", "0");
@@ -736,12 +603,11 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 	}
 
 	private void moreDialog(final String id, final Boolean isFeatured,
-			final Boolean isChild) {
-		ContentBean mBean = ContentParser.ContentCollection.get(id);
+							final Boolean isChild) {
+		Content mBean = ContentParser.ContentMap.get(id);
 
 		final Dialog dialog = new Dialog(activity,
 				android.R.style.Theme_Translucent_NoTitleBar);
-		dialog.setTitle("Hari");
 		dialog.setContentView(R.layout.more);
 		dialog.setCancelable(true);
 		if (isFeatured) {
@@ -805,20 +671,16 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				if (isChild) {
-					Intent editView = new Intent(context, Edit.class);
+					Intent editView = new Intent(context, EditReview.class);
 					editView.putExtra("id", id);
 					editView.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(editView);
-					activity.overridePendingTransition(R.anim.right_in,
-							R.anim.left_out);
 				} else {
-					Intent replyView = new Intent(context, Reply.class);
+					Intent replyView = new Intent(context, ReplyReview.class);
 					replyView.putExtra("id", id);
 					replyView.putExtra("isEdit", true);
 					replyView.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(replyView);
-					activity.overridePendingTransition(R.anim.right_in,
-							R.anim.left_out);
 				}
 
 				dialog.dismiss();
@@ -836,7 +698,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 						WriteClient.featureMessage("unfeature", id,
 								LFSConfig.COLLECTION_ID, LFSConfig.USER_TOKEN,
 								null, new helpfulCallback());// same as helpful
-																// call back
+						// call back
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
@@ -847,7 +709,7 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 						WriteClient.featureMessage("feature", id,
 								LFSConfig.COLLECTION_ID, LFSConfig.USER_TOKEN,
 								null, new helpfulCallback());// same as helpful
-																// call back
+						// call back
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
@@ -895,8 +757,8 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 				parameters.put(LFSConstants.LFSPostUserTokenKey,
 						LFSConfig.USER_TOKEN);
 				parameters.put("retroactive", "0");
-				WriteClient.flagAuthor(ContentParser.ContentCollection.get(id)
-						.getAuthorId(), LFSConfig.USER_TOKEN, parameters,
+				WriteClient.flagAuthor(ContentParser.ContentMap.get(id)
+								.getAuthorId(), LFSConfig.USER_TOKEN, parameters,
 						new actionCallback());
 
 				dialog.dismiss();
@@ -1074,7 +936,6 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 			showToast("Something went wrong.");
 
 		}
-
 	}
 
 	private class flagCallback extends JsonHttpResponseHandler {
@@ -1093,12 +954,10 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 		}
 
 	}
-
 	protected void showProgress() {
 		dialog = new ProgressDialog(activity);
 		dialog.setMessage("Please wait." + "\n"
 				+ "Your request is being processed..");
-
 		dialog.setCancelable(false);
 		dialog.show();
 	}
@@ -1107,23 +966,10 @@ public class ReviewInDetailAdapter extends BaseAdapter {
 		try {
 			dialog.dismiss();
 		} catch (Exception e) {
-
 		}
 	}
 
 	public void showToast(String toastText) {
 		Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
 	}
-
-	protected Boolean isNetworkAvailable() {
-		ConnectivityManager cn = (ConnectivityManager) activity
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo nf = cn.getActiveNetworkInfo();
-		if (nf != null && nf.isConnected() == true) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

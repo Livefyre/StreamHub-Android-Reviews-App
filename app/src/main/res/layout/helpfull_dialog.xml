@@ -44,7 +44,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/helpful" />
+                android:src="@mipmap/helpful" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -68,7 +68,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/unhelpful" />
+                android:src="@mipmap/unhelpful" />
 
             <TextView
                 android:layout_width="match_parent"
