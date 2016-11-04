@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.squareup.otto.Bus;
@@ -23,6 +24,7 @@ public class LivefyreApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         LivefyreConfig.setLivefyreNetworkID(LFSConfig.NETWORK_ID);
         AppSingleton.getInstance().setApplication(this);
         init();
