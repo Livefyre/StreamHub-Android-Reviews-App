@@ -15,24 +15,26 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.livefyre.streamhub_android_sdk.network.WriteClient;
+import com.livefyre.streamhub_android_sdk.util.LFSActions;
+import com.livefyre.streamhub_android_sdk.util.LFSConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cz.msebera.android.httpclient.Header;
 import livefyre.AppSingleton;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
 import livefyre.LFUtils;
 import livefyre.LivefyreApplication;
+import livefyre.R;
 import livefyre.models.Content;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.LFSActions;
-import livefyre.streamhub.LFSConstants;
-import livefyre.streamhub.WriteClient;
-import livefyre.R;
 
 public class EditReview extends BaseActivity {
 
@@ -253,17 +255,50 @@ public class EditReview extends BaseActivity {
     };
 
     private class editCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject data) {
-            Log.d("Log", "" + data);
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
+            Log.d("Log", "" + response);
             dismissProgressDialog();
             showAlert("Review Edited Successfully.", "OK", null);
         }
+
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            super.onSuccess(statusCode, headers, response);
+            Log.d("Log", "" + response);
+            dismissProgressDialog();
+            showAlert("Review Edited Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            Log.d("Log", "" + responseString);
+            dismissProgressDialog();
+            showAlert("Review Edited Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
             dismissProgressDialog();
             showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
         }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            dismissProgressDialog();
+            showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            dismissProgressDialog();
+            showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+        }
+
     }
 }

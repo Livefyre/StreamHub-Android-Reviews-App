@@ -11,24 +11,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.livefyre.streamhub_android_sdk.network.WriteClient;
+import com.livefyre.streamhub_android_sdk.util.LFSActions;
+import com.livefyre.streamhub_android_sdk.util.LFSConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
+import cz.msebera.android.httpclient.Header;
 import livefyre.BaseActivity;
 import livefyre.LFSConfig;
 import livefyre.LFUtils;
+import livefyre.R;
 import livefyre.models.Content;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.LFSActions;
-import livefyre.streamhub.LFSConstants;
-import livefyre.streamhub.WriteClient;
-import livefyre.R;
+
 public class ReplyReview extends BaseActivity {
 
     EditText newReplyEt;
@@ -150,20 +153,33 @@ public class ReplyReview extends BaseActivity {
     }
 
     private class editCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject data) {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             dismissProgressDialog();
             showAlert("Reply Edited Successfully.", "OK", null);
-            // Log.d("Log", "" + data);
-            // showToast("Reply Edited Successfully.");
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            super.onSuccess(statusCode, headers, response);
+            dismissProgressDialog();
+            showAlert("Reply Edited Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            dismissProgressDialog();
+            showAlert("Reply Edited Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
             dismissProgressDialog();
             try {
-                JSONObject errorJson = new JSONObject(content);
+                JSONObject errorJson = new JSONObject(responseString);
                 if (!errorJson.isNull("msg")) {
                     showAlert(errorJson.getString("msg"), "TRY AGAIN", tryAgain);
                 } else {
@@ -174,11 +190,34 @@ public class ReplyReview extends BaseActivity {
                 showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
             }
         }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            dismissProgressDialog();
+            try {
+                if (!errorResponse.isNull("msg")) {
+                    showAlert(errorResponse.getString("msg"), "TRY AGAIN", tryAgain);
+                } else {
+                    showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+        }
     }
 
     public class newReplyCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject data) {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             dismissProgressDialog();
             showAlert("Reply Posted Successfully.", "OK", null);
             Intent returnIntent = new Intent();
@@ -187,11 +226,31 @@ public class ReplyReview extends BaseActivity {
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            super.onSuccess(statusCode, headers, response);
+            dismissProgressDialog();
+            showAlert("Reply Posted Successfully.", "OK", null);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("result", 1);
+            setResult(RESULT_OK, returnIntent);
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            dismissProgressDialog();
+            showAlert("Reply Posted Successfully.", "OK", null);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("result", 1);
+            setResult(RESULT_OK, returnIntent);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
             dismissProgressDialog();
             try {
-                JSONObject errorJson = new JSONObject(content);
+                JSONObject errorJson = new JSONObject(responseString);
                 if (!errorJson.isNull("msg")) {
                     showAlert(errorJson.getString("msg"), "TRY AGAIN", tryAgain);
 
@@ -204,5 +263,31 @@ public class ReplyReview extends BaseActivity {
 
             }
         }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            dismissProgressDialog();
+            try {
+                if (!errorResponse.isNull("msg")) {
+                    showAlert(errorResponse.getString("msg"), "TRY AGAIN", tryAgain);
+
+                } else {
+                    showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            showAlert("Something went wrong.", "TRY AGAIN", tryAgain);
+
+        }
+
     }
 }

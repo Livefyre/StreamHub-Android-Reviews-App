@@ -9,10 +9,10 @@ import android.net.NetworkInfo;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.livefyre.streamhub_android_sdk.util.LivefyreConfig;
 import com.squareup.otto.Bus;
 
 import livefyre.activities.SplashActivity;
-import livefyre.streamhub.LivefyreConfig;
 
 public class LivefyreApplication extends Application {
     private static final int TIMEOUT_VALUE = 10000;

@@ -15,6 +15,8 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.livefyre.streamhub_android_sdk.network.WriteClient;
+import com.livefyre.streamhub_android_sdk.util.LFSConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -27,13 +29,12 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cz.msebera.android.httpclient.Header;
 import io.filepicker.Filepicker;
 import io.filepicker.models.FPFile;
 import livefyre.BaseActivity;
 import livefyre.LFSConfig;
 import livefyre.R;
-import livefyre.streamhub.LFSConstants;
-import livefyre.streamhub.WriteClient;
 
 /**
  * Created by kvanadev5 on 16/06/15.
@@ -156,18 +157,35 @@ public class NewReviewActivity extends BaseActivity {
     }
 
     private class writeclientCallback extends JsonHttpResponseHandler {
-        public void onSuccess(JSONObject data) {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             dismissProgressDialog();
             showAlert("Review Posted Successfully.", "OK", null);
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            super.onSuccess(statusCode, headers, response);
             dismissProgressDialog();
-            Log.d("data error", "" + content);
+            showAlert("Review Posted Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            dismissProgressDialog();
+            showAlert("Review Posted Successfully.", "OK", null);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
+            dismissProgressDialog();
+            Log.d("data error", "" + responseString);
             try {
-                JSONObject errorJson = new JSONObject(content);
+                JSONObject errorJson = new JSONObject(responseString);
                 if (!errorJson.isNull("msg")) {
                     showAlert(errorJson.getString("msg"), "OK", null);
                 } else {
@@ -177,6 +195,29 @@ public class NewReviewActivity extends BaseActivity {
                 e.printStackTrace();
                 showAlert("Something went wrong.", "OK", null);
             }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            dismissProgressDialog();
+            Log.d("data error", "" + errorResponse);
+            try {
+                if (!errorResponse.isNull("msg")) {
+                    showAlert(errorResponse.getString("msg"), "OK", null);
+                } else {
+                    showAlert("Something went wrong.", "OK", null);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                showAlert("Something went wrong.", "OK", null);
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            showAlert("Something went wrong.", "OK", null);
         }
     }
 

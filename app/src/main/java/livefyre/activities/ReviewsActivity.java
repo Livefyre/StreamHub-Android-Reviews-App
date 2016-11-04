@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,13 +21,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import livefyre.R;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.livefyre.streamhub_android_sdk.network.AdminClient;
+import com.livefyre.streamhub_android_sdk.network.BootstrapClient;
+import com.livefyre.streamhub_android_sdk.network.StreamClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,18 +42,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
+import livefyre.R;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.adapters.SpinnerAdapter;
 import livefyre.listeners.ContentUpdateListener;
 import livefyre.models.Content;
 import livefyre.models.ContentTypeEnum;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.AdminClient;
-import livefyre.streamhub.BootstrapClient;
-import livefyre.streamhub.StreamClient;
 
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
     public static final String TAG = ReviewsActivity.class.getSimpleName();
@@ -271,16 +273,42 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     private class InitCallback extends JsonHttpResponseHandler {
-        public void onSuccess(String data) {
-            application.printLog(false, TAG + "-InitCallback-onSuccess", data.toString());
-            buildReviewsList(data);
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
+            buildReviewsList(response.toString());
             swipeView.setRefreshing(false);
+            application.printLog(false, TAG + "-InitCallback-onSuccess", response.toString());
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-InitCallback-onFailure", error.toString());
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            buildReviewsList(responseString.toString());
+            swipeView.setRefreshing(false);
+            application.printLog(false, TAG + "-InitCallback-onSuccess", responseString.toString());
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
         }
     }
 
@@ -328,23 +356,26 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
     public class StreamCallBack extends AsyncHttpResponseHandler {
 
-        public void onSuccess(String data) {
-            if (data != null) {
-                content.setStreamData(data);
-            }
-        }
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String response = new String(responseBody);
+            content.setStreamData(response);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            Log.e(TAG, "StreamCallBack-onFailure: " + error.getLocalizedMessage());
+
         }
     }
 
     public class AdminCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject AdminClintJsonResponseObject) {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             JSONObject data;
             try {
-                data = AdminClintJsonResponseObject.getJSONObject("data");
+                data = response.getJSONObject("data");
                 if (!data.isNull("permissions")) {
                     JSONObject permissions = data.getJSONObject("permissions");
                     if (!permissions.isNull("moderator_key"))
@@ -374,9 +405,23 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-AdminCallback-onFailure", error.toString());
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
+            bootstrapClientCall();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
+            bootstrapClientCall();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
             bootstrapClientCall();
         }
     }
