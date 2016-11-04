@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,13 +22,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import livefyre.R;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.livefyre.streamhub_android_sdk.network.AdminClient;
+import com.livefyre.streamhub_android_sdk.network.BootstrapClient;
+import com.livefyre.streamhub_android_sdk.network.StreamClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,20 +43,46 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
+import livefyre.R;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.adapters.SpinnerAdapter;
 import livefyre.listeners.ContentUpdateListener;
 import livefyre.models.Content;
 import livefyre.models.ContentTypeEnum;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.AdminClient;
-import livefyre.streamhub.BootstrapClient;
-import livefyre.streamhub.StreamClient;
 
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
+
+    private class ParseContent extends AsyncTask<JSONObject, String, String> {
+
+        @Override
+        protected String doInBackground(JSONObject... jsonObjects) {
+            try {
+                content = new ContentParser(jsonObjects[0], getBaseContext());
+                content.getContentFromResponse(ReviewsActivity.this);
+                reviewCollectiontoBuild = content.getReviews();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            reviewListAdapter = new ReviewListAdapter(ReviewsActivity.this, reviewCollectiontoBuild);
+            reviewsRV.setAdapter(reviewListAdapter);
+            streamClintCall();
+            isReviewPosted();
+            swipeView.setEnabled(true);
+            dismissProgressDialog();
+        }
+    }
+
     public static final String TAG = ReviewsActivity.class.getSimpleName();
 
     ImageView postNewReviewIv;
@@ -271,47 +301,47 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     private class InitCallback extends JsonHttpResponseHandler {
-        public void onSuccess(String data) {
-            application.printLog(false, TAG + "-InitCallback-onSuccess", data.toString());
-            buildReviewsList(data);
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             swipeView.setRefreshing(false);
+            application.printLog(false, TAG + "-InitCallback-onSuccess", response.toString());
+            (new ParseContent()).execute(response);
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-InitCallback-onFailure", error.toString());
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+            swipeView.setRefreshing(false);
+            application.printLog(false, TAG + "-InitCallback-onSuccess", responseString.toString());
+            try {
+                (new ParseContent()).execute(new JSONObject(responseString));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    void buildReviewsList(String data) {
-        try {
-            content = new ContentParser(new JSONObject(data), getBaseContext());
-            content.getContentFromResponse(this);
-            reviewCollectiontoBuild = content.getReviews();
-            reviewListAdapter = new ReviewListAdapter(this, reviewCollectiontoBuild);
-            reviewsRV.setAdapter(reviewListAdapter);
-            reviewsRV.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), reviewsRV, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-
-                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
-                    detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
-                    startActivity(detailViewIntent);
-
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-                }
-            }));
-            streamClintCall();
-            isReviewPosted();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
         }
-        swipeView.setEnabled(true);
-        dismissProgressDialog();
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            swipeView.setRefreshing(false);
+            application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
+        }
     }
 
     void streamClintCall() {
@@ -328,23 +358,26 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
     public class StreamCallBack extends AsyncHttpResponseHandler {
 
-        public void onSuccess(String data) {
-            if (data != null) {
-                content.setStreamData(data);
-            }
-        }
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String response = new String(responseBody);
+            content.setStreamData(response);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            Log.e(TAG, "StreamCallBack-onFailure: " + error.getLocalizedMessage());
+
         }
     }
 
     public class AdminCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject AdminClintJsonResponseObject) {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            super.onSuccess(statusCode, headers, response);
             JSONObject data;
             try {
-                data = AdminClintJsonResponseObject.getJSONObject("data");
+                data = response.getJSONObject("data");
                 if (!data.isNull("permissions")) {
                     JSONObject permissions = data.getJSONObject("permissions");
                     if (!permissions.isNull("moderator_key"))
@@ -374,9 +407,23 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         }
 
         @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-AdminCallback-onFailure", error.toString());
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            super.onFailure(statusCode, headers, responseString, throwable);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
+            bootstrapClientCall();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
+            bootstrapClientCall();
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", throwable.toString());
             bootstrapClientCall();
         }
     }
@@ -451,6 +498,20 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
             }
         });
+        reviewsRV.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), reviewsRV, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
+                detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
+                startActivity(detailViewIntent);
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+            }
+        }));
     }
 
     AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {

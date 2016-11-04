@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.livefyre.streamhub_android_sdk.util.LivefyreConfig;
 import com.squareup.otto.Bus;
 
 import livefyre.activities.SplashActivity;
-import livefyre.streamhub.LivefyreConfig;
 
 public class LivefyreApplication extends Application {
     private static final int TIMEOUT_VALUE = 10000;
@@ -23,6 +24,7 @@ public class LivefyreApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         LivefyreConfig.setLivefyreNetworkID(LFSConfig.NETWORK_ID);
         AppSingleton.getInstance().setApplication(this);
         init();

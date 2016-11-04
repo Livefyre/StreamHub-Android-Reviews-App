@@ -186,7 +186,7 @@ public class ReviewInDetailActivity extends BaseActivity {
                                 int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, this.getResources().getDisplayMetrics());
                                 webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height));
                                 String youtubeId = LFUtils.getYoutubeVideoId(mAttachments.getUrl());
-                                webView.loadUrl("http://www.youtube.com/embed/" + youtubeId);
+                                webView.loadUrl("https://www.youtube.com/embed/" + youtubeId);
                             } else {
                                 webView.loadDataWithBaseURL(mAttachments.getLink(), mAttachments.getHTML(), "text/html", "UTF-8", "");
                             }

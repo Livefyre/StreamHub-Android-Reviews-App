@@ -22,16 +22,22 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.livefyre.streamhub_android_sdk.network.WriteClient;
+import com.livefyre.streamhub_android_sdk.util.LFSActions;
+import com.livefyre.streamhub_android_sdk.util.LFSConstants;
+import com.livefyre.streamhub_android_sdk.util.LFSFlag;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
 import livefyre.AppSingleton;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
@@ -44,10 +50,6 @@ import livefyre.activities.ReplyReview;
 import livefyre.models.Content;
 import livefyre.models.Vote;
 import livefyre.parsers.ContentParser;
-import livefyre.streamhub.LFSActions;
-import livefyre.streamhub.LFSConstants;
-import livefyre.streamhub.LFSFlag;
-import livefyre.streamhub.WriteClient;
 
 public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAdapter.MyViewHolder> {
     private static final int VIEW_COUNT = 3;
@@ -892,12 +894,13 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 	}
 
 	private class actionCallback extends JsonHttpResponseHandler {
-
-		public void onSuccess(JSONObject responce) {
-			Log.d("action ClientCall", "success" + responce);
-			if (!responce.isNull("data")) {
+		@Override
+		public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+			super.onSuccess(statusCode, headers, response);
+			Log.d("action ClientCall", "success" + response);
+			if (!response.isNull("data")) {
 				try {
-					JSONObject data = responce.getJSONObject("data");
+					JSONObject data = response.getJSONObject("data");
 					if (!data.isNull("messageId")) {
 						if (data.getString("messageId").equals(mainReviewId)) {
 							if (dialog.isShowing())
@@ -914,40 +917,107 @@ public class ReviewInDetailAdapter extends RecyclerView.Adapter<ReviewInDetailAd
 		}
 
 		@Override
-		public void onFailure(Throwable error, String content) {
-			super.onFailure(error, content);
+		public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+			super.onFailure(statusCode, headers, responseString, throwable);
 			dismissProgress();
-			Log.d("action ClientCall", error + "");
+			Log.d("action ClientCall", throwable + "");
 			showToast("Something went wrong.");
 		}
 
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
+			dismissProgress();
+			Log.d("action ClientCall", throwable + "");
+			showToast("Something went wrong.");
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
+			dismissProgress();
+			Log.d("action ClientCall", throwable + "");
+			showToast("Something went wrong.");
+		}
 	}
 
 	private class helpfulCallback extends JsonHttpResponseHandler {
-
-		public void onSuccess(JSONObject data) {
+		@Override
+		public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+			super.onSuccess(statusCode, headers, response);
 			dismissProgress();
 		}
 
 		@Override
-		public void onFailure(Throwable error, String content) {
-			super.onFailure(error, content);
+		public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+			super.onSuccess(statusCode, headers, response);
+			dismissProgress();
+		}
+
+		@Override
+		public void onSuccess(int statusCode, Header[] headers, String responseString) {
+			super.onSuccess(statusCode, headers, responseString);
+			dismissProgress();
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+			super.onFailure(statusCode, headers, responseString, throwable);
 			dismissProgress();
 			showToast("Something went wrong.");
+		}
 
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
+			dismissProgress();
+			showToast("Something went wrong.");
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
+			dismissProgress();
+			showToast("Something went wrong.");
 		}
 	}
 
 	private class flagCallback extends JsonHttpResponseHandler {
-
-		public void onSuccess(JSONObject data) {
+		@Override
+		public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+			super.onSuccess(statusCode, headers, response);
 			showToast("Content flagged successfully");
-
 		}
 
 		@Override
-		public void onFailure(Throwable error, String content) {
-			super.onFailure(error, content);
+		public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+			super.onSuccess(statusCode, headers, response);
+			showToast("Content flagged successfully");
+		}
+
+		@Override
+		public void onSuccess(int statusCode, Header[] headers, String responseString) {
+			super.onSuccess(statusCode, headers, responseString);
+			showToast("Content flagged successfully");
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+			super.onFailure(statusCode, headers, responseString, throwable);
+			dismissProgress();
+			showToast("Something went wrong.");
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
+			dismissProgress();
+			showToast("Something went wrong.");
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+			super.onFailure(statusCode, headers, throwable, errorResponse);
 			dismissProgress();
 			showToast("Something went wrong.");
 
