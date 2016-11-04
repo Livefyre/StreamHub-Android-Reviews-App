@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,6 +56,33 @@ import livefyre.models.ContentTypeEnum;
 import livefyre.parsers.ContentParser;
 
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
+
+    private class ParseContent extends AsyncTask<JSONObject, String, String> {
+
+        @Override
+        protected String doInBackground(JSONObject... jsonObjects) {
+            try {
+                content = new ContentParser(jsonObjects[0], getBaseContext());
+                content.getContentFromResponse(ReviewsActivity.this);
+                reviewCollectiontoBuild = content.getReviews();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            reviewListAdapter = new ReviewListAdapter(ReviewsActivity.this, reviewCollectiontoBuild);
+            reviewsRV.setAdapter(reviewListAdapter);
+            streamClintCall();
+            isReviewPosted();
+            swipeView.setEnabled(true);
+            dismissProgressDialog();
+        }
+    }
+
     public static final String TAG = ReviewsActivity.class.getSimpleName();
 
     ImageView postNewReviewIv;
@@ -277,17 +305,21 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             super.onSuccess(statusCode, headers, response);
-            buildReviewsList(response.toString());
             swipeView.setRefreshing(false);
             application.printLog(false, TAG + "-InitCallback-onSuccess", response.toString());
+            (new ParseContent()).execute(response);
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             super.onSuccess(statusCode, headers, responseString);
-            buildReviewsList(responseString.toString());
             swipeView.setRefreshing(false);
             application.printLog(false, TAG + "-InitCallback-onSuccess", responseString.toString());
+            try {
+                (new ParseContent()).execute(new JSONObject(responseString));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -310,36 +342,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             swipeView.setRefreshing(false);
             application.printLog(true, TAG + "-InitCallback-onFailure", throwable.toString());
         }
-    }
-
-    void buildReviewsList(String data) {
-        try {
-            content = new ContentParser(new JSONObject(data), getBaseContext());
-            content.getContentFromResponse(this);
-            reviewCollectiontoBuild = content.getReviews();
-            reviewListAdapter = new ReviewListAdapter(this, reviewCollectiontoBuild);
-            reviewsRV.setAdapter(reviewListAdapter);
-            reviewsRV.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), reviewsRV, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-
-                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
-                    detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
-                    startActivity(detailViewIntent);
-
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-                }
-            }));
-            streamClintCall();
-            isReviewPosted();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        swipeView.setEnabled(true);
-        dismissProgressDialog();
     }
 
     void streamClintCall() {
@@ -496,6 +498,20 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
 
             }
         });
+        reviewsRV.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), reviewsRV, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
+                detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
+                startActivity(detailViewIntent);
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+            }
+        }));
     }
 
     AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
