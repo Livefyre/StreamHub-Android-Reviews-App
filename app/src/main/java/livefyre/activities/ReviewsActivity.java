@@ -1,9 +1,9 @@
 package livefyre.activities;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,16 +11,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import livefyre.R;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -42,6 +38,7 @@ import java.util.List;
 import livefyre.BaseActivity;
 import livefyre.LFSAppConstants;
 import livefyre.LFSConfig;
+import livefyre.R;
 import livefyre.adapters.ReviewListAdapter;
 import livefyre.adapters.SpinnerAdapter;
 import livefyre.listeners.ContentUpdateListener;
@@ -53,6 +50,216 @@ import livefyre.streamhub.BootstrapClient;
 import livefyre.streamhub.StreamClient;
 
 public class ReviewsActivity extends BaseActivity implements ContentUpdateListener {
+    public interface ClickListener {
+
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
+    public class AdminCallback extends JsonHttpResponseHandler {
+
+        public void onSuccess(JSONObject AdminClintJsonResponseObject) {
+            JSONObject data;
+            try {
+                data = AdminClintJsonResponseObject.getJSONObject("data");
+                if (!data.isNull("permissions")) {
+                    JSONObject permissions = data.getJSONObject("permissions");
+                    if (!permissions.isNull("moderator_key"))
+                        application.saveDataInSharedPreferences(
+                                LFSAppConstants.ISMOD, "yes");
+                    else {
+                        application.saveDataInSharedPreferences(
+                                LFSAppConstants.ISMOD, "no");
+                    }
+                } else {
+                    application.saveDataInSharedPreferences(
+                            LFSAppConstants.ISMOD, "no");
+                }
+                if (!data.isNull("profile")) {
+                    JSONObject profile = data.getJSONObject("profile");
+
+                    if (!profile.isNull("id")) {
+                        application.saveDataInSharedPreferences(
+                                LFSAppConstants.ID, profile.getString("id"));
+                        adminClintId = profile.getString("id");
+                    }
+                }
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            bootstrapClientCall();
+        }
+
+        @Override
+        public void onFailure(Throwable error, String content) {
+            super.onFailure(error, content);
+            application.printLog(true, TAG + "-AdminCallback-onFailure", error.toString());
+            bootstrapClientCall();
+        }
+    }
+
+    private class InitCallback extends JsonHttpResponseHandler {
+        public void onSuccess(String data) {
+            application.printLog(false, TAG + "-InitCallback-onSuccess", data.toString());
+            (new ParseContentTask()).execute(data);
+        }
+
+        @Override
+        public void onFailure(Throwable error, String content) {
+            super.onFailure(error, content);
+            application.printLog(true, TAG + "-InitCallback-onFailure", error.toString());
+        }
+    }
+
+    public class StreamCallBack extends AsyncHttpResponseHandler {
+
+        public void onSuccess(String data) {
+            if (data != null) {
+                content.setStreamData(data);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable error, String content) {
+            super.onFailure(error, content);
+        }
+    }
+
+    private class ParseContentTask extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            swipeView.setRefreshing(true);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            reviewListAdapter = new ReviewListAdapter(ReviewsActivity.this, reviewCollectiontoBuild);
+            reviewsRV.setAdapter(reviewListAdapter);
+            streamClintCall();
+            isReviewPosted();
+            swipeView.setRefreshing(false);
+            dismissProgressDialog();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                content = new ContentParser(new JSONObject(params[0]), getBaseContext());
+                content.getContentFromResponse(ReviewsActivity.this);
+                reviewCollectiontoBuild = content.getReviews();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+    public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        boolean hideToolBar = false;
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (hideToolBar) {
+                getSupportActionBar().hide();
+            } else {
+                getSupportActionBar().show();
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy > 2) {
+                hideToolBar = true;
+            } else if (dy < -1) {
+                hideToolBar = false;
+            }
+        }
+    };
+    AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String[] helpfulCategories = getResources().getStringArray(R.array.helpful_categories);
+            selectedCategory = helpfulCategories[position];
+
+            if (selectedCategory.equals("Most Helpful")) {
+                activityTitleSpinner.setPrompt("Most Helpful");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Highest Rating")) {
+                activityTitleSpinner.setPrompt("Highest Rating");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Lowest Rating")) {
+                activityTitleSpinner.setPrompt("Lowest Rating");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Newest")) {
+                activityTitleSpinner.setPrompt("Newest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+            if (selectedCategory.equals("Oldest")) {
+                activityTitleSpinner.setPrompt("Oldest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+            }
+        }
+
+        public void onNothingSelected(AdapterView<?> parentView) {
+
+        }
+
+    };
+    View.OnClickListener activityTitleListenerShow = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            activityTitle.setOnClickListener(activityTitleListenerHide);
+        }
+    };
+    View.OnClickListener activityTitleListenerHide = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                activityTitle.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                activityTitle.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
+            }
+            activityTitle.setOnClickListener(activityTitleListenerShow);
+        }
+    };
+
+    View.OnClickListener postNewReviewsListener = new View.OnClickListener() {
+
+        public void onClick(View v) {
+            Intent newPostIntent = new Intent(ReviewsActivity.this,
+                    NewReviewActivity.class);
+            startActivity(newPostIntent);
+        }
+    };
+
+    DialogInterface.OnClickListener tryAgain = new DialogInterface.OnClickListener() {
+
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            adminClintCall();
+        }
+    };
+    View.OnClickListener myReviewListener = new View.OnClickListener() {
+
+        public void onClick(View v) {
+            Intent detailViewIntent = new Intent(ReviewsActivity.this,
+                    ReviewInDetailActivity.class);
+            detailViewIntent.putExtra("id", ownReviewId);
+            startActivity(detailViewIntent);
+        }
+    };
     public static final String TAG = ReviewsActivity.class.getSimpleName();
 
     ImageView postNewReviewIv;
@@ -88,6 +295,149 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
                 isReviewPosted();
                 streamClintCall();
             }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void buildToolBar() {
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        //disable title on toolbar
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
+        homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        Spinner mSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
+        String[] items = getResources().getStringArray(R.array.helpful_categories);
+        mSpinner.setVisibility(View.VISIBLE);
+        activityTitle.setVisibility(View.GONE);
+        List<String> spinnerItems = new ArrayList<String>();
+
+        for (int i = 0; i < items.length; i++) {
+            spinnerItems.add(items[i]);
+        }
+
+        SpinnerAdapter adapter = new SpinnerAdapter(actionBar.getThemedContext(), spinnerItems);
+        mSpinner.setAdapter(adapter);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mSpinner.setDropDownVerticalOffset(-116);
+        }
+    }
+
+    private void pullViews() {
+        reviewsRV = (RecyclerView) findViewById(R.id.reviewsRV);
+        reviewsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        postNewReviewIv = (ImageView) findViewById(R.id.postNewReviewIv);
+        activityTitle = (TextView) findViewById(R.id.activityTitle);
+        activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
+        actionTv = (TextView) findViewById(R.id.actionTv);
+        notification = (LinearLayout) findViewById(R.id.notification);
+        notifMsgTV = (TextView) findViewById(R.id.notifMsgTV);
+        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
+    }
+
+    private void setListenersToViews() {
+        postNewReviewIv.setOnClickListener(postNewReviewsListener);
+        reviewsRV.setOnScrollListener(onScrollListener);
+        activityTitle.setOnClickListener(activityTitleListenerHide);
+        activityTitleSpinner.setOnItemSelectedListener(activityTitleSpinnerListener);
+        actionTv.setOnClickListener(myReviewListener);
+        swipeView.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeView.setRefreshing(true);
+                reviewListAdapter = null;
+                reviewCollectiontoBuild.clear();
+                reviewListAdapter = new ReviewListAdapter(getApplication(), reviewCollectiontoBuild);
+                reviewsRV.setAdapter(reviewListAdapter);
+                bootstrapClientCall();
+
+                YoYo.with(Techniques.FadeIn)
+                        .duration(700)
+                        .playOn(findViewById(R.id.reviewsRV));
+            }
+        });
+        reviewsRV.setOnScrollListener(onScrollListener);
+        notification.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                activityTitleSpinner.setPrompt("Newest");
+                sortReviews(LFSAppConstants.MOVE_TO_TOP);
+                YoYo.with(Techniques.BounceInUp)
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
+                notification.setVisibility(View.GONE);
+                reviewsRV.smoothScrollToPosition(0);
+            }
+        });
+    }
+
+    @Override
+    public void onDataUpdate(HashSet<String> updates) {
+
+        for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
+            Content mContentBean = reviewCollectiontoBuild.get(i);
+            if (mContentBean.getContentType() == ContentTypeEnum.DELETED) {
+                reviewCollectiontoBuild.remove(mContentBean);
+            }
+        }
+
+        HashMap<String, Content> mainContent = ContentParser.ContentMap;
+        String authorId = application.getDataFromSharedPreferences(LFSAppConstants.ID);
+        for (Content mContentBean : mainContent.values()) {
+            if (mContentBean.getContentType() == ContentTypeEnum.PARENT) {
+                if (mContentBean.getAuthorId().equals(authorId)) {
+                    Boolean flag = true;
+                    for (Content t : reviewCollectiontoBuild) {
+                        if (t.getAuthorId().equals(authorId)) {
+                            flag = false;
+                        }
+                    }
+                    if (flag)
+                        reviewCollectiontoBuild.add(0, mContentBean);
+                    break;
+                }
+            }
+        }
+        reviewListAdapter.notifyDataSetChanged();
+        ReviewInDetailActivity.notifyDatainDetail();
+
+        int oldCount = 0;
+        if (reviewCollectiontoBuild != null)
+            oldCount = reviewCollectiontoBuild.size();
+
+        List<Content> newList = new ArrayList();
+        for (Content t : mainContent.values()) {
+            if (t.getContentType() == ContentTypeEnum.PARENT
+                    && t.getVisibility().equals("1")) {
+                newList.add(t);
+            }
+        }
+        if (newList.size() > 0) {
+            if (newList.size() - oldCount > 0) {
+
+                if ((newList.size() - oldCount) == 1)
+                    notifMsgTV.setText("" + (newList.size() - oldCount)
+                            + " New Review ");
+                else {
+                    notifMsgTV.setText("" + (newList.size() - oldCount)
+                            + " New Reviews ");
+                }
+                notification.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.DropOut)
+                        .duration(700)
+                        .playOn(findViewById(R.id.notification));
+            } else {
+                notification.setVisibility(View.GONE);
+            }
+        }
+
+        isReviewPosted();
     }
 
     void sortReviews(Boolean viewpoint) {
@@ -212,7 +562,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     void isReviewPosted() {
-
         Boolean isGiven = false;
         if (reviewCollectiontoBuild != null)
             for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
@@ -231,16 +580,6 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
             actionTv.setVisibility(View.GONE);
         }
     }
-
-    View.OnClickListener myReviewListener = new View.OnClickListener() {
-
-        public void onClick(View v) {
-            Intent detailViewIntent = new Intent(ReviewsActivity.this,
-                    ReviewInDetailActivity.class);
-            detailViewIntent.putExtra("id", ownReviewId);
-            startActivity(detailViewIntent);
-        }
-    };
 
     private void adminClintCall() {
 
@@ -261,412 +600,24 @@ public class ReviewsActivity extends BaseActivity implements ContentUpdateListen
     }
 
     void bootstrapClientCall() {
-
         try {
-            BootstrapClient.getInit(LFSConfig.SITE_ID,
-                    LFSConfig.ARTICLE_ID, new InitCallback());
+            BootstrapClient.getInit(
+                    LFSConfig.SITE_ID,
+                    LFSConfig.ARTICLE_ID,
+                    new InitCallback());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private class InitCallback extends JsonHttpResponseHandler {
-        public void onSuccess(String data) {
-            application.printLog(false, TAG + "-InitCallback-onSuccess", data.toString());
-            buildReviewsList(data);
-            swipeView.setRefreshing(false);
-        }
-
-        @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-InitCallback-onFailure", error.toString());
-        }
-    }
-
-    void buildReviewsList(String data) {
-        try {
-            content = new ContentParser(new JSONObject(data), getBaseContext());
-            content.getContentFromResponse(this);
-            reviewCollectiontoBuild = content.getReviews();
-            reviewListAdapter = new ReviewListAdapter(this, reviewCollectiontoBuild);
-            reviewsRV.setAdapter(reviewListAdapter);
-            reviewsRV.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), reviewsRV, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-
-                    Intent detailViewIntent = new Intent(ReviewsActivity.this, ReviewInDetailActivity.class);
-                    detailViewIntent.putExtra(LFSAppConstants.ID, reviewCollectiontoBuild.get(position).getId());
-                    startActivity(detailViewIntent);
-
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-                }
-            }));
-            streamClintCall();
-            isReviewPosted();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        swipeView.setEnabled(true);
-        dismissProgressDialog();
-    }
-
     void streamClintCall() {
         try {
             StreamClient.pollStreamEndpoint(
-                    LFSConfig.COLLECTION_ID, ContentParser.lastEvent,
+                    LFSConfig.COLLECTION_ID,
+                    ContentParser.lastEvent,
                     new StreamCallBack());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public class StreamCallBack extends AsyncHttpResponseHandler {
-
-        public void onSuccess(String data) {
-            if (data != null) {
-                content.setStreamData(data);
-            }
-        }
-        @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-        }
-    }
-
-    public class AdminCallback extends JsonHttpResponseHandler {
-
-        public void onSuccess(JSONObject AdminClintJsonResponseObject) {
-            JSONObject data;
-            try {
-                data = AdminClintJsonResponseObject.getJSONObject("data");
-                if (!data.isNull("permissions")) {
-                    JSONObject permissions = data.getJSONObject("permissions");
-                    if (!permissions.isNull("moderator_key"))
-                        application.saveDataInSharedPreferences(
-                                LFSAppConstants.ISMOD, "yes");
-                    else {
-                        application.saveDataInSharedPreferences(
-                                LFSAppConstants.ISMOD, "no");
-                    }
-                } else {
-                    application.saveDataInSharedPreferences(
-                            LFSAppConstants.ISMOD, "no");
-                }
-                if (!data.isNull("profile")) {
-                    JSONObject profile = data.getJSONObject("profile");
-
-                    if (!profile.isNull("id")) {
-                        application.saveDataInSharedPreferences(
-                                LFSAppConstants.ID, profile.getString("id"));
-                        adminClintId = profile.getString("id");
-                    }
-                }
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            bootstrapClientCall();
-        }
-
-        @Override
-        public void onFailure(Throwable error, String content) {
-            super.onFailure(error, content);
-            application.printLog(true, TAG + "-AdminCallback-onFailure", error.toString());
-            bootstrapClientCall();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void buildToolBar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        //disable title on toolbar
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        ImageView homeIcon = (ImageView) findViewById(R.id.activityIcon);
-        homeIcon.setBackgroundResource(R.mipmap.livefyreflame);
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        Spinner mSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
-        String[] items = getResources().getStringArray(R.array.helpful_categories);
-        mSpinner.setVisibility(View.VISIBLE);
-        activityTitle.setVisibility(View.GONE);
-        List<String> spinnerItems = new ArrayList<String>();
-
-        for (int i = 0; i < items.length; i++) {
-            spinnerItems.add(items[i]);
-        }
-
-        SpinnerAdapter adapter = new SpinnerAdapter(actionBar.getThemedContext(), spinnerItems);
-        mSpinner.setAdapter(adapter);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpinner.setDropDownVerticalOffset(-116);
-        }
-
-    }
-
-    private void setListenersToViews() {
-
-        postNewReviewIv.setOnClickListener(postNewReviewsListener);
-        reviewsRV.setOnScrollListener(onScrollListener);
-        activityTitle.setOnClickListener(activityTitleListenerHide);
-        activityTitleSpinner.setOnItemSelectedListener(activityTitleSpinnerListener);
-        actionTv.setOnClickListener(myReviewListener);
-        swipeView.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeView.setRefreshing(true);
-                reviewListAdapter = null;
-                reviewCollectiontoBuild.clear();
-                reviewListAdapter = new ReviewListAdapter(getApplication(), reviewCollectiontoBuild);
-                reviewsRV.setAdapter(reviewListAdapter);
-                bootstrapClientCall();
-
-                YoYo.with(Techniques.FadeIn)
-                        .duration(700)
-                        .playOn(findViewById(R.id.reviewsRV));
-            }
-        });
-        reviewsRV.setOnScrollListener(onScrollListener);
-        notification.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                activityTitleSpinner.setPrompt("Newest");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-                YoYo.with(Techniques.BounceInUp)
-                        .duration(700)
-                        .playOn(findViewById(R.id.notification));
-                notification.setVisibility(View.GONE);
-                reviewsRV.smoothScrollToPosition(0);
-
-            }
-        });
-    }
-
-    AdapterView.OnItemSelectedListener activityTitleSpinnerListener = new AdapterView.OnItemSelectedListener() {
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String[] helpfulCategories = getResources().getStringArray(R.array.helpful_categories);
-            selectedCategory = helpfulCategories[position];
-
-            if (selectedCategory.equals("Most Helpful")) {
-                activityTitleSpinner.setPrompt("Most Helpful");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-            }
-            if (selectedCategory.equals("Highest Rating")) {
-                activityTitleSpinner.setPrompt("Highest Rating");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-            }
-            if (selectedCategory.equals("Lowest Rating")) {
-                activityTitleSpinner.setPrompt("Lowest Rating");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-            }
-            if (selectedCategory.equals("Newest")) {
-                activityTitleSpinner.setPrompt("Newest");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-            }
-            if (selectedCategory.equals("Oldest")) {
-                activityTitleSpinner.setPrompt("Oldest");
-                sortReviews(LFSAppConstants.MOVE_TO_TOP);
-            }
-        }
-
-        public void onNothingSelected(AdapterView<?> parentView) {
-
-        }
-
-    };
-    public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        boolean hideToolBar = false;
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (hideToolBar) {
-                getSupportActionBar().hide();
-            } else {
-                getSupportActionBar().show();
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (dy > 2) {
-                hideToolBar = true;
-            } else if (dy < -1) {
-                hideToolBar = false;
-            }
-        }
-    };
-    View.OnClickListener activityTitleListenerShow = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            activityTitle.setOnClickListener(activityTitleListenerHide);
-        }
-    };
-    View.OnClickListener activityTitleListenerHide = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                activityTitle.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                activityTitle.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
-            }
-            activityTitle.setOnClickListener(activityTitleListenerShow);
-        }
-    };
-
-    View.OnClickListener postNewReviewsListener = new View.OnClickListener() {
-
-        public void onClick(View v) {
-            Intent newPostIntent = new Intent(ReviewsActivity.this,
-                    NewReviewActivity.class);
-            startActivity(newPostIntent);
-        }
-    };
-
-    static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-    }
-
-    public static interface ClickListener {
-
-        public void onClick(View view, int position);
-
-        public void onLongClick(View view, int position);
-    }
-
-    DialogInterface.OnClickListener tryAgain = new DialogInterface.OnClickListener() {
-
-        @Override
-        public void onClick(DialogInterface arg0, int arg1) {
-            adminClintCall();
-        }
-    };
-
-    private void pullViews() {
-        reviewsRV = (RecyclerView) findViewById(R.id.reviewsRV);
-        reviewsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        postNewReviewIv = (ImageView) findViewById(R.id.postNewReviewIv);
-        activityTitle = (TextView) findViewById(R.id.activityTitle);
-        activityTitleSpinner = (Spinner) findViewById(R.id.activityTitleSpinner);
-        actionTv = (TextView) findViewById(R.id.actionTv);
-        notification = (LinearLayout) findViewById(R.id.notification);
-        notifMsgTV = (TextView) findViewById(R.id.notifMsgTV);
-        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
-    }
-
-    @Override
-    public void onDataUpdate(HashSet<String> updates) {
-
-        for (int i = 0; i < reviewCollectiontoBuild.size(); i++) {
-            Content mContentBean = reviewCollectiontoBuild.get(i);
-            if (mContentBean.getContentType() == ContentTypeEnum.DELETED) {
-                reviewCollectiontoBuild.remove(mContentBean);
-            }
-        }
-
-        HashMap<String, Content> mainContent = ContentParser.ContentMap;
-        String authorId = application.getDataFromSharedPreferences(LFSAppConstants.ID);
-        for (Content mContentBean : mainContent.values()) {
-            if (mContentBean.getContentType() == ContentTypeEnum.PARENT) {
-                if (mContentBean.getAuthorId().equals(authorId)) {
-                    Boolean flag = true;
-                    for (Content t : reviewCollectiontoBuild) {
-                        if (t.getAuthorId().equals(authorId)) {
-                            flag = false;
-                        }
-                    }
-                    if (flag)
-                        reviewCollectiontoBuild.add(0, mContentBean);
-                    break;
-                }
-            }
-        }
-        reviewListAdapter.notifyDataSetChanged();
-        ReviewInDetailActivity.notifyDatainDetail();
-
-        int oldCount = 0;
-        if (reviewCollectiontoBuild != null)
-            oldCount = reviewCollectiontoBuild.size();
-
-        List<Content> newList = new ArrayList();
-        for (Content t : mainContent.values()) {
-            if (t.getContentType() == ContentTypeEnum.PARENT
-                    && t.getVisibility().equals("1")) {
-                newList.add(t);
-            }
-        }
-        if (newList.size() > 0) {
-            if (newList.size() - oldCount > 0) {
-
-                if ((newList.size() - oldCount) == 1)
-                    notifMsgTV.setText("" + (newList.size() - oldCount)
-                            + " New Review ");
-                else {
-                    notifMsgTV.setText("" + (newList.size() - oldCount)
-                            + " New Reviews ");
-                }
-                notification.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.DropOut)
-                        .duration(700)
-                        .playOn(findViewById(R.id.notification));
-            } else {
-                notification.setVisibility(View.GONE);
-            }
-        }
-
-        isReviewPosted();
     }
 }

@@ -2,6 +2,7 @@ package livefyre.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,14 +13,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import livefyre.R;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import livefyre.LFSAppConstants;
 import livefyre.LFUtils;
+import livefyre.R;
 import livefyre.RoundedTransformation;
+import livefyre.activities.ReviewInDetailActivity;
 import livefyre.models.Attachments;
 import livefyre.models.Content;
 import livefyre.models.Vote;
@@ -27,16 +30,16 @@ import livefyre.parsers.ContentParser;
 
 @SuppressLint("SimpleDateFormat")
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyViewHolder> {
-
     private List<Content> ContentMap = null;
     private LayoutInflater inflater;
-    Context context;
+    private Context context;
 
     public ReviewListAdapter(Context context, List<Content> ContentMap) {
         this.ContentMap = ContentMap;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
+
     public void updateContentResult(List<Content> ContentMap) {
         this.ContentMap = ContentMap;
         notifyDataSetChanged();
@@ -87,7 +90,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.reviewedDate.setText(LFUtils.getFormatedDate(content.getCreatedAt(), LFSAppConstants.SHART));
         holder.reviewTitle.setText(content.getTitle());
         holder.reviewBody.setText(LFUtils.trimTrailingWhitespace(Html.fromHtml(content.getBodyHtml())), TextView.BufferType.SPANNABLE);
-        if(content.getRating()!=null)
+        if (content.getRating() != null)
             holder.reviewRatingBar.setRating(Float.parseFloat(content.getRating()) / 20);
 
         if (content.getAuthor().getAvatar().length() > 0) {
@@ -149,6 +152,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         } else
             holder.replies.setVisibility(View.GONE);
     }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -159,14 +163,15 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         return ContentMap.size();
     }
 
-     static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView reviewerImage, reviewImage;
         RatingBar reviewRatingBar;
         TextView reviewerid, isMod, reviewedDate, reviewTitle, reviewBody, helpful, replies;
         LinearLayout reviewCount;
 
-        public MyViewHolder(View item) {
+        MyViewHolder(View item) {
             super(item);
+            item.setOnClickListener(this);
             reviewCount = (LinearLayout) item.findViewById(R.id.reviewCount);
             reviewerid = (TextView) item.findViewById(R.id.reviewerid);
             isMod = (TextView) item.findViewById(R.id.isMod);
@@ -178,6 +183,13 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
             reviewRatingBar = (RatingBar) item.findViewById(R.id.reviewRatingBar);
             helpful = (TextView) item.findViewById(R.id.helpful);
             replies = (TextView) item.findViewById(R.id.replies);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent detailViewIntent = new Intent(context, ReviewInDetailActivity.class);
+            detailViewIntent.putExtra(LFSAppConstants.ID, ContentMap.get(getLayoutPosition()).getId());
+            context.startActivity(detailViewIntent);
         }
     }
 
