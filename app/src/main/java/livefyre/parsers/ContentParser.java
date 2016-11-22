@@ -30,8 +30,8 @@ public class ContentParser {
     private JSONObject jsonResponseObject;
     private static HashMap<String, AuthorsBean> authorsCollection;
     public static HashMap<String, Content> ContentMap;
-    public static List<Content> SortedContents;
-    private int depth = 0;
+    public static ArrayList<Content> SortedContents;
+    private static int depth = 0;
     public static String lastEvent = "0";
     static Context mContext;
     ArrayList<Content> parentsList;
@@ -49,7 +49,7 @@ public class ContentParser {
             throws JSONException {
         this.l1 = l1;
         ContentMap = new HashMap<>();
-        SortedContents = Collections.synchronizedList(new ArrayList<Content>());;
+        SortedContents = new ArrayList<>();
         parentsList = new ArrayList<>();
         reviewsArray = new ArrayList<>();
         // Collecting Authors
