@@ -1,1 +1,1 @@
-include ':app', ':streamHubAndroidSDK'
+include ':streamhub-reviews', ':streamhub-android-sdk'
